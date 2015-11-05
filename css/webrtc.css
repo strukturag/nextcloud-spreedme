@@ -1,0 +1,13 @@
+/* Debug */
+#debug {
+	display: none;
+}
+
+#container, #container iframe {
+	width: 100%;
+	height: 100%;
+}
+
+#container iframe {
+	margin-bottom: -4px;
+}

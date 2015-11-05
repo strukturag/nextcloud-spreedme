@@ -1,0 +1,33 @@
+<?php
+/**
+ * ownCloud - spreedwebrtc
+ *
+ * This file is licensed under the Affero General Public License version 3 or
+ * later. See the COPYING file.
+ *
+ * @author Leon <leon@struktur.de>
+ * @copyright Leon 2015
+ */
+
+namespace OCA\SpreedWebRTC\Config;
+
+class Config {
+
+	// Domain of your Spreed WebRTC server (including protocol and optional port number), examples:
+	//const SPREED_WEBRTC_ORIGIN = 'https://myowncloudserver.com';
+	//const SPREED_WEBRTC_ORIGIN = 'https://webrtc.myowncloudserver.com:8080';
+	const SPREED_WEBRTC_ORIGIN = '';
+
+	// This has to be the same `basePath`
+	// you already set in the [http] section of the `server.conf` file from Spreed WebRTC server
+	const SPREED_WEBRTC_BASEPATH = '/webrtc/';
+
+	// This has to be the same `sharedsecret_secret` (64-character HEX string)
+	// you already set in the [users] section of the `server.conf` file from Spreed WebRTC server
+	const SPREED_WEBRTC_SHAREDSECRET = 'bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX';
+
+	private function __construct() {
+
+	}
+
+}

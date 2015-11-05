@@ -1,0 +1,14 @@
+/* Debug */
+#debug {
+	display: none;
+}
+
+/* Hide close button of file picker */
+.oc-dialog-close {
+	display: none;
+}
+
+/* This is a hack. Without it the select button of the file picker goes crazy. */
+#oc-dialog-filepicker-content {
+	height: initial !important;
+}

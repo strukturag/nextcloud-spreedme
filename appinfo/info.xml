@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<info>
+    <id>spreedwebrtc</id>
+    <name>Spreed WebRTC</name>
+    <description>spreed-webrtc - https://github.com/strukturag/spreed-webrtc</description>
+    <licence>AGPL</licence>
+    <author>struktur AG</author>
+    <documentation>
+        <user>../README.md</user>
+        <admin>../README.md</admin>
+    </documentation>
+    <version>0.0.1</version>
+    <namespace>SpreedWebRTC</namespace>
+    <category>other</category>
+    <dependencies>
+        <owncloud min-version="8.1" />
+    </dependencies>
+</info>
