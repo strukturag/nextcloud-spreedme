@@ -24,7 +24,7 @@
 	if (typeof define === "function" && define.amd) {
 		define(OwnCloudConfig);
 	} else {
-		window.OwnCloudConfig = OwnCloudConfig;
+		window.OwnCloudConfig = OwnCloudConfig();
 	}
 
 })(window);
