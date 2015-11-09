@@ -63,4 +63,15 @@ class PageController extends Controller {
 		return $response;
 	}
 
+	/**
+	 * @NoCSRFRequired
+	 */
+	public function displayChangelog() {
+		//$params = ['user' => $this->userId];
+		$params = ['since' => $since];
+		$response = new TemplateResponse(Settings::APP_ID, 'changelog', $params, 'empty');
+
+		return $response;
+	}
+
 }

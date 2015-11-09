@@ -15,6 +15,7 @@ return [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#webrtc', 'url' => '/webrtc', 'verb' => 'GET'],
 		['name' => 'page#file_selector', 'url' => '/file-selector', 'verb' => 'GET'],
+		['name' => 'page#display_changelog', 'url' => '/changelog', 'verb' => 'GET'],
 
 		// API
 		['name' => 'api#get_user_config', 'url' => '/api/v1/user/config', 'verb' => 'GET'],
