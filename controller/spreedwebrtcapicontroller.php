@@ -33,32 +33,8 @@ class SpreedWebRTCApiController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
 	 */
-	public function getCSRFToken() {
-		$_response = array('success' => true);
-		$_response['token'] = \OC_Util::callRegister();
-
-		return new DataResponse($_response);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 */
-	public function getConfig() {
-		$_response = array('success' => true);
-		$_response['config'] = array(
-			'allowed_partners' => array(Helper::getOwnHost()),
-		);
-
-		return new DataResponse($_response);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 */
-	public function downloadFile($file) {
+	public function downloadFile() {
 		// TODO(leon): Make this RESTy
 		$url = '/remote.php/webdav/' . urldecode($_GET['file']);
 

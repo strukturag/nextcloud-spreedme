@@ -76,14 +76,14 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 
 		initialize: function(app, launcher) {
 
+			var postMessageAPI = new PostMessageAPI({
+				allowedPartners: ALLOWED_PARTNERS,
+				parent: parent
+			});
+
 			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "alertify", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, alertify) {
 
 				//$window.mediaStream = mediaStream;
-
-				var postMessageAPI = new PostMessageAPI({
-					allowedPartners: ALLOWED_PARTNERS,
-					parent: parent
-				});
 
 				var currentRoom;
 				var online = $q.defer();
@@ -255,82 +255,31 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 					config.baseURL = newConfig.baseURL;
 				};
 
-				var api = (function(config) {
-					// Private
-					var basePath = "/api/v1/";
-					var $config = {
-						token: null,
-						parentConfig: config
-					};
-					var _request = function(method, url, config) {
-						config = angular.extend({
-							method: method,
-							url: $config.parentConfig.baseURL + basePath + url
-						}, config);
-						return $http(config);
-					};
-					var get = function(url, config) {
-						return _request("GET", url, config);
-					};
-					var post = function(url, data, config) {
-						config = angular.extend({
-							data: angular.element.param(data)
-						}, config);
-						// Workaround as the angular version we currently use doesn't support .merge
-						config.headers["Content-Type"] = "application/x-www-form-urlencoded";
-						return _request("POST", url, config);
-					};
-					var requestToken = function() {
-						var deferred = $q.defer();
-						if ($config.token) {
-							// Cached.
-							deferred.resolve($config.token);
-						} else {
-							get("tokenize")
-							.then(function(response) {
-								var token = response.data.token;
-								$config.token = token;
-								deferred.resolve(token);
-							});
-						}
-						return deferred.promise;
-					};
-					var getCSRFSafe = function(url, config) {
-						return requestToken()
-						.then(function(token) {
-							config = angular.extend({
-								headers: {
-									requesttoken: token
-								}
-							}, config);
-							return get(url, config);
-						});
-					};
-					var postCSRFSafe = function(url, data, config) {
-						return requestToken()
-						.then(function(token) {
-							config = angular.extend({
-								headers: {
-									requesttoken: token
-								}
-							}, config);
-							return post(url, data, config);
-						});
-					};
-
-					// Expose public components
-					return {
-						get: get,
-						post: post,
-						requestToken: requestToken,
-						getCSRFSafe: getCSRFSafe,
-						postCSRFSafe: postCSRFSafe
-					};
-				})(config);
-
 				var download = function(file) {
-					var url = "file/download?file=" + encodeURIComponent(file.path);
-					return api.getCSRFSafe(url, {responseType: "blob"});
+					var defer = $q.defer();
+
+					/*var onMessage = function(event) {
+						if (event.data.type === "downloadFile" && event.data.file === file.path) {
+							postMessageAPI.unbind(onMessage);
+							var data = event.data.data;
+							defer.resolve(data);
+						}
+					};
+					postMessageAPI.bind(onMessage);
+					postMessageAPI.post({
+						type: "downloadFile",
+						downloadFile: file.path
+					});*/
+
+					postMessageAPI.requestResponse(file.path /* id */, {
+						type: "downloadFile",
+						downloadFile: file.path
+					}, function(event) {
+						var data = event.data.data;
+						defer.resolve(data);
+					});
+
+					return defer.promise;
 				};
 
 				var FileSelector = function(cb, config) {
@@ -358,7 +307,7 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 
 					popup.onbeforeunload = function() {
 						// Timeout to retrieve last-second postMessages
-						setTimeout(this.postMessageAPI.unbind, 100);
+						setTimeout(this.postMessageAPI.unbindAll, 100);
 					};
 
 					var that = this;
@@ -441,9 +390,8 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 
 					var ownCloudShare = function(file) {
 						ownCloud.download(file)
-						.then(function(response) {
+						.then(function(blob) {
 							var namespace = "file_" + $scope.id;
-							var blob = response.data;
 							var fromBlobBinder = fromBlob(namespace, [blob], function(files) {
 								$timeout(function() {
 									$scope.$apply(function(scope) {

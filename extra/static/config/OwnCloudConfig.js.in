@@ -10,13 +10,13 @@
 
 // This file is loaded in WebRTC context
 
-(function (window) {
+(function(window) {
 
 	var OwnCloudConfig = function() {
 		return {
 			// Domain of your ownCloud server (including protocol and optional port number), examples:
 			//OWNCLOUD_ORIGIN: 'https://myowncloudserver.com',
-			//OWNCLOUD_ORIGIN: 'https://owncloud.myserver.com:8080',
+			//OWNCLOUD_ORIGIN: 'https://owncloud.myserver.com:8443',
 			OWNCLOUD_ORIGIN: 'please-change-me',
 		};
 	};

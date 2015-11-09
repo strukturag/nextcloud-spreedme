@@ -10,32 +10,32 @@
 
 // This file is loaded in ownCloud context
 
-(function ($, OC, PostMessageAPI) {
+(function($, OC, OwnCloudConfig, PostMessageAPI) {
 $(document).ready(function() {
 
+	var iframe = $("#container iframe").get(0);
+
 	var ALLOWED_PARTNERS = (function() {
-		var location = document.location;
-		var protocol = location.protocol;
-		var host = location.host;
-		// First element is default
-		// TODO(leon): When used with postMessage API, we have to iterate over this list
+		var parser = document.createElement("a");
+		parser.href = iframe.src;
 		return [
-			protocol + "//" + host
-			//, "https://" + host
-			//, "http://" + host
+			parser.origin
+			//, "https://" + parser.host
+			//, "http://" + parser.host
 		];
 	})();
 
 	var postMessageAPI = new PostMessageAPI({
 		allowedPartners: ALLOWED_PARTNERS,
-		iframe: $("#container iframe").get(0)
+		iframe: iframe
 	});
 	var currentRoom = decodeURIComponent(window.location.hash.replace("#", "")) || "";
 
 	var getConfig = function() {
 		postMessageAPI.post({
 			config: {
-				baseURL: OC.generateUrl("/apps/spreedwebrtc")
+				// Use own origin, as this is possibly used by a different context
+				baseURL: OwnCloudConfig.OWNCLOUD_ORIGIN + OC.generateUrl("/apps/spreedwebrtc")
 			},
 			type: "config"
 		});
@@ -124,6 +124,25 @@ $(document).ready(function() {
 		}, config.allowMultiSelect, config.filterByMIME, null, config.withDetails);
 	};
 
+	var downloadFile = function(event, file) {
+		var url = OC.generateUrl("/apps/spreedwebrtc/api/v1/file/download") + "?requesttoken=" + encodeURIComponent(oc_requesttoken) + "&file=" + encodeURIComponent(file);
+
+		// jQuery doesn't support blob responses..
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				postMessageAPI.answerRequest(event, {
+					data: this.response,
+					file: file,
+					type: "downloadFile"
+				});
+			}
+		};
+		xhr.open("GET", url);
+		xhr.responseType = "blob";
+		xhr.send();
+	};
+
 	postMessageAPI.bind(function(event) {
 		var message = event.data[event.data.type];
 		switch (event.data.type) {
@@ -137,10 +156,13 @@ $(document).ready(function() {
 		case "openFilePicker":
 			openFilePicker(message);
 			break;
+		case "downloadFile":
+			downloadFile(event, message);
+			break;
 		default:
 			console.log("Got unsupported message type", event.data.type);
 		}
 	});
 
 });
-})(jQuery, OC, PostMessageAPI);
+})(jQuery, OC, OwnCloudConfig, PostMessageAPI);

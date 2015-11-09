@@ -10,7 +10,7 @@
 
 // This file is loaded both in ownCloud and in WebRTC context
 
-(function (window) {
+(function(window) {
 
 	var PostMessageAPI = function(config) {
 		var IN_IFRAME = (function() {
@@ -27,7 +27,7 @@
 		this.opener = config.opener;
 		this.allowedPartners = config.allowedPartners;
 		this.partnerOrigin = null;
-		this.listener = null;
+		this.listeners = [];
 
 		this.init();
 	};
@@ -40,8 +40,28 @@
 
 	};
 	PostMessageAPI.prototype.post = function(obj) {
+		this.log("POSTING FROM", document.location, "TO " + (this.partnerOrigin || this.allowedPartners[0]), obj);
 		var pw = this.getPartnerWindow();
 		pw.postMessage(obj, this.partnerOrigin || this.allowedPartners[0]);
+	};
+	PostMessageAPI.prototype.requestResponse = function(id, data, cb) {
+		data.id = data.type + ":" + id;
+
+		var that = this;
+		var listener = function(event) {
+			if (event.data.id === data.id) {
+				that.unbind(listener);
+				cb(event);
+			}
+		};
+		this.bind(listener);
+		this.post(data);
+	};
+	PostMessageAPI.prototype.answerRequest = function(request, data) {
+		// Create clone
+		request = request.data;
+		data.id = request.id;
+		this.post(data);
 	};
 	PostMessageAPI.prototype.getPartnerWindow = function() {
 		var pw = null;
@@ -59,11 +79,17 @@
 		}
 		return pw;
 	};
-	PostMessageAPI.prototype.gotValidEvent = function(event) {
-		if (!this.partnerOrigin) {
-			this.partnerOrigin = event.origin;
+	PostMessageAPI.prototype.gotEvent = function(event) {
+		if (this.validateEvent(event)) {
+			if (!this.partnerOrigin) {
+				this.partnerOrigin = event.origin;
+			}
+			this.log("Got event", event);
+			for (var i = 0, l = this.listeners.length; i < l; i++) {
+				var listener = this.listeners[i];
+				listener(event);
+			}
 		}
-		this.log("Got event", event);
 	};
 	PostMessageAPI.prototype.validateEvent = function(event) {
 		var valid = true;
@@ -77,25 +103,26 @@
 		return valid;
 	};
 	PostMessageAPI.prototype.bind = function(fnct) {
-		if (this.listener) {
-			// Unbind first
-			this.unbind();
+		var firstListener = !this.listeners[0];
+		this.listeners.push(fnct);
+		if (firstListener) {
+			var that = this;
+			window.addEventListener("message", function(e) {
+				that.gotEvent(e);
+			}, false);
 		}
-		var that = this;
-		this.listener = function(event) {
-			if (that.validateEvent(event)) {
-				that.gotValidEvent(event);
-				fnct(event);
-			}
-		};
-		window.addEventListener("message", this.listener, false);
 	};
-	PostMessageAPI.prototype.unbind = function() {
-		if (!this.listener) {
-			return;
+	PostMessageAPI.prototype.unbind = function(fnct) {
+		for (var i = 0, l = this.listeners.length; i < l; i++) {
+			var listener = this.listeners[i];
+			if (listener === fnct) {
+				this.listeners.splice(i, 1);
+			}
 		}
-		window.removeEventListener("message", this.listener, false);
-		this.listener = null;
+	};
+	PostMessageAPI.prototype.unbindAll = function() {
+		window.removeEventListener("message", this.gotEvent, false);
+		this.listeners = [];
 	};
 
 	if (typeof define === "function" && define.amd) {

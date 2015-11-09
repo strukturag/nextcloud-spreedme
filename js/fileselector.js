@@ -10,24 +10,15 @@
 
 // This file is loaded in ownCloud context
 
-(function ($, OC, PostMessageAPI) {
+(function ($, OC, OwnCloudConfig, PostMessageAPI) {
+$(document).ready(function() {
 
 	if (!window.opener) {
 		return;
 	}
 
-	var ALLOWED_PARTNERS = (function() {
-		var location = document.location;
-		var protocol = location.protocol;
-		var host = location.host;
-		// First element is default
-		// TODO(leon): When used with postMessage API, we have to iterate over this list
-		return [
-			protocol + "//" + host
-			//, "https://" + host
-			//, "http://" + host
-		];
-	})();
+	var sharedConfig = $.parseJSON($("script[data-shared-config]").attr("data-shared-config"));
+	var ALLOWED_PARTNERS = sharedConfig.allowedPartners.split(",");
 
 	var postMessageAPI = new PostMessageAPI({
 		allowedPartners: ALLOWED_PARTNERS,
@@ -54,10 +45,9 @@
 		}
 	});
 
-	$(document).ready(function() {
-		postMessageAPI.post({
-			type: "init"
-		});
+	postMessageAPI.post({
+		type: "init"
 	});
 
-})(jQuery, OC, PostMessageAPI);
+});
+})(jQuery, OC, OwnCloudConfig, PostMessageAPI);
