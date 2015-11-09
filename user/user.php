@@ -22,25 +22,6 @@ class User {
 		$this->userId = $userId;
 	}
 
-	public function loginAndSetCookie($username, $password) {
-		$success = \OC_User::login($username, $password);
-		if ($success) {
-			$this->login($username, $password);
-			return true;
-		}
-		throw new \Exception('Invalid login', 50002);
-	}
-
-	private function login($username, $password) {
-		$user = new \OCP\User();
-		if ($user->checkPassword($username, $password) !== false) {
-			$this->user = $user;
-			$this->userId = $this->getUserId();
-			return true;
-		}
-		throw new \Exception('Invalid login', 50002);
-	}
-
 	public function requireLogin() {
 		if (!$this->userId) {
 			throw new \Exception('Not logged in', 50001);
@@ -61,14 +42,19 @@ class User {
 	}
 
 	private function getUserId() {
+		$this->requireLogin();
+
 		return $this->user->getUser();
 	}
 
 	private function getDisplayName() {
+		$this->requireLogin();
+
 		return $this->user->getDisplayName();
 	}
 
 	private function isAdmin() {
+		$this->requireLogin();
 		$groups = \OC_Group::getUserGroups($this->userId);
 
 		return in_array('admin', $groups, true);

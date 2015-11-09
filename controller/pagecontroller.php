@@ -63,26 +63,4 @@ class PageController extends Controller {
 		return $response;
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	/*public function install() {
-set_time_limit(0);
-$dir = getcwd() . '/apps/spreedwebrtc/';
-$log = $dir . 'log.txt';
-
-echo PHP_OS;
-
-$open = fopen($log, 'a');
-fwrite($open, PHP_EOL . date('c') . PHP_EOL);
-fclose($open);
-
-$out = shell_exec(escapeshellcmd($dir) . 'install.sh | tee -a ' . escapeshellarg($log));
-$out = str_replace("\n", '<br />', $out);
-echo $out;
-
-return '';
-}*/
-
 }

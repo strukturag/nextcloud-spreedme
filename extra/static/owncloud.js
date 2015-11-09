@@ -339,6 +339,21 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 				FileSelector.prototype.gotSelectedFiles = function(files) {
 					this.log("Files selected", files);
 					files.forEach(_.bind(function(file) {
+						/*
+							date: "3. August 2015 um 16:20:35 MESZ"
+							etag: "1aae35591c2a999c9d1055a24345a15f"
+							icon: "/core/img/filetypes/x-office-document.svg"
+							id: "15"
+							mimetype: "application/vnd.oasis.opendocument.text"
+							mtime: 1438611635000
+							name: "Example.odt"
+							parentId: "18"
+							permissions: 27
+							selectedPath: "/Photos/Example.odt"
+							size: 36227
+							type: "file"
+						*/
+						// This only works if oc-dialogs.js::filepicker comes with `withDetails` support
 						var fileWithMeta = {
 							name: file.name,
 							path: file.selectedPath,
