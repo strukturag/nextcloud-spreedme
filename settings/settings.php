@@ -17,7 +17,7 @@ class Settings {
 	const APP_TITLE = 'Spreed WebRTC';
 	const APP_ICON = 'app.svg';
 
-	const SPREED_WEBRTC_MAX_USERCOMBO_AGE = 60 * 60 * 24;
+	const SPREED_WEBRTC_MAX_USERCOMBO_AGE = 20;
 
 	private function __construct() {
 
