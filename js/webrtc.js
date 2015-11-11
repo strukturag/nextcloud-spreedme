@@ -124,7 +124,7 @@ $(document).ready(function() {
 		}, config.allowMultiSelect, config.filterByMIME, null, config.withDetails);
 	};
 
-	var downloadFile = function(event, file) {
+	var downloadFile = function(file, event) {
 		var url = OC.generateUrl("/apps/spreedwebrtc/api/v1/file/download") + "?requesttoken=" + encodeURIComponent(oc_requesttoken) + "&file=" + encodeURIComponent(file);
 
 		// jQuery doesn't support blob responses..
@@ -157,7 +157,7 @@ $(document).ready(function() {
 			openFilePicker(message);
 			break;
 		case "downloadFile":
-			downloadFile(event, message);
+			downloadFile(message, event);
 			break;
 		default:
 			console.log("Got unsupported message type", event.data.type);

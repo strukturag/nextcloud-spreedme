@@ -11,8 +11,6 @@
 
 namespace OCA\SpreedWebRTC\Controller;
 
-use OCA\SpreedWebRTC\Config\Config;
-use OCA\SpreedWebRTC\Helper\Helper;
 use OCA\SpreedWebRTC\User\User;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -66,7 +64,13 @@ class ApiController extends Controller {
 	 */
 	public function downloadFile() {
 		// TODO(leon): Make this RESTy
-		$url = '/remote.php/webdav/' . urldecode($_GET['file']);
+		$filePath = $_GET['file'];
+		$filePathSplit = explode('/', $filePath);
+		$fileName = array_pop($filePathSplit);
+		$fileDir = implode('/', $filePathSplit);
+
+		//$url = '/remote.php/webdav' . $filePath;
+		$url = '/index.php/apps/files/ajax/download.php?dir=' . urlencode($fileDir) . '&files=' . urlencode($fileName);
 
 		return new \OCP\AppFramework\Http\RedirectResponse($url);
 	}

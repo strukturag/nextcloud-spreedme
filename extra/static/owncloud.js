@@ -255,22 +255,8 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 					config.baseURL = newConfig.baseURL;
 				};
 
-				var download = function(file) {
+				var downloadFile = function(file) {
 					var defer = $q.defer();
-
-					/*var onMessage = function(event) {
-						if (event.data.type === "downloadFile" && event.data.file === file.path) {
-							postMessageAPI.unbind(onMessage);
-							var data = event.data.data;
-							defer.resolve(data);
-						}
-					};
-					postMessageAPI.bind(onMessage);
-					postMessageAPI.post({
-						type: "downloadFile",
-						downloadFile: file.path
-					});*/
-
 					postMessageAPI.requestResponse(file.path /* id */, {
 						type: "downloadFile",
 						downloadFile: file.path
@@ -317,7 +303,7 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 						case "init":
 							that.open(event.data.message);
 							break;
-						case "files":
+						case "filesSelected":
 							that.gotSelectedFiles(event.data.message);
 							return;
 						default:
@@ -331,7 +317,7 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 							title: "Please select the file(s) you want to share",
 							allowMultiSelect: true,
 							filterByMIME: this.config.allowedFileTypes,
-							withDetails: true
+							withDetails: false // TODO(leon): Set this to true at some point..
 						},
 						type: "open"
 					});
@@ -365,7 +351,7 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 
 				return {
 					setConfig: setConfig,
-					download: download,
+					downloadFile: downloadFile,
 					FileSelector: FileSelector,
 				};
 
@@ -404,7 +390,7 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 					};
 
 					var ownCloudShare = function(file) {
-						ownCloud.download(file)
+						ownCloud.downloadFile(file)
 						.then(function(blob) {
 							var namespace = "file_" + $scope.id;
 							var fromBlobBinder = fromBlob(namespace, [blob], function(files) {
