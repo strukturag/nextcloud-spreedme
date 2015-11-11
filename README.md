@@ -18,7 +18,7 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 ## Installation / Setup of this app
 1. Place this app in the **apps/** folder of your ownCloud installation.
 2. Set up a Spreed WebRTC server and continue with the next step.
-   An easy-to-follow installation guideline can be found further below ("**Installation / Setup of a Spreed WebRTC server**").
+   An easy-to-follow installation guideline can be found further below: **Installation / Setup of a Spreed WebRTC server**
 3. You now should have a running Spreed WebRTC server.
 4. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server, namely:
    1. In the **[http]** section:
