@@ -6,7 +6,7 @@ $origin = Config::SPREED_WEBRTC_ORIGIN;
 $basepath = Config::SPREED_WEBRTC_BASEPATH;
 
 if (empty($origin) || empty($basepath)) {
-	die('Please edit the config/config.php and set all required constants.');
+	die('Please edit the config/config.php file and set all required constants.');
 }
 
 $iframe_url = $origin . $basepath;
