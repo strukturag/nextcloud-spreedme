@@ -20,11 +20,8 @@ use OCP\IRequest;
 
 class PageController extends Controller {
 
-	//private $userId;
-
 	public function __construct($appName, IRequest $request, $userId) {
 		parent::__construct($appName, $request);
-		//$this->userId = $userId;
 	}
 
 	/**
@@ -40,7 +37,7 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function webRTC() {
-		//$params = ['user' => $this->userId];
+		$params = [];
 		$response = new TemplateResponse(Settings::APP_ID, 'webrtc', $params);
 
 		// Allow to embed iframes
@@ -57,7 +54,7 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function fileSelector() {
-		//$params = ['user' => $this->userId];
+		$params = [];
 		$response = new TemplateResponse(Settings::APP_ID, 'fileselector', $params, 'empty');
 
 		return $response;
@@ -67,7 +64,6 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function displayChangelog() {
-		//$params = ['user' => $this->userId];
 		$params = ['since' => $since];
 		$response = new TemplateResponse(Settings::APP_ID, 'changelog', $params, 'empty');
 

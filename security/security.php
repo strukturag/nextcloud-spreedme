@@ -39,6 +39,7 @@ class Security {
 		if (empty($origin)) {
 			$origin = Helper::getOwnHost();
 		}
+
 		return array(
 			$origin,
 		);
