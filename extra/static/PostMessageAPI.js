@@ -87,7 +87,9 @@
 			this.log("Got event", event);
 			for (var i = 0, l = this.listeners.length; i < l; i++) {
 				var listener = this.listeners[i];
-				listener(event);
+				if (listener) {
+					listener(event);
+				}
 			}
 		}
 	};
