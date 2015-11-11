@@ -429,9 +429,15 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 							var $button = $('<button>');
 							$button
 								.text('ownCloud Import')
-								.addClass('btn btn-lg btn-primary owncloud-start-import');
+								.addClass('btn btn-primary owncloud-start-import');
 							$button.on("click", importFromOwnCloud.bind(scope));
-							element.find('.welcome button').parent().append(' ').append($button);
+
+							element.find('.welcome button').parent().append(' ').append($button.clone(true).addClass('btn-lg'));
+
+							var $thumb = element.find('.presentations .thumbnail').first().clone();
+							$thumb.find('.fa').removeClass('fa-plus').addClass('fa-cloud-upload');
+							$thumb.find('button').replaceWith($button.clone(true));
+							$thumb.insertAfter(element.find('.presentations .thumbnail').first());
 						};
 					},
 				};
