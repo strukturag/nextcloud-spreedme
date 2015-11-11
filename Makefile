@@ -37,4 +37,5 @@ appstore_package: clean
 	--exclude=$(project_dir)/.travis.yml \
 	--exclude=$(project_dir)/phpunit*xml \
 	--exclude=$(project_dir)/Makefile \
-	--exclude=$(project_dir)/tests
+	--exclude=$(project_dir)/tests \
+	--exclude-from=$(project_dir)/.gitignore
