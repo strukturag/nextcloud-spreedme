@@ -5,7 +5,7 @@ use \OCA\SpreedWebRTC\Config\Config;
 $origin = Config::SPREED_WEBRTC_ORIGIN;
 $basepath = Config::SPREED_WEBRTC_BASEPATH;
 
-if (empty($origin) || empty($basepath)) {
+if (empty($origin)) {
 	die('Please edit the config/config.php file and set all required constants.');
 }
 
