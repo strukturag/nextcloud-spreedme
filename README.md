@@ -50,7 +50,8 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 6. Head over to the **apps/spreedwebrtc/extra/static/config** folder in your ownCloud installation. Copy `OwnCloudConfig.js.in` to `OwnCloudConfig.js` and adjust the constants as already done in `server.conf` and `config.php`:
    1. Set `OWNCLOUD_ORIGIN` to the origin of your ownCloud server  
       (e.g. `OWNCLOUD_ORIGIN: 'https://myowncloudserver.com:8443`)
-7. **That's it.** You can now start communicating securely with your friends and family by opening **/index.php/apps/spreedwebrtc** of your ownCloud host in your browser.  
+7. Enable this ownCloud app by browsing to **/index.php/settings/apps** with your browser
+8. **That's it.** You can now start communicating securely with your friends and family by opening **/index.php/apps/spreedwebrtc** of your ownCloud host in your browser.  
    For debugging, simply append `?debug` to that URL.
 
 ## Installation / Setup of a Spreed WebRTC server
