@@ -392,6 +392,7 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 					var ownCloudShare = function(file) {
 						ownCloud.downloadFile(file)
 						.then(function(blob) {
+							blob.name = file.name;
 							var namespace = "file_" + $scope.id;
 							var fromBlobBinder = fromBlob(namespace, [blob], function(files) {
 								$timeout(function() {
