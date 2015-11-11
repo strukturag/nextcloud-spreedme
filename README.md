@@ -22,7 +22,7 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 3. You now should have a running Spreed WebRTC server.
 4. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server, namely:
    1. In the **[http]** section:
-      - **ONLY do this step when your basePath should not be empty (see Preparations above):**  
+      - **ONLY do this step if your basePath is not empty (see Preparations above):**  
         Enable **basePath** and set it to e.g. **/webrtc/**  
         (e.g. `basePath = /webrtc/`)
    2. In the **[app]** section:
@@ -55,21 +55,6 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
    For debugging, simply append `?debug` to that URL.
 
 ## Installation / Setup of a Spreed WebRTC server
-1. Head over to [github.com/strukturag/spreed-webrtc](https://github.com/strukturag/spreed-webrtc) and follow the instructions to install the Spreed WebRTC server.
-
-
-
-
-
-## Publish to App Store
-
-First get an account for the [App Store](http://apps.owncloud.com/) then run:
-
-    make appstore_package
-
-The archive is located in build/artifacts/appstore and can then be uploaded to the App Store.
-
-## Running tests
-After [Installing PHPUnit](http://phpunit.de/getting-started.html) run:
-
-    phpunit -c phpunit.xml
+1. Head over to [github.com/strukturag/spreed-webrtc](https://github.com/strukturag/spreed-webrtc) and follow the instructions to install the Spreed WebRTC server.  
+   **Please note**: Your Spreed WebRTC server has to be _publicly_ accessible.  
+   You certainly want to change your [nginx](https://github.com/strukturag/spreed-webrtc/blob/master/doc/NGINX.txt) / [Apache](https://github.com/strukturag/spreed-webrtc/blob/master/doc/APACHE.txt) configuration accordingly.
