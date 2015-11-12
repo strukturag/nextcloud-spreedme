@@ -143,6 +143,87 @@ $(document).ready(function() {
 		xhr.send();
 	};
 
+	var createFolder = function(path, name) {
+		var fd = new FormData();
+		fd.append('dir', path);
+		fd.append('foldername', name);
+		//fd.append('requesttoken', oc_requesttoken);
+		return $.ajax({
+			type: 'POST',
+			url: OC.generateUrl('/apps/files/ajax/newfolder.php'),
+			data: fd,
+			processData: false,
+			contentType: false
+		});
+	};
+
+	var uploadBlob = function(obj, event) {
+		var doUpload = function(blob, filename) {
+			var getUploadFolderPath  = function() {
+				var date = new Date();
+				return 'Spreed WebRTC Downloads/' + date.getFullYear() + '/' + (date.getMonth() + 1);
+			};
+			var upload = function(blob, filename) {
+				var fd = new FormData();
+				fd.append('dir', '/');
+				fd.append('file_directory', getUploadFolderPath());
+				fd.append('files[]', blob, filename);
+				//fd.append('requesttoken', oc_requesttoken);
+				return $.ajax({
+					type: 'POST',
+					url: OC.generateUrl('/apps/files/ajax/upload.php'),
+					data: fd,
+					processData: false,
+					contentType: false
+				});
+			}
+			var uploadNonOverwrite = (function() {
+				var origFilename = '';
+				var counter = 2;
+				var deferred = $.Deferred();
+				var getFilenameWithCounter = function(filename) {
+					var parts = filename.split('.');
+					var extension = parts.pop();
+					var name = parts.pop();
+					parts.push(name + ' ' + counter);
+					parts.push(extension);
+					counter++;
+					return parts.join('.');
+				};
+				return function(blob, filename) {
+					if (!origFilename) {
+						origFilename = filename;
+					}
+					upload(blob, filename)
+					.done(function(response) {
+						var json = $.parseJSON(response)[0];
+						if (json.status === 'existserror') {
+							return uploadNonOverwrite(blob, getFilenameWithCounter(origFilename));
+						} else {
+							// No error
+							deferred.resolve({
+								response: response,
+								savedFilename: filename,
+								path: getUploadFolderPath()
+							});
+						}
+					});
+					return deferred;
+				};
+			})();
+
+			return uploadNonOverwrite(blob, filename);
+		};
+
+		doUpload(obj.blob, obj.name)
+		.then(function(data) {
+			postMessageAPI.answerRequest(event, {
+				data: data,
+				type: "uploadBlob"
+			});
+		});
+	};
+
 	postMessageAPI.bind(function(event) {
 		var message = event.data[event.data.type];
 		switch (event.data.type) {
@@ -158,6 +239,9 @@ $(document).ready(function() {
 			break;
 		case "downloadFile":
 			downloadFile(message, event);
+			break;
+		case "uploadBlob":
+			uploadBlob(message, event);
 			break;
 		default:
 			console.log("Got unsupported message type", event.data.type);

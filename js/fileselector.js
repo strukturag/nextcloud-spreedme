@@ -10,7 +10,7 @@
 
 // This file is loaded in ownCloud context
 
-(function ($, OC, OwnCloudConfig, PostMessageAPI) {
+(function($, OC, OwnCloudConfig, PostMessageAPI) {
 $(document).ready(function() {
 
 	if (!window.opener) {

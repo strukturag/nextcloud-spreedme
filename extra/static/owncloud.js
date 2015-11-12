@@ -22,7 +22,7 @@
 // This file is loaded in WebRTC context
 
 "use strict";
-define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../../extra/static/config/OwnCloudConfig'], function(angular, PostMessageAPI, OwnCloudConfig) {
+define(['angular', 'moment', '../../../../../extra/static/PostMessageAPI', '../../../../../extra/static/config/OwnCloudConfig'], function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 
 	var ALLOWED_PARTNERS = (function() {
 		var OWNCLOUD_ORIGIN = OwnCloudConfig.OWNCLOUD_ORIGIN;
@@ -268,6 +268,23 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 					return defer.promise;
 				};
 
+				var uploadFile = function(file, filename) {
+					var defer = $q.defer();
+					postMessageAPI.requestResponse(filename /* id */, {
+						type: "uploadBlob",
+						// :( blob attributes are lost when sent via postMessage
+						uploadBlob: {
+							blob: file,
+							name: filename
+						}
+					}, function(event) {
+						var data = event.data.data;
+						defer.resolve(data);
+					});
+
+					return defer.promise;
+				};
+
 				var FileSelector = function(cb, config) {
 					this.cb = cb;
 					this.config = config;
@@ -351,13 +368,14 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 
 				return {
 					setConfig: setConfig,
+					uploadFile: uploadFile,
 					downloadFile: downloadFile,
 					FileSelector: FileSelector,
 				};
 
 			}]);
 
-			app.directive('presentation', ['$compile', '$timeout', 'ownCloud', 'fileData', function($compile, $timeout, ownCloud, fileData) {
+			app.directive('presentation', ['$compile', '$timeout', 'ownCloud', 'fileData', 'toastr', function($compile, $timeout, ownCloud, fileData, toastr) {
 
 				var importFromOwnCloud = function() {
 					var $scope = this;
@@ -419,9 +437,55 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 					});
 				};
 
+				var downloadPresentation = function(presentationToDownload) {
+					var $scope = this;
+					var $presentationToDownload = angular.element(presentationToDownload);
+					return function() {
+						var presentation = $presentationToDownload.scope().presentation;
+						var file = presentation.file;
+						var cb = function(file, filename) {
+							var $downloadButton = $presentationToDownload.find('.download-to-owncloud');
+							$downloadButton.addClass('hidden');
+							ownCloud.uploadFile(file, filename)
+							.then(function(info) {
+								$downloadButton.removeClass('hidden');
+								var escapeUnsafe = function(unsafe) {
+									return unsafe
+										.replace(/&/g, "&amp;")
+										.replace(/</g, "&lt;")
+										.replace(/>/g, "&gt;")
+										.replace(/"/g, "&quot;")
+										.replace(/'/g, "&#039;");
+								};
+								toastr.info(moment().format("lll"), info.savedFilename + " has been saved to your ownCloud drive");
+							});
+						};
+						if (typeof file.file === 'function') {
+							file.file(function(file) {
+								cb(file, presentation.info.name);
+							});
+						} else {
+							if (typeof file.file !== 'object') {
+								var xhr = new XMLHttpRequest();
+								xhr.open('GET', file.toURL(), true);
+								xhr.responseType = 'blob';
+								xhr.onload = function(e) {
+									if (this.status == 200) {
+										cb(this.response, presentation.info.name);
+									}
+								};
+								xhr.send();
+							} else {
+								cb(file.file, presentation.info.name);
+							}
+						}
+					};
+				};
+
 				return {
 					restrict: 'C',
 					scope: false,
+					// TODO(leon): Wow. This function is __so__ shitty. Please don't continue reading, stranger :/
 					compile: function(element) {
 						// Compile
 						return function(scope, element) {
@@ -438,6 +502,21 @@ define(['angular', '../../../../../extra/static/PostMessageAPI', '../../../../..
 							$thumb.find('.fa').removeClass('fa-plus').addClass('fa-cloud-upload');
 							$thumb.find('button').replaceWith($button.clone(true));
 							$thumb.insertAfter(element.find('.presentations .thumbnail').first());
+
+							$(element).on('mouseenter', '.presentations .thumbnail.ng-scope', function(event) {
+								var $this = $(this);
+								if ($this.find('.btn.download-to-owncloud').length === 0) {
+									var $button = $this.find('.download');
+									var $newButton = $button.clone()
+										.removeClass('download ng-hide')
+										.addClass('download-to-owncloud')
+										.removeAttr('ng-show ng-click')
+										.css('left', '57px');
+									$newButton.find('.fa').removeClass('fa-download').addClass('fa-cloud-download');
+									$newButton.on('click', downloadPresentation.bind(scope)($this));
+									$newButton.insertAfter($button);
+								}
+							});
 						};
 					},
 				};

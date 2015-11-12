@@ -70,6 +70,7 @@ class ApiController extends Controller {
 		$fileDir = implode('/', $filePathSplit);
 
 		//$url = '/remote.php/webdav' . $filePath;
+		// TODO(leon): Support non-root-folder-installations
 		$url = '/index.php/apps/files/ajax/download.php?dir=' . urlencode($fileDir) . '&files=' . urlencode($fileName);
 
 		return new \OCP\AppFramework\Http\RedirectResponse($url);
