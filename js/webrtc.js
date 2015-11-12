@@ -159,14 +159,14 @@ $(document).ready(function() {
 
 	var uploadBlob = function(obj, event) {
 		var doUpload = function(blob, filename) {
-			var getUploadFolderPath  = function() {
+			var uploadFolderPath = (function() {
 				var date = new Date();
 				return 'Spreed WebRTC Downloads/' + date.getFullYear() + '/' + (date.getMonth() + 1);
-			};
+			})();
 			var upload = function(blob, filename) {
 				var fd = new FormData();
 				fd.append('dir', '/');
-				fd.append('file_directory', getUploadFolderPath());
+				fd.append('file_directory', uploadFolderPath);
 				fd.append('files[]', blob, filename);
 				//fd.append('requesttoken', oc_requesttoken);
 				return $.ajax({
@@ -204,7 +204,7 @@ $(document).ready(function() {
 							deferred.resolve({
 								response: response,
 								savedFilename: filename,
-								path: getUploadFolderPath()
+								path: uploadFolderPath
 							});
 						}
 					});
