@@ -15,18 +15,22 @@ use OCA\SpreedWebRTC\User\User;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
+use OCP\IURLGenerator;
 
 class ApiController extends Controller {
 
 	private $user;
+	private $urlGenerator;
 
-	public function __construct($appName, IRequest $request, $userId) {
+	public function __construct($appName, IRequest $request, $userId, IURLGenerator $urlGenerator) {
 		parent::__construct($appName, $request);
 		if (!empty($userId)) {
 			$this->user = new User($userId);
 		} else {
 			$this->user = new User();
 		}
+
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**
@@ -70,8 +74,14 @@ class ApiController extends Controller {
 		$fileDir = implode('/', $filePathSplit);
 
 		//$url = '/remote.php/webdav' . $filePath;
-		// TODO(leon): Support non-root-folder-installations
-		$url = '/index.php/apps/files/ajax/download.php?dir=' . urlencode($fileDir) . '&files=' . urlencode($fileName);
+		$url = $this->urlGenerator->linkTo(
+			'files',
+			'ajax/download.php',
+			array(
+				'dir' => $fileDir,
+				'files' => $fileName
+			)
+		);
 
 		return new \OCP\AppFramework\Http\RedirectResponse($url);
 	}
