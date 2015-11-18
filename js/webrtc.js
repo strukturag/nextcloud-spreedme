@@ -176,7 +176,9 @@ $(document).ready(function() {
 					processData: false,
 					contentType: false
 				});
-			}
+			};
+			// This function tries to upload the file until response status != 'existserror'
+			// TODO(leon): Let backend do this job, as it might cause a lot of traffic for the client..
 			var uploadNonOverwrite = (function() {
 				var origFilename = '';
 				var counter = 2;
