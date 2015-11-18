@@ -11,6 +11,7 @@
 
 namespace OCA\SpreedWebRTC\Controller;
 
+use OCA\SpreedWebRTC\Helper\Helper;
 use OCA\SpreedWebRTC\Security\Security;
 use OCA\SpreedWebRTC\Settings\Settings;
 use OCP\AppFramework\Controller;
@@ -22,6 +23,8 @@ class PageController extends Controller {
 
 	public function __construct($appName, IRequest $request, $userId) {
 		parent::__construct($appName, $request);
+
+		Helper::notifyIfAppNotSetUp();
 	}
 
 	/**

@@ -24,6 +24,7 @@ class ApiController extends Controller {
 
 	public function __construct($appName, IRequest $request, $userId, IURLGenerator $urlGenerator) {
 		parent::__construct($appName, $request);
+
 		if (!empty($userId)) {
 			$this->user = new User($userId);
 		} else {

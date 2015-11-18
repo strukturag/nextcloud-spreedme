@@ -38,4 +38,10 @@ class Helper {
 		return getcwd() . '/apps/' . Settings::APP_ID . '/';
 	}
 
+	public static function notifyIfAppNotSetUp() {
+		if (!class_exists('\OCA\SpreedWebRTC\Config\Config', true) || !is_file(self::getOwnAppPath() . 'extra/static/config/OwnCloudConfig.js')) {
+			die('You didn\'t set up this ownCloud app. Please follow the instructions in the README.md file in the apps/' . Settings::APP_ID . ' folder.');
+		}
+	}
+
 }
