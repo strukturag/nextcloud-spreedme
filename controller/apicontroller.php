@@ -78,7 +78,9 @@ class ApiController extends Controller {
 			'files',
 			'ajax/download.php',
 			array(
-				'dir' => $fileDir,
+				//'dir' => $fileDir,
+				// TODO(leon): Overwrite this for now..
+				'dir' => 'Spreed WebRTC Downloads/' . date('Y/m'),
 				'files' => $fileName
 			)
 		);
