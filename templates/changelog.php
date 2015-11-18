@@ -7,7 +7,7 @@ $response = '';
 
 foreach($changes_by_version as $version => $changes) {
 	$response .= sprintf(
-		'<h2>Version %s:</h2>',
+		'<h1>Version %s:</h1>',
 		$version
 	);
 	foreach($changes as $change) {
