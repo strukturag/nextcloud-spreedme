@@ -2,7 +2,7 @@
 <info>
     <id>spreedwebrtc</id>
     <name>Spreed WebRTC</name>
-    <description>spreed-webrtc - https://github.com/strukturag/spreed-webrtc</description>
+    <description>Securely communicate with your friends and family using rich audio-, video- and text chat, and much more right from your ownCloud installation – in your browser</description>
     <licence>AGPL</licence>
     <author>struktur AG</author>
     <documentation>
