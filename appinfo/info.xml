@@ -11,7 +11,7 @@
     </documentation>
     <version>0.0.1</version>
     <namespace>SpreedWebRTC</namespace>
-    <category>other</category>
+    <category>tools</category>
     <dependencies>
         <owncloud min-version="8.1" />
     </dependencies>
