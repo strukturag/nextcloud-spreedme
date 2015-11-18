@@ -460,24 +460,28 @@ define(['angular', 'moment', '../../../../../extra/static/PostMessageAPI', '../.
 								toastr.info(moment().format("lll"), info.savedFilename + " has been saved to your ownCloud drive");
 							});
 						};
+
+						if (!file || !file.file) {
+							// We need file.file :)
+							return;
+						}
+
 						if (typeof file.file === 'function') {
 							file.file(function(file) {
 								cb(file, presentation.info.name);
 							});
+						} else if (typeof file.file !== 'object') {
+							var xhr = new XMLHttpRequest();
+							xhr.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+									cb(this.response, presentation.info.name);
+								}
+							};
+							xhr.responseType = 'blob';
+							xhr.open('GET', file.toURL(), true);
+							xhr.send();
 						} else {
-							if (typeof file.file !== 'object') {
-								var xhr = new XMLHttpRequest();
-								xhr.open('GET', file.toURL(), true);
-								xhr.responseType = 'blob';
-								xhr.onload = function(e) {
-									if (this.status == 200) {
-										cb(this.response, presentation.info.name);
-									}
-								};
-								xhr.send();
-							} else {
-								cb(file.file, presentation.info.name);
-							}
+							cb(file.file, presentation.info.name);
 						}
 					};
 				};

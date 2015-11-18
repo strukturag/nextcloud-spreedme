@@ -138,8 +138,8 @@ $(document).ready(function() {
 				});
 			}
 		};
-		xhr.open("GET", url);
 		xhr.responseType = "blob";
+		xhr.open("GET", url, true);
 		xhr.send();
 	};
 
