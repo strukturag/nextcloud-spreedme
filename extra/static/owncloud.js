@@ -86,7 +86,7 @@ define(['angular', 'moment', '../../../../../extra/static/PostMessageAPI', '../.
 			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "alertify", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, alertify) {
 
 				if (!HAS_VALID_PARTNER) {
-					alertify.dialog.alert("Please do not directly access this service. Open this app in your ownCloud installation instead.");
+					alertify.dialog.error("Please do not directly access this service. Open this app in your ownCloud installation instead.");
 					// Workaround to prevent app from continuing
 					appData.authorizing(true);
 
