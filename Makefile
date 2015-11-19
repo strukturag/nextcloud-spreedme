@@ -24,6 +24,7 @@ appstore_package: clean
 	mkdir -p $(appstore_dir)
 	tar cvzf $(appstore_dir)/$(package_name).tar.gz $(project_dir) \
 	--exclude-vcs \
+	--exclude=".DS_Store" \
 	--exclude=$(project_dir)/build \
 	--exclude=$(project_dir)/js/node_modules \
 	--exclude=$(project_dir)/js/.bowerrc \
