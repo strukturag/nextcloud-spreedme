@@ -76,12 +76,21 @@ define(['angular', 'moment', '../../../../../extra/static/PostMessageAPI', '../.
 
 		initialize: function(app, launcher) {
 
+			var HAS_VALID_PARTNER = window !== parent;
+
 			var postMessageAPI = new PostMessageAPI({
 				allowedPartners: ALLOWED_PARTNERS,
 				parent: parent
 			});
 
 			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "alertify", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, alertify) {
+
+				if (!HAS_VALID_PARTNER) {
+					alertify.dialog.alert("Please do not directly access this service. Open this app in your ownCloud installation instead.");
+					appData.authorizing(true);
+
+					return;
+				}
 
 				//$window.mediaStream = mediaStream;
 
