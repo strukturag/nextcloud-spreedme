@@ -89,7 +89,7 @@ define([
 				parent: parent
 			});
 
-			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "alertify", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, alertify) {
+			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "alertify", "chromeExtension", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, alertify, chromeExtension) {
 
 				if (!HAS_VALID_PARTNER) {
 					alertify.dialog.error("Please do not directly access this service. Open this app in your ownCloud installation instead.");
@@ -98,6 +98,23 @@ define([
 
 					return;
 				}
+
+				// Chrome extension
+				(function() {
+					if ($window.webrtcDetectedBrowser === 'chrome') {
+						var chromeStoreElem = $window.document.head.querySelector('link[rel=chrome-webstore-item]');
+						if (!chromeStoreElem) {
+							return;
+						}
+						var chromeStoreLink = chromeStoreElem.href;
+						chromeExtension.registerAutoInstall(function() {
+							var d = $q.defer();
+							alertify.dialog.alert('Screen sharing requires a browser extension. Please add the Spreed WebRTC screen sharing extension to Chrome and try again. Copy the url ' + chromeStoreLink + ' open it in your browser, and install the extension.');
+							//d.reject(); // This will cause an additional dialog. Uncomment if wanted.
+							return d.promise;
+						});
+					}
+				})();
 
 				var currentRoom;
 				var online = $q.defer();
