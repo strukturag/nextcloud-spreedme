@@ -42,6 +42,7 @@ class Security {
 
 		return array(
 			$origin,
+			'mailto:', // For social sharing via email
 		);
 	}
 

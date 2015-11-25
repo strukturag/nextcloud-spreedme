@@ -46,7 +46,7 @@ class PageController extends Controller {
 		// Allow to embed iframes
 		$csp = new ContentSecurityPolicy();
 		//$csp->addAllowedFrameDomain('*');
-		$csp->addAllowedFrameDomain(implode(',', Security::getAllowedIframeDomains()));
+		$csp->addAllowedFrameDomain(implode(' ', Security::getAllowedIframeDomains()));
 		$response->setContentSecurityPolicy($csp);
 
 		return $response;

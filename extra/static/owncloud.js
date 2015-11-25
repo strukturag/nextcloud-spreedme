@@ -87,7 +87,7 @@ define([
 
 		initialize: function(app, launcher) {
 
-			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "alertify", "chromeExtension", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, alertify, chromeExtension) {
+			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "restURL", "alertify", "chromeExtension", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, restURL, alertify, chromeExtension) {
 
 				if (!HAS_PARENT) {
 					alertify.dialog.error("Please do not directly access this service. Open this app in your ownCloud installation instead.");
@@ -95,6 +95,29 @@ define([
 					appData.authorizing(true);
 					return;
 				}
+
+				// Fix room location for social sharing
+				(function() {
+					// TODO(leon): Rely on something else than __proto__
+					var orig = _.bind(restURL.__proto__.room, restURL);
+					var parentUrl = document.referrer; // This is the URL of the site which loads this script in an Iframe
+					var ownCloudAppPath = "/index.php/apps/spreedwebrtc/";
+					restURL.__proto__.room = function(room) {
+						var makeRoom = function(url, room) {
+							var parser = document.createElement("a");
+							parser.href = url;
+							var roomHash = "";
+							if (room) {
+								roomHash = "#" + room;
+							}
+							//return parser.protocol + "//" + parser.host + ownCloudAppPath + roomHash;
+							return ownCloud.getConfig().baseURL + roomHash;
+						};
+
+						//return orig(name).replace($window.location.protocol + '//' + $window.location.host, makeRoom(parentUrl, room));
+						return makeRoom(parentUrl, room);
+					};
+				})();
 
 				// Chrome extension
 				(function() {
@@ -290,6 +313,10 @@ define([
 
 				};
 
+				var getConfig = function() {
+					return config;
+				};
+
 				var setConfig = function(newConfig) {
 					config.baseURL = newConfig.baseURL;
 				};
@@ -406,6 +433,7 @@ define([
 				};
 
 				return {
+					getConfig: getConfig,
 					setConfig: setConfig,
 					uploadFile: uploadFile,
 					downloadFile: downloadFile,
