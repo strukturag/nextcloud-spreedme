@@ -68,7 +68,6 @@ class ApiController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function downloadFile() {
-		// TODO(leon): Make this RESTy
 		$filePath = $_GET['file'];
 		$filePathSplit = explode('/', $filePath);
 		$fileName = array_pop($filePathSplit);
