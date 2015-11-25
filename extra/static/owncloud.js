@@ -30,6 +30,7 @@ define([
 ], function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 	'use strict';
 
+	var HAS_PARENT = window !== parent;
 	var ALLOWED_PARTNERS = (function() {
 		var OWNCLOUD_ORIGIN = OwnCloudConfig.OWNCLOUD_ORIGIN;
 		if (OWNCLOUD_ORIGIN && OWNCLOUD_ORIGIN !== "please-change-me") {
@@ -39,7 +40,6 @@ define([
 		}
 
 		console.error("Please make sure to edit your OwnCloudConfig.js file in extra/static/config");
-
 		// Boo! Not set - Only allow own host
 		var location = document.location;
 		var protocol = location.protocol;
@@ -73,6 +73,11 @@ define([
 		console.log.apply(console, args);
 	};
 
+	var postMessageAPI = new PostMessageAPI({
+		allowedPartners: ALLOWED_PARTNERS,
+		parent: parent
+	});
+
 	/*var storage = {
 		userid: null,
 		username: null
@@ -82,20 +87,12 @@ define([
 
 		initialize: function(app, launcher) {
 
-			var HAS_VALID_PARTNER = window !== parent;
-
-			var postMessageAPI = new PostMessageAPI({
-				allowedPartners: ALLOWED_PARTNERS,
-				parent: parent
-			});
-
 			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "alertify", "chromeExtension", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, alertify, chromeExtension) {
 
-				if (!HAS_VALID_PARTNER) {
+				if (!HAS_PARENT) {
 					alertify.dialog.error("Please do not directly access this service. Open this app in your ownCloud installation instead.");
 					// Workaround to prevent app from continuing
 					appData.authorizing(true);
-
 					return;
 				}
 
@@ -265,6 +262,7 @@ define([
 					}
 				};
 			}]);
+
 			app.directive("roomBar", [function() {
 				return {
 					scope: false,
