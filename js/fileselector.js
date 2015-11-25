@@ -42,7 +42,7 @@ $(document).ready(function() {
 					var filePath = selectedFiles[i];
 					var filePathSplit = filePath.split("/");
 					var fileName = filePathSplit.pop();
-					var fileDirectory = filePathSplit.join("/");
+					var fileDirectory = filePathSplit.join("/") || "/";
 					var filesInSameDirectory = fileDetails[fileDirectory];
 					for (var j = 0; j < filesInSameDirectory.length; j++) {
 						var file = filesInSameDirectory[j];
