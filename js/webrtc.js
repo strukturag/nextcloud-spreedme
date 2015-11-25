@@ -144,6 +144,7 @@ $(document).ready(function() {
 	};
 
 	var createFolder = function(path, name) {
+		// TODO(leon): Deprecated in latest master..
 		var fd = new FormData();
 		fd.append('dir', path);
 		fd.append('foldername', name);
