@@ -22,7 +22,13 @@
 // This file is loaded in WebRTC context
 
 "use strict";
-define(['angular', 'moment', '../../../../../extra/static/PostMessageAPI', '../../../../../extra/static/config/OwnCloudConfig'], function(angular, moment, PostMessageAPI, OwnCloudConfig) {
+define([
+	'angular',
+	'moment',
+	'../../../../../extra/static/PostMessageAPI',
+	'../../../../../extra/static/config/OwnCloudConfig'
+], function(angular, moment, PostMessageAPI, OwnCloudConfig) {
+	'use strict';
 
 	var ALLOWED_PARTNERS = (function() {
 		var OWNCLOUD_ORIGIN = OwnCloudConfig.OWNCLOUD_ORIGIN;
@@ -92,8 +98,6 @@ define(['angular', 'moment', '../../../../../extra/static/PostMessageAPI', '../.
 
 					return;
 				}
-
-				//$window.mediaStream = mediaStream;
 
 				var currentRoom;
 				var online = $q.defer();
