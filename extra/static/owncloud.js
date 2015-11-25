@@ -99,9 +99,9 @@ define([
 				// Fix room location for social sharing
 				(function() {
 					// TODO(leon): Rely on something else than __proto__
-					var orig = _.bind(restURL.__proto__.room, restURL);
+					//var orig = _.bind(restURL.__proto__.room, restURL);
 					var parentUrl = document.referrer; // This is the URL of the site which loads this script in an Iframe
-					var ownCloudAppPath = "/index.php/apps/spreedwebrtc/";
+					//var ownCloudAppPath = "/index.php/apps/spreedwebrtc/";
 					restURL.__proto__.room = function(room) {
 						var makeRoom = function(url, room) {
 							var parser = document.createElement("a");
