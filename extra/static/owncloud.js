@@ -205,16 +205,26 @@ define([
 				};
 
 				$rootScope.$on('$routeChangeSuccess', function(e, current, previous) {
+					var inform = function(newRoom) {
+						postMessageAPI.post({
+							type: "roomChanged",
+							roomChanged: newRoom
+						});
+					};
+
+					if (!current || !current.params) {
+						inform("");
+						return;
+					}
+
 					var newRoom = decodeURIComponent(current.params.room);
 					var oldRoom = "";
 					if (previous) {
 						oldRoom = decodeURIComponent(previous.params.room);
 					}
+
 					if (newRoom !== oldRoom && newRoom !== currentRoom) {
-						postMessageAPI.post({
-							type: "roomChanged",
-							roomChanged: newRoom
-						});
+						inform(newRoom);
 					}
 				});
 
