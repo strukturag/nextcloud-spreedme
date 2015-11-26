@@ -498,7 +498,10 @@ define([
 				var downloadPresentation = function(presentationToDownload) {
 					var $scope = this;
 					var $presentationToDownload = angular.element(presentationToDownload);
-					return function() {
+					return function(e) {
+						// Prevent event propagation. This prevents switching the presentation if we want to download a presentation which is currently not active
+						e.stopPropagation();
+
 						var presentation = $presentationToDownload.scope().presentation;
 						var file = presentation.file;
 						var cb = function(file, filename) {
