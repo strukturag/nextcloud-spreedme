@@ -9,7 +9,7 @@
         <user>../README.md</user>
         <admin>../README.md</admin>
     </documentation>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <namespace>SpreedME</namespace>
     <category>tools</category>
     <dependencies>
