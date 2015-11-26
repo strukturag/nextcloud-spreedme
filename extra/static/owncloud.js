@@ -52,6 +52,7 @@ define([
 			//, "http://" + host
 		];
 	})();
+	// Copied from directives/presentation.js
 	var SUPPORTED_DOCUMENT_TYPES = {
 		// rendered by pdfcanvas directive
 		"application/pdf": "pdf",
