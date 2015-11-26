@@ -530,8 +530,9 @@ define([
 							});
 						};
 
-						if (!file || !file.file) {
+						if (!file && !(file instanceof "FileWriterFake")) {
 							// We need file.file :)
+							console.log("No file found. Not downloading", file);
 							return;
 						}
 
@@ -586,7 +587,7 @@ define([
 										.removeAttr('ng-show ng-click')
 										.css('left', '57px');
 									$newButton.find('.fa').removeClass('fa-download').addClass('fa-cloud-download');
-									$newButton.on('click', downloadPresentation.bind(scope)($this));
+									$newButton.on('click', _.bind(downloadPresentation, scope)($this));
 									$newButton.insertAfter($button);
 								}
 							});
