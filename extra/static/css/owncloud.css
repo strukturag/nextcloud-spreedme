@@ -29,6 +29,19 @@ padding: 8px 10px 0px 15px;
 	}
 }
 
+.buddyPicture  {
+background: #00bbd7 !important;
+}
+
+.buddyPicture .fa {
+color: white !important;
+}
+
+.bar .right .btn.active.aenablebtn {
+background-color: #00bbd7;
+border-color: #00bbd7;
+}
+
 .welcome .welcome-logo {
 background: url("../img/logo.svg") no-repeat left top;
 }
