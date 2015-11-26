@@ -102,20 +102,21 @@ define([
 					//var orig = _.bind(restURL.__proto__.room, restURL);
 					var parentUrl = document.referrer; // This is the URL of the site which loads this script in an Iframe
 					//var ownCloudAppPath = "/index.php/apps/spreedwebrtc/";
-					restURL.__proto__.room = function(room) {
-						var makeRoom = function(url, room) {
+					var that = restURL.__proto__;
+					that.room = function(room) {
+						var makeRoomUrl = function(url, room) {
 							var parser = document.createElement("a");
 							parser.href = url;
-							var roomHash = "";
+							var roomName = "";
 							if (room) {
-								roomHash = "#" + room;
+								roomName = "#" + room;
 							}
-							//return parser.protocol + "//" + parser.host + ownCloudAppPath + roomHash;
-							return ownCloud.getConfig().baseURL + roomHash;
+							//return parser.protocol + "//" + parser.host + ownCloudAppPath + roomName;
+							return ownCloud.getConfig().baseURL + that.encodeRoomURL(roomName).replace("%23", "#"); // Allow first hash to be unencoded
 						};
 
-						//return orig(name).replace($window.location.protocol + '//' + $window.location.host, makeRoom(parentUrl, room));
-						return makeRoom(parentUrl, room);
+						//return orig(name).replace($window.location.protocol + '//' + $window.location.host, makeRoomUrl(parentUrl, room));
+						return makeRoomUrl(parentUrl, room);
 					};
 				})();
 
