@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedwebrtc
+ * ownCloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -9,9 +9,9 @@
  * @copyright Leon 2015
  */
 
-namespace OCA\SpreedWebRTC\Controller;
+namespace OCA\SpreedME\Controller;
 
-use OCA\SpreedWebRTC\User\User;
+use OCA\SpreedME\User\User;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;

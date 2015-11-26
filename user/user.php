@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedwebrtc
+ * ownCloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -9,9 +9,9 @@
  * @copyright Leon 2015
  */
 
-namespace OCA\SpreedWebRTC\User;
+namespace OCA\SpreedME\User;
 
-use OCA\SpreedWebRTC\Security\Security;
+use OCA\SpreedME\Security\Security;
 
 class User {
 

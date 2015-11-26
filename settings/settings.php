@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedwebrtc
+ * ownCloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -9,12 +9,12 @@
  * @copyright Leon 2015
  */
 
-namespace OCA\SpreedWebRTC\Settings;
+namespace OCA\SpreedME\Settings;
 
 class Settings {
 
-	const APP_ID = 'spreedwebrtc';
-	const APP_TITLE = 'Spreed WebRTC';
+	const APP_ID = 'spreedme';
+	const APP_TITLE = 'Spreed.ME';
 	const APP_ICON = 'app.svg';
 
 	const SPREED_WEBRTC_MAX_USERCOMBO_AGE = 20;

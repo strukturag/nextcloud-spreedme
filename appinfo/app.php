@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedwebrtc
+ * ownCloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -9,9 +9,9 @@
  * @copyright Leon 2015
  */
 
-namespace OCA\SpreedWebRTC\AppInfo;
+namespace OCA\SpreedME\AppInfo;
 
-use OCA\SpreedWebRTC\Settings\Settings;
+use OCA\SpreedME\Settings\Settings;
 use OCP\AppFramework\App;
 
 $app = new App(Settings::APP_ID);
@@ -29,7 +29,7 @@ $container->query('OCP\INavigationManager')->add(function () use ($container) {
 		'order' => 10,
 
 		// the route that will be shown on startup
-		'href' => $urlGenerator->linkToRoute('spreedwebrtc.page.index'),
+		'href' => $urlGenerator->linkToRoute('spreedme.page.index'),
 
 		// the icon that will be shown in the navigation
 		// this file needs to exist in img/

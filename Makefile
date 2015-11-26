@@ -1,6 +1,6 @@
 # Makefile for building the project
 
-app_name=spreedwebrtc
+app_name=spreedme
 project_dir=$(CURDIR)/../$(app_name)
 build_dir=$(CURDIR)/build/artifacts
 appstore_dir=$(build_dir)/appstore

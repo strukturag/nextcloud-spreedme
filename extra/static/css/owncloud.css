@@ -1,0 +1,120 @@
+#loader {
+background: url("../img/logo.svg") no-repeat center;
+}
+
+.bar .left .logo a {
+display:none;
+}
+
+.bar .left .logo {
+background: url("../img/spreedme.svg") no-repeat center;
+background-size: 100%;
+display: inline-block;
+width: 108px;
+height: 40px;
+}
+
+.bar .left {
+padding: 8px 10px 0px 15px;
+}
+
+@media (max-width: 700px) {
+	.bar .left .logo {
+		background: url("../img/logo.svg") no-repeat center;
+		width: 46px;
+		height: 46px;
+	}
+	.bar .left {
+		padding: 2px 5px 0px 11px;
+	}
+}
+
+
+
+/*.buddyPicture  {
+background: #00bbd7 !important;
+}
+
+.buddyPicture .fa {
+color: white !important;
+}*/
+
+.welcome .welcome-logo {
+background: url("../img/logo.svg") no-repeat left top;
+}
+
+.remoteVideo .overlayLogo {
+background: url("../img/logo.svg") no-repeat right center;
+max-height: 50px;
+}
+
+.desktopnotify-icon {
+  background-image: url("../img/logo-48x48.png");
+}
+
+/*#spreedme-login-required {
+	display: block;
+	position: absolute;
+	left: 0px;
+	bottom: 100%;
+	z-index: 100;
+	border: none;
+	width: 100%;
+	height: 100%;
+	background: white;
+	margin-top: -100%;
+	-webkit-transition: bottom 1s ease-in-out;
+	-moz-transition: bottom 1s ease-in-out;
+	-ms-transition: bottom 1s ease-in-out;
+	-o-transition: bottom 1s ease-in-out;
+	transition: bottom 1s ease-in-out;
+}
+
+#spreedme-login-required.spreedme-login-required {
+	bottom:0px;
+}
+
+.status-indicator-with-spreedname {
+	line-height: 1.3;
+	vertical-align: middle;
+	display: inline-block;
+	text-align: right;
+}
+
+.status-indicator-with-spreedname .spreedname {
+	display: block;
+	font-size: 0.8em;
+	max-width: 400px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+	.status-indicator-with-spreedname .spreedname {
+		max-width: 120px;
+	}
+}
+
+@media (min-width: 481px) and (max-width: 960px) {
+	.status-indicator-with-spreedname .spreedname {
+		max-width: 200px;
+	}
+}
+
+.status-indicator-with-spreedname .spreedname:after {
+	width: 14px;
+	height: 14px;
+	content: "";
+	background-image: url("../img/logo-small.svg");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 2px;
+}
+
+.status-indicator-with-spreedname > span > i {
+	display: none;
+}
+*/

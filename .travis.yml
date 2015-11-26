@@ -35,14 +35,14 @@ install:
   # install owncloud
   - cd ..
   - ocdev setup core --dir owncloud --branch $BRANCH --no-history
-  - mv spreedwebrtc owncloud/apps
-  - phpenv config-add owncloud/apps/spreedwebrtc/tests/travis/php.ini
+  - mv spreedme owncloud/apps
+  - phpenv config-add owncloud/apps/spreedme/tests/travis/php.ini
   - cd owncloud
   - ./occ maintenance:install --database-name oc_autotest --database-user oc_autotest --database-pass --admin-user admin --admin-pass admin --database $DB
-  - ./occ app:enable spreedwebrtc
+  - ./occ app:enable spreedme
 
 before_script:
-  - cd apps/spreedwebrtc
+  - cd apps/spreedme
 
 script:
   - phpunit -c phpunit.xml

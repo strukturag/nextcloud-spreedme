@@ -102,7 +102,7 @@ define([
 					// TODO(leon): Rely on something else than __proto__
 					//var orig = _.bind(restURL.__proto__.room, restURL);
 					var parentUrl = document.referrer; // This is the URL of the site which loads this script in an Iframe
-					//var ownCloudAppPath = "/index.php/apps/spreedwebrtc/";
+					//var ownCloudAppPath = "/index.php/apps/spreedme/";
 					var that = restURL.__proto__;
 					that.room = function(room) {
 						var makeRoomUrl = function(url, room) {

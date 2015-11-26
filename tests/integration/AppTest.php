@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedwebrtc
+ * ownCloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -23,13 +23,13 @@ class AppTest extends TestCase {
 
 	public function setUp() {
 		parent::setUp();
-		$app = new App('spreedwebrtc');
+		$app = new App('spreedme');
 		$this->container = $app->getContainer();
 	}
 
 	public function testAppInstalled() {
 		$appManager = $this->container->query('OCP\App\IAppManager');
-		$this->assertTrue($appManager->isInstalled('spreedwebrtc'));
+		$this->assertTrue($appManager->isInstalled('spreedme'));
 	}
 
 }

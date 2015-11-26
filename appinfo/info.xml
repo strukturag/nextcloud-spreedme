@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <info>
-    <id>spreedwebrtc</id>
-    <name>Spreed WebRTC</name>
+    <id>spreedme</id>
+    <name>Spreed.ME</name>
     <description>Securely communicate with your friends and family using rich audio-, video- and text chat, and much more right from your ownCloud installation – in your browser</description>
     <licence>AGPL</licence>
     <author>struktur AG</author>
@@ -10,7 +10,7 @@
         <admin>../README.md</admin>
     </documentation>
     <version>0.0.3</version>
-    <namespace>SpreedWebRTC</namespace>
+    <namespace>SpreedME</namespace>
     <category>tools</category>
     <dependencies>
         <owncloud min-version="8.1" />

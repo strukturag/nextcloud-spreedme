@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedwebrtc
+ * ownCloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -9,10 +9,10 @@
  * @copyright Leon 2015
  */
 
-namespace OCA\SpreedWebRTC\Changelog;
+namespace OCA\SpreedME\Changelog;
 
-use OCA\SpreedWebRTC\Helper\Helper;
-use OCA\SpreedWebRTC\Settings\Settings;
+use OCA\SpreedME\Helper\Helper;
+use OCA\SpreedME\Settings\Settings;
 
 class Changelog {
 

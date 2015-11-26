@@ -1,6 +1,6 @@
 <?php
 
-use \OCA\SpreedWebRTC\Config\Config;
+use \OCA\SpreedME\Config\Config;
 
 $origin = Config::SPREED_WEBRTC_ORIGIN;
 $basepath = Config::SPREED_WEBRTC_BASEPATH;
@@ -14,10 +14,10 @@ if (isset($_GET['debug'])) {
 	$iframe_url .= '?debug';
 }
 
-script('spreedwebrtc', '../extra/static/config/OwnCloudConfig');
-script('spreedwebrtc', '../extra/static/PostMessageAPI');
-script('spreedwebrtc', 'webrtc');
-style('spreedwebrtc', 'webrtc');
+script('spreedme', '../extra/static/config/OwnCloudConfig');
+script('spreedme', '../extra/static/PostMessageAPI');
+script('spreedme', 'webrtc');
+style('spreedme', 'webrtc');
 
 ?>
 

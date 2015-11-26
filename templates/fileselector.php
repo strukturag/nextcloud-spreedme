@@ -1,13 +1,13 @@
 <?php
 
-use \OCA\SpreedWebRTC\Config\Config;
+use \OCA\SpreedME\Config\Config;
 
 $origin = Config::SPREED_WEBRTC_ORIGIN;
 
-script('spreedwebrtc', '../extra/static/config/OwnCloudConfig');
-script('spreedwebrtc', '../extra/static/PostMessageAPI');
-script('spreedwebrtc', 'fileselector');
-style('spreedwebrtc', 'fileselector');
+script('spreedme', '../extra/static/config/OwnCloudConfig');
+script('spreedme', '../extra/static/PostMessageAPI');
+script('spreedme', 'fileselector');
+style('spreedme', 'fileselector');
 
 ?>
 

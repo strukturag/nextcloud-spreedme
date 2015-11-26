@@ -1,5 +1,5 @@
 /**
- * ownCloud - spreedwebrtc
+ * ownCloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -35,14 +35,14 @@ $(document).ready(function() {
 		postMessageAPI.post({
 			config: {
 				// Use own origin, as this is possibly used by a different context
-				baseURL: OwnCloudConfig.OWNCLOUD_ORIGIN + OC.generateUrl("/apps/spreedwebrtc")
+				baseURL: OwnCloudConfig.OWNCLOUD_ORIGIN + OC.generateUrl("/apps/spreedme")
 			},
 			type: "config"
 		});
 	};
 
 	var getUserConfig = function() {
-		var url = OC.generateUrl("/apps/spreedwebrtc/api/v1/user/config");
+		var url = OC.generateUrl("/apps/spreedme/api/v1/user/config");
 		$.ajax({
 			url: url,
 			method: "GET",
@@ -57,7 +57,7 @@ $(document).ready(function() {
 	};
 
 	var getLogin = function() {
-		var url = OC.generateUrl("/apps/spreedwebrtc/api/v1/user/login");
+		var url = OC.generateUrl("/apps/spreedme/api/v1/user/login");
 		$.ajax({
 			url: url,
 			method: "GET",
@@ -125,7 +125,7 @@ $(document).ready(function() {
 	};
 
 	var downloadFile = function(file, event) {
-		var url = OC.generateUrl("/apps/spreedwebrtc/api/v1/file/download") + "?requesttoken=" + encodeURIComponent(oc_requesttoken) + "&file=" + encodeURIComponent(file);
+		var url = OC.generateUrl("/apps/spreedme/api/v1/file/download") + "?requesttoken=" + encodeURIComponent(oc_requesttoken) + "&file=" + encodeURIComponent(file);
 
 		// jQuery doesn't support blob responses..
 		var xhr = new XMLHttpRequest();
@@ -162,7 +162,7 @@ $(document).ready(function() {
 		var doUpload = function(blob, filename) {
 			var uploadFolderPath = (function() {
 				var date = new Date();
-				return 'Spreed WebRTC Downloads/' + date.getFullYear() + '/' + (date.getMonth() + 1);
+				return 'Spreed.ME Downloads/' + date.getFullYear() + '/' + (date.getMonth() + 1);
 			})();
 			var upload = function(blob, filename) {
 				var fd = new FormData();

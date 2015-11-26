@@ -1,6 +1,6 @@
 <?php
 
-use \OCA\SpreedWebRTC\Changelog\Changelog;
+use \OCA\SpreedME\Changelog\Changelog;
 
 $changes_by_version = Changelog::getChangesSinceVersion(0);
 $response = '';

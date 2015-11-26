@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedwebrtc
+ * ownCloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -9,7 +9,7 @@
  * @copyright Leon 2015
  */
 
-namespace OCA\SpreedWebRTC\Controller;
+namespace OCA\SpreedME\Controller;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use PHPUnit_Framework_TestCase;
@@ -23,7 +23,7 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
 		$this->controller = new PageController(
-			'spreedwebrtc', $request, $this->userId
+			'spreedme', $request, $this->userId
 		);
 	}
 
