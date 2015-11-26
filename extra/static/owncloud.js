@@ -137,6 +137,9 @@ define([
 
 					if (!isOnline) {
 						appData.authorizing(true);
+					} else {
+						// isOnline === true
+						authorize.resolve();
 					}
 
 					online.resolve();
@@ -198,7 +201,6 @@ define([
 							log("Retrieved nonce - authenticating as user:", data.userid);
 							mediaStream.api.requestAuthentication(data.userid, data.nonce);
 							delete data.nonce;
-							authorize.resolve();
 						}, function(data, status) {
 							log("Failed to authorize session", status, data);
 							$timeout(function() {
@@ -215,7 +217,7 @@ define([
 					authorize.promise.then(function() {
 						currentRoom = room;
 						rooms.joinByName(room, true);
-					})
+					});
 				};
 
 				$rootScope.$on('$routeChangeSuccess', function(e, current, previous) {
@@ -255,11 +257,17 @@ define([
 						break;
 					case "userConfig":
 						var config = message;
-						setUserConfig(config);
+						// TODO(leon): This is only a temporary workaround
+						authorize.promise.then(function() {
+							setUserConfig(config);
+						});
 						break;
 					case "userBuddyPicture":
 						var buddyPicture = message;
-						setBuddyPicture(buddyPicture);
+						// TODO(leon): This is only a temporary workaround
+						authorize.promise.then(function() {
+							setBuddyPicture(buddyPicture);
+						});
 						break;
 					case "changeRoom":
 						var room = message;
