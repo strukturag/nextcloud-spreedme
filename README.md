@@ -42,7 +42,7 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
         (`mode = sharedsecret`)
       - Enable **sharedsecret_secret** and set it to a random 64-character HEX string  
         **Please note:** Do **NOT** use the string given below. Generate your own random 64-character HEX string!
-        You can generate your own 64-character HEX string by running `openssl rand -hex 32`
+        You can generate your own 64-character HEX string by running `xxd -ps -l 32 -c 32 /dev/random` or `openssl rand -hex 32`
         (e.g. `sharedsecret_secret = bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX`)  
    4. Restart the Spreed WebRTC server for it to reload its configuration
 5. Head over to the **apps/spreedme/config** folder in your ownCloud installation. Copy `config.php.in` to `config.php` and adjust the constants as already done in `server.conf`:
@@ -66,5 +66,7 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 
 ## Installation / Setup of a Spreed WebRTC server
 1. Head over to [github.com/strukturag/spreed-webrtc](https://github.com/strukturag/spreed-webrtc) and follow the instructions to install the Spreed WebRTC server.  
+   For a packaged version (preferred) see [github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository](https://github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository)  
    **Please note**: Your Spreed WebRTC server has to be _publicly_ accessible.  
    You certainly want to adjust your [nginx](https://github.com/strukturag/spreed-webrtc/blob/master/doc/NGINX.txt) / [Apache](https://github.com/strukturag/spreed-webrtc/blob/master/doc/APACHE.txt) configuration accordingly.
+2. **Don't forget** to set your own secrets in the **[app]** section of spreed-webrtc's config file. At the very least you should change **sessionSecret** and **encryptionSecret**.
