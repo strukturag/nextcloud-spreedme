@@ -1,18 +1,8 @@
 <?php
 
-use \OCA\SpreedME\Config\Config;
+use \OCA\SpreedME\Helper\Helper;
 
-$origin = Config::SPREED_WEBRTC_ORIGIN;
-$basepath = Config::SPREED_WEBRTC_BASEPATH;
-
-if (empty($origin)) {
-	die('Please edit the config/config.php file and set all required constants.');
-}
-
-$iframe_url = $origin . $basepath;
-if (isset($_GET['debug'])) {
-	$iframe_url .= '?debug';
-}
+$iframe_url = Helper::getSpreedWebRtcUrl();
 
 script('spreedme', '../extra/static/config/OwnCloudConfig');
 script('spreedme', '../extra/static/PostMessageAPI');

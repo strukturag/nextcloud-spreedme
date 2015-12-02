@@ -73,4 +73,14 @@ class PageController extends Controller {
 		return $response;
 	}
 
+	/**
+	 * @NoCSRFRequired
+	 */
+	public function debug() {
+		$params = [];
+		$response = new TemplateResponse(Settings::APP_ID, 'debug', $params, 'empty');
+
+		return $response;
+	}
+
 }

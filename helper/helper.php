@@ -11,6 +11,7 @@
 
 namespace OCA\SpreedME\Helper;
 
+use OCA\SpreedME\Config\Config;
 use OCA\SpreedME\Settings\Settings;
 
 class Helper {
@@ -42,6 +43,25 @@ class Helper {
 		if (!class_exists('\OCA\SpreedME\Config\Config', true) || !is_file(self::getOwnAppPath() . 'extra/static/config/OwnCloudConfig.js')) {
 			die('You didn\'t set up this ownCloud app. Please follow the instructions in the README.md file in the apps/' . Settings::APP_ID . ' folder.');
 		}
+	}
+
+	public static function getSpreedWebRtcUrl($debug = null) {
+		$origin = Config::SPREED_WEBRTC_ORIGIN;
+		$basepath = Config::SPREED_WEBRTC_BASEPATH;
+
+		if (empty($origin)) {
+			// TODO(leon): This shouldn't die, maybe use exceptions
+			die('Please edit the config/config.php file and set all required constants.');
+		}
+
+		$iframe_url = $origin . $basepath;
+		if ($debug !== false) {
+			if ($debug === true || isset($_GET['debug'])) {
+				$iframe_url .= '?debug';
+			}
+		}
+
+		return $iframe_url;
 	}
 
 }
