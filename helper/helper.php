@@ -54,14 +54,14 @@ class Helper {
 			die('Please edit the config/config.php file and set all required constants.');
 		}
 
-		$iframe_url = $origin . $basepath;
+		$url = $origin . $basepath;
 		if ($debug !== false) {
 			if ($debug === true || isset($_GET['debug'])) {
-				$iframe_url .= '?debug';
+				$url .= '?debug';
 			}
 		}
 
-		return $iframe_url;
+		return $url;
 	}
 
 }
