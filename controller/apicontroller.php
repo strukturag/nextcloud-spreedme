@@ -106,7 +106,7 @@ class ApiController extends Controller {
 			'ajax/download.php',
 			array(
 				'dir' => $fileDir,
-				'files' => $fileName
+				'files' => $fileName,
 			)
 		);
 
