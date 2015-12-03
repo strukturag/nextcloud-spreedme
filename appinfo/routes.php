@@ -21,7 +21,7 @@ return [
 		// API
 		['name' => 'api#get_config', 'url' => '/api/v1/config', 'verb' => 'GET'],
 		['name' => 'api#get_user_config', 'url' => '/api/v1/user/config', 'verb' => 'GET'],
-		['name' => 'api#get_login', 'url' => '/api/v1/user/login', 'verb' => 'GET'],
+		['name' => 'api#get_token', 'url' => '/api/v1/user/token', 'verb' => 'GET'],
 		['name' => 'api#download_file', 'url' => '/api/v1/file/download', 'verb' => 'GET'],
 	],
 ];

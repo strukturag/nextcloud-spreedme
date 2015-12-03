@@ -251,9 +251,9 @@ define([
 						var config = message;
 						setConfig(config);
 						break;
-					case "login":
-						var login = message;
-						doLogin(login);
+					case "token":
+						var token = message;
+						doLogin(token);
 						break;
 					case "userConfig":
 						var config = message;

@@ -79,7 +79,7 @@ class ApiController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function getLogin() {
+	public function getToken() {
 		$_response = array('success' => false);
 		try {
 			$_response = array_merge($_response, $this->user->getSignedCombo());

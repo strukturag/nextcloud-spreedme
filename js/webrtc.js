@@ -56,16 +56,16 @@ $(document).ready(function() {
 		});
 	};
 
-	var getLogin = function() {
-		var url = OC.generateUrl("/apps/spreedme/api/v1/user/login");
+	var getToken = function() {
+		var url = OC.generateUrl("/apps/spreedme/api/v1/user/token");
 		$.ajax({
 			url: url,
 			method: "GET",
 		})
-		.done(function(login) {
+		.done(function(token) {
 			postMessageAPI.post({
-				login: login,
-				type: "login"
+				token: token,
+				type: "token"
 			});
 		});
 	};
@@ -106,7 +106,7 @@ $(document).ready(function() {
 			});
 		}
 		getConfig();
-		getLogin();
+		getToken();
 		getUserConfig();
 	};
 
