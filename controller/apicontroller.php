@@ -11,6 +11,7 @@
 
 namespace OCA\SpreedME\Controller;
 
+use OCA\SpreedME\Helper\Helper;
 use OCA\SpreedME\User\User;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -32,6 +33,32 @@ class ApiController extends Controller {
 		}
 
 		$this->urlGenerator = $urlGenerator;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 */
+	public function getConfig() {
+		$_response = array('success' => false);
+		try {
+			$_response['spreed_webrtc'] = array(
+				'url' => Helper::getSpreedWebRtcUrl(),
+			);
+			$_response['owncloud'] = array(
+				'login' => array(
+					'url' => $this->urlGenerator->linkTo(
+						'index.php'
+					),
+				),
+			);
+			$_response['success'] = true;
+		} catch (\Exception $e) {
+			$_response['error'] = $e->getCode();
+		}
+
+		return new DataResponse($_response);
 	}
 
 	/**
