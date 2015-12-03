@@ -64,6 +64,10 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 4. Copy back the two files (step 1) to the appropriate folders
 5. Consult CHANGELOG.md for changes you might need to follow
 
+## Debugging this app
+- If you're having trouble getting this app and Spreed WebRTC server to run, simply open **/index.php/apps/spreedme/debug** of your ownCloud host in your browser.  
+  It might contain information which can help to debug the issue.
+
 ## Installation / Setup of a Spreed WebRTC server
 1. Head over to [github.com/strukturag/spreed-webrtc](https://github.com/strukturag/spreed-webrtc) and follow the instructions to install the Spreed WebRTC server.  
    For a packaged version (preferred) see [github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository](https://github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository)  
