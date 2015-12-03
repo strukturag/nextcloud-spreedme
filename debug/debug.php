@@ -30,6 +30,8 @@ class Debug {
 			}
 		}
 
+		printf('<b>%s Version %s</b>%s', Settings::APP_TITLE, Helper::getOwnAppVersion(), '<br /><br />' . PHP_EOL);
+
 		$found_errors = false;
 		foreach ($tests as $number => $test) {
 			$error = self::$test();
