@@ -40,5 +40,4 @@ appstore_package: clean
 	--exclude=$(project_dir)/Makefile \
 	--exclude=$(project_dir)/tests \
 	--exclude=$(project_dir)/screenshots \
-	--exclude=$(project_dir)/doc \
 	--exclude-from=$(project_dir)/.gitignore
