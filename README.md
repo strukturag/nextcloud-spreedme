@@ -57,6 +57,13 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 8. **That's it.** You can now start communicating securely with your friends and family by opening **/index.php/apps/spreedme** of your ownCloud host in your browser.  
    For debugging, simply append `?debug` to that URL.
 
+## Limiting access to this app
+- By default, all users who can log in to your ownCloud installation can also use this app (and spreed-webrtc)
+- If you want to limit access to this app (and spreed-webrtc) only to a selected user-group, open ownCloud's user configuration site in your browser: **/index.php/settings/users**
+- Create a new group there (e.g. "spreed.me"). For sure you can also use an existing group (like "admin")
+- Now go to ownCloud's app configuration page **/index.php/settings/apps**, find this app and check **Enable only for specific groups**. Then add all groups which should be able to use this app.
+- All users not in a group specified in the step above, will neither be able to use this app nor spreed-webrtc.
+
 ## Upgrading this app
 1. Save the `config/config.php` and the `extra/static/config/OwnCloudConfig.js` file of your current **spreedme** apps directory
 2. Download a newer version of this app
