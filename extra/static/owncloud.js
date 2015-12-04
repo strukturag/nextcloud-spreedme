@@ -80,7 +80,12 @@ define([
 			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "restURL", "alertify", "chromeExtension", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, restURL, alertify, chromeExtension) {
 
 				if (!HAS_PARENT) {
-					alertify.dialog.error("Please do not directly access this service. Open the Spreed.ME app in your ownCloud installation instead.");
+					var redirect = function() {
+						// This only redirects to the ownCloud host. No base path included!
+						// TODO(leon): Fix this somehow.
+						$window.location.replace(OwnCloudConfig.OWNCLOUD_ORIGIN);
+					};
+					alertify.dialog.exec("error", "Error", "Please do not directly access this service. Open the Spreed.ME app in your ownCloud installation instead.", redirect, redirect);
 					// Workaround to prevent app from continuing
 					appData.authorizing(true);
 					return;
