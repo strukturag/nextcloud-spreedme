@@ -80,7 +80,7 @@ define([
 			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "restURL", "alertify", "chromeExtension", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, restURL, alertify, chromeExtension) {
 
 				if (!HAS_PARENT) {
-					alertify.dialog.error("Please do not directly access this service. Open this app in your ownCloud installation instead.");
+					alertify.dialog.error("Please do not directly access this service. Open the Spreed.ME app in your ownCloud installation instead.");
 					// Workaround to prevent app from continuing
 					appData.authorizing(true);
 					return;
