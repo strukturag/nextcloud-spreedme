@@ -65,7 +65,7 @@ class Security {
 		self::requireEnabledTemporaryPassword();
 
 		$key = Config::OWNCLOUD_TEMPORARY_PASSWORD_SHAREDSECRET;
-		$max_age = Config::OWNCLOUD_TEMPORARY_PASSWORD_DEFAULT_MAX_AGE;
+		$max_age = 60 * 60 * 2;
 
 		if ($expiration > 0) {
 			// Use a fixed expiration date
