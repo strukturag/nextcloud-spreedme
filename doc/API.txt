@@ -70,6 +70,37 @@ Available endpoints with request methods and content-type:
         }
 
 
+  /api/v1/token/withtp
+
+    The token/withtp endpoint returns a token which can be used by non-ownCloud users
+    to authenticate to spreed-webrtc. It requires a temporary password.
+    This endpoint does not require a session (cookie). It's public.
+
+    POST application/x-www-form-urlencoded
+      tp: The temporary password
+      Response 200:
+        {
+          "success": true,
+          "useridcombo": "1450885700:test",
+          "secret": "0QaHuJ3WuSf6ONErhZvJO8H9Lxu0uaEbGSnmxQh/T1A="
+        }
+
+
+  /api/v1/admin/tp
+
+    The admin/tp endpoint returns a temporary password.
+    This endpoint requires a valid admin session (cookie).
+
+    POST application/x-www-form-urlencoded
+      userid: The user id to invite
+      expiration: UNIX timestamp representation of expiration date
+      Response 200:
+        {
+          "success": true,
+          "tp": "1450885680:test:THFJ2rJbkEhGR5ehkI+JqoZNXjMzuApSKjLXGsX7HAc="
+        }
+
+
   /api/v1/file/download
 
     The file/download endpoint provides download functionality
