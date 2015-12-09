@@ -42,7 +42,7 @@ Available endpoints with request methods and content-type:
 
   /api/v1/user/config
 
-    The user/config endpoints returns user-specific information about the
+    The user/config endpoint returns user-specific information about the
     currently authenticated user.
     This endpoint requires a valid session (cookie).
 
@@ -59,7 +59,7 @@ Available endpoints with request methods and content-type:
 
   /api/v1/user/token
 
-    The user/token endpoints returns the token required to
+    The user/token endpoint returns the token required to
     authenticate to spreed-webrtc.
     This endpoint requires a valid session (cookie).
 
@@ -75,7 +75,7 @@ Available endpoints with request methods and content-type:
 
   /api/v1/file/download
 
-    The file/download endpoints provides download functionality
+    The file/download endpoint provides download functionality
     of ownCloud documents. Currently it redirects to a URL where the file
     ultimately can be found. This is due to ownCloud's restrictiveness.
     This endpoint and the URL it redirects to both require a valid session (cookie).
