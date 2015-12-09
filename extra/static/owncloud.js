@@ -130,9 +130,11 @@ define([
 				})();
 
 				var currentRoom;
-				var online = $q.defer();
+				var online = ownCloud.deferreds.online;
 				var isOnline = false;
-				var authorize = $q.defer();
+				var guest = ownCloud.deferreds.guest;
+				var isGuest = false;
+				var authorize = $q.defer(); // Too risky to expose
 
 				appData.e.on("selfReceived", function(event, data) {
 					log("selfReceived", data);
@@ -155,6 +157,10 @@ define([
 				online.promise.then(function() {
 					isOnline = true;
 				});
+				guest.promise.then(function() {
+					isGuest = true;
+					askForGuestToken();
+				});
 
 				var getUserSettings = function() {
 					return userSettingsData.load() || {};
@@ -167,13 +173,45 @@ define([
 					settingsScope.saveSettings();
 				};
 
+				var askForGuestToken = function(previouslyFailed) {
+					previouslyFailed = !!previouslyFailed;
+					alertify.dialog.prompt("Please enter a token to log in", function(token) {
+						postMessageAPI.requestResponse((new Date().getTime()) /* id */, {
+							type: "guestLogin",
+							guestLogin: token
+						}, function(event) {
+							var token = event.data;
+							if (!token.success) {
+								askForGuestToken(true);
+								return;
+							}
+							doLogin({
+								useridcombo: token.useridcombo,
+								secret: token.secret
+							});
+						});
+					}, function() {
+						askForGuestToken(true);
+					});
+				};
+
 				var setConfig = function(config) {
 					ownCloud.setConfig(config);
+
+					if (config.isGuest) {
+						guest.resolve(true);
+					}
+				};
+
+				var setGuestConfig = function(config) {
+					if (config.display_name) {
+						setUsername(config.display_name);
+					}
 				};
 
 				var setUserConfig = function(config) {
 					setUsername(config.display_name);
-				}
+				};
 
 				var setUsername = function(displayName) {
 					var userSettings = getUserSettings();
@@ -200,6 +238,13 @@ define([
 				var doLogin = function(login) {
 					online.promise.then(function() {
 						mediaStream.users.authorize(login, function(data) {
+							if (isGuest) {
+								authorize.promise.then(function() {
+									setGuestConfig({
+										display_name: data.userid
+									});
+								});
+							}
 							log("Retrieved nonce - authenticating as user:", data.userid);
 							mediaStream.api.requestAuthentication(data.userid, data.nonce);
 							delete data.nonce;
@@ -208,8 +253,13 @@ define([
 							$timeout(function() {
 								var modal = angular.element(".modal");
 								var scope = modal.find(".modal-header").scope().$parent;
-								modal.find("button").remove();
-								scope.msg = "Could not authenticate. Incorrect shared secret?";
+								scope.msg = "Could not authenticate. Please try again.";
+								if (isGuest) {
+									//scope.close();
+									askForGuestToken(true);
+								} else {
+									modal.find("button").remove();
+								}
 							}, 100);
 						});
 					});
@@ -271,6 +321,13 @@ define([
 							setBuddyPicture(buddyPicture);
 						});
 						break;
+					case "guestConfig":
+						var config = message;
+						// TODO(leon): This is only a temporary workaround
+						authorize.promise.then(function() {
+							setGuestConfig(config);
+						});
+						break;
 					case "changeRoom":
 						var room = message;
 						changeRoom(room);
@@ -309,6 +366,11 @@ define([
 			}]);
 
 			app.service('ownCloud', ["$window", "$http", "$q", function($window, $http, $q) {
+
+				var deferreds = {
+					online: $q.defer(),
+					guest: $q.defer()
+				};
 
 				var config = {
 
@@ -439,6 +501,7 @@ define([
 					uploadFile: uploadFile,
 					downloadFile: downloadFile,
 					FileSelector: FileSelector,
+					deferreds: deferreds
 				};
 
 			}]);
@@ -579,7 +642,7 @@ define([
 							$thumb.find('button').replaceWith($button.clone(true));
 							$thumb.insertAfter(element.find('.presentations .thumbnail').first());
 
-							$(element).on('mouseenter', '.presentations .thumbnail.ng-scope', function(event) {
+							var onmouseenter = function(event) {
 								var $this = $(this);
 								if ($this.find('.btn.download-to-owncloud').length === 0) {
 									var $button = $this.find('.download');
@@ -591,6 +654,14 @@ define([
 									$newButton.on('click', _.bind(downloadPresentation, scope)($this));
 									$newButton.insertAfter($button);
 								}
+							};
+							$(element).on('mouseenter', '.presentations .thumbnail.ng-scope', onmouseenter);
+
+							ownCloud.deferreds.guest.promise.then(function() {
+								// Remove some features for guests
+								element.find('.owncloud-start-import').remove();
+								$thumb.remove();
+								$(element).off('mouseenter', '.presentations .thumbnail.ng-scope', onmouseenter);
 							});
 						};
 					},

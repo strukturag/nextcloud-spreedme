@@ -27,6 +27,19 @@ class Config {
 	// you already set in the [users] section of the `server.conf` file from Spreed WebRTC server
 	const SPREED_WEBRTC_SHAREDSECRET = 'bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX';
 
+	// Set to true if you want to allow access to this app + spreed-webrtc for non-registered users who received a temporary password by an ownCloud admin.
+	// You can generate such a temporary password at: TODO(leon): Add link /index.php/apps/spreedme/admin/tp (ownCloud admin user account required)
+	const OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED = false;
+
+	// If 'OWNCLOUD_ALLOW_TEMPORARY_PASSWORD_LOGIN' is set to true, you also have to provide a shared secret here (64-character HEX string)
+	// Generate it using `xxd -ps -l 32 -c 32 /dev/random` (better) or `openssl rand -hex 32`
+	const OWNCLOUD_TEMPORARY_PASSWORD_SHAREDSECRET = 'f20e1b84781d80570fef6e2969f61ba91ccb56922398a45eXXXXXXXXXXXXXXXX';
+
+	// Max age of the temporary password. Default: 2 hours.
+	// It's recommended not to change this, as you can set the expiration date manually via web interface
+	// This is just a default value.
+	const OWNCLOUD_TEMPORARY_PASSWORD_DEFAULT_MAX_AGE = 60 * 60 * 2;
+
 	private function __construct() {
 
 	}
