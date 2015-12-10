@@ -28,7 +28,7 @@ class Config {
 	const SPREED_WEBRTC_SHAREDSECRET = 'bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX';
 
 	// Set to true if you want to allow access to this app + spreed-webrtc for non-registered users who received a temporary password by an ownCloud admin.
-	// You can generate such a temporary password at: TODO(leon): Add link /index.php/apps/spreedme/admin/tp (ownCloud admin user account required)
+	// You can generate such a temporary password at: /index.php/apps/spreedme/admin/tp (ownCloud admin user account required)
 	const OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED = false;
 
 	// If 'OWNCLOUD_ALLOW_TEMPORARY_PASSWORD_LOGIN' is set to true, you also have to provide a shared secret here (64-character HEX string)
