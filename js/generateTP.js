@@ -22,7 +22,7 @@ $(document).ready(function() {
 			alert("Please enter a valid expiration date");
 			return;
 		}
-		if (expiration > (new Date().getTime() / 1000) + (60 * 60 * 24)) {
+		if (expiration > Math.round(new Date().getTime() / 1000) + (60 * 60 * 24)) {
 			var response = confirm("Do you really want to generate a Temporary Passwords which is valid for more than 1 day?");
 			if (!response) {
 				return;
