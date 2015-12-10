@@ -22,7 +22,7 @@ $(document).ready(function() {
 			alert("Please enter a valid expiration date");
 			return;
 		}
-		if (expiration > Math.round(new Date().getTime() / 1000) + (60 * 60 * 24)) {
+		if (expiration > (new Date().getTime() / 1000) + (60 * 60 * 24)) {
 			var response = confirm("Do you really want to generate a Temporary Passwords which is valid for more than 1 day?");
 			if (!response) {
 				return;
@@ -52,7 +52,7 @@ $(document).ready(function() {
 	$("form input[type=submit]").click(function(e) {
 		e.preventDefault();
 
-		requestTP(useridField.val(), (new Date(expirationField.datetimepicker("getDate")).getTime() / 1000), function(tp) {
+		requestTP(useridField.val(), Math.round(new Date(expirationField.datetimepicker("getDate")).getTime() / 1000), function(tp) {
 			var tpField = $("<input>")
 				.attr("value", tp)
 				.attr("size", "80")
