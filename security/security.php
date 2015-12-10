@@ -23,7 +23,7 @@ class Security {
 
 	public static function getSignedCombo($userid) {
 		$key = Config::SPREED_WEBRTC_SHAREDSECRET;
-		$max_usercombo_age = Settings::SPREED_WEBRTC_MAX_USERCOMBO_AGE;
+		$max_usercombo_age = Settings::SPREED_WEBRTC_USERCOMBO_MAX_AGE;
 
 		$useridcombo = (time() + $max_usercombo_age) . ':' . $userid;
 		$secret = base64_encode(hash_hmac('sha256', $useridcombo, $key, true));
