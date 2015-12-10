@@ -64,7 +64,7 @@ class Security {
 	public static function generateTemporaryPassword($userid, $expiration = 0) {
 		self::requireEnabledTemporaryPassword();
 
-		$key = Config::OWNCLOUD_TEMPORARY_PASSWORD_SHAREDSECRET;
+		$key = Config::OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY;
 		$max_age = 60 * 60 * 2;
 
 		if ($expiration > 0) {
