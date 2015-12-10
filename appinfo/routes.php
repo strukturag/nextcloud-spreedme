@@ -15,8 +15,8 @@ return [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#webrtc', 'url' => '/webrtc', 'verb' => 'GET'],
 		['name' => 'page#file_selector', 'url' => '/file-selector', 'verb' => 'GET'],
-		['name' => 'page#display_changelog', 'url' => '/changelog', 'verb' => 'GET'],
-		['name' => 'page#debug', 'url' => '/debug', 'verb' => 'GET'],
+		['name' => 'page#display_changelog', 'url' => '/admin/changelog', 'verb' => 'GET'],
+		['name' => 'page#debug', 'url' => '/admin/debug', 'verb' => 'GET'],
 
 		// API
 		['name' => 'api#get_config', 'url' => '/api/v1/config', 'verb' => 'GET'],

@@ -72,7 +72,7 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 5. Consult CHANGELOG.md for changes you might need to follow
 
 ## Debugging this app
-- If you're having trouble getting this app and Spreed WebRTC server to run, simply open **/index.php/apps/spreedme/debug** of your ownCloud host in your browser.  
+- If you're having trouble getting this app and Spreed WebRTC server to run, simply open **/index.php/apps/spreedme/admin/debug** of your ownCloud host in your browser.  
   It might contain information which can help to debug the issue.
 
 ## Installation / Setup of a Spreed WebRTC server
