@@ -589,8 +589,7 @@ define([
 									var $newButton = $button.clone()
 										.removeClass('download ng-hide')
 										.addClass('download-to-owncloud')
-										.removeAttr('ng-show ng-click')
-										.css('left', '57px');
+										.removeAttr('ng-show ng-click');
 									$newButton.find('.fa').removeClass('fa-download').addClass('fa-cloud-download');
 									$newButton.on('click', _.bind(downloadPresentation, scope)($this));
 									$newButton.insertAfter($button);

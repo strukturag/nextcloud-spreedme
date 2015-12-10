@@ -54,3 +54,7 @@
 .desktopnotify-icon {
 	background-image: url("../img/logo-48x48.png");
 }
+
+.presentation .btn.download-to-owncloud {
+	left: 57px;
+}
