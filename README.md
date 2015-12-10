@@ -1,6 +1,7 @@
 # Spreed.ME ownCloud app
 - This app can only be used in conjunction with a [Spreed WebRTC server](https://github.com/strukturag/spreed-webrtc).  
   You will not be able to use this app without such a server, but it's **easy to set up** one – The whole process only takes about 5-10 minutes – 2 minutes if you are fast ;).
+- The latest version of this app can be found in the ownCloud app store or at [github.com/strukturag/owncloud-spreedme](https://github.com/strukturag/owncloud-spreedme)
 
 ## Features
 - Securely communicate with your friends and family using rich audio-, video- and text chat right from your ownCloud installation – in your browser
