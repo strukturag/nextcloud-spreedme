@@ -20,7 +20,7 @@ style('spreedme', 'jquery-timepicker');
 <form action="#" method="POST">
 
 	Username: <input type="text" name="userid" value="" /><br />
-	Expiration: <input type="text" name="expiration" value="<?php echo time(); ?>" /><br />
+	Expiration: <input type="text" name="expiration" value="" /><br />
 
 	<br /><input type="submit" />
 
