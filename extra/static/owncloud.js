@@ -159,7 +159,7 @@ define([
 				});
 				guest.promise.then(function() {
 					isGuest = true;
-					askForGuestToken();
+					askForGuestPassword();
 				});
 
 				var getUserSettings = function() {
@@ -173,16 +173,16 @@ define([
 					settingsScope.saveSettings();
 				};
 
-				var askForGuestToken = function(previouslyFailed) {
+				var askForGuestPassword = function(previouslyFailed) {
 					previouslyFailed = !!previouslyFailed;
-					alertify.dialog.prompt("Please enter a token to log in", function(token) {
+					alertify.dialog.prompt("Please enter a password to log in", function(token) {
 						postMessageAPI.requestResponse((new Date().getTime()) /* id */, {
 							type: "guestLogin",
 							guestLogin: token
 						}, function(event) {
 							var token = event.data;
 							if (!token.success) {
-								askForGuestToken(true);
+								askForGuestPassword(true);
 								return;
 							}
 							doLogin({
@@ -191,7 +191,7 @@ define([
 							});
 						});
 					}, function() {
-						askForGuestToken(true);
+						askForGuestPassword(true);
 					});
 				};
 
@@ -256,7 +256,7 @@ define([
 								scope.msg = "Could not authenticate. Please try again.";
 								if (isGuest) {
 									//scope.close();
-									askForGuestToken(true);
+									askForGuestPassword(true);
 								} else {
 									modal.find("button").remove();
 								}
