@@ -21,8 +21,8 @@ class Security {
 
 	}
 
-	private static function getSignedUsercomboArray($userid, $key, $max_age, $expiration = null) {
-		if ($expiration !== null) {
+	private static function getSignedUsercomboArray($userid, $key, $max_age, $expiration = 0) {
+		if ($expiration > 0) {
 			$useridcombo = intval($expiration) . ':' . $userid;
 		} else {
 			$useridcombo = (time() + $max_age) . ':' . $userid;
