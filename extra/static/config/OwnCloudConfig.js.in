@@ -17,7 +17,8 @@
 			// Domain of your ownCloud server (including protocol and optional port number), examples:
 			//OWNCLOUD_ORIGIN: 'https://myowncloudserver.com',
 			//OWNCLOUD_ORIGIN: 'https://owncloud.myserver.com:8443',
-			OWNCLOUD_ORIGIN: 'please-change-me',
+			// If this is empty or only includes a port (e.g. :8443), host will automatically be determined (current host)
+			OWNCLOUD_ORIGIN: '',
 		};
 	};
 

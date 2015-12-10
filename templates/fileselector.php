@@ -1,8 +1,8 @@
 <?php
 
-use \OCA\SpreedME\Config\Config;
+use \OCA\SpreedME\Helper\Helper;
 
-$origin = Config::SPREED_WEBRTC_ORIGIN;
+$origin = Helper::getSpreedWebRtcOrigin();
 
 script('spreedme', '../extra/static/config/OwnCloudConfig');
 script('spreedme', '../extra/static/PostMessageAPI');

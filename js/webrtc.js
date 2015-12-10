@@ -25,6 +25,22 @@ $(document).ready(function() {
 		];
 	})();
 
+	var OWN_ORIGIN = (function() {
+		var origin = OwnCloudConfig.OWNCLOUD_ORIGIN;
+		var isPort = origin[0] === ':';
+
+		if (origin && !isPort) {
+			return origin;
+		} else {
+			// Not set - allow own host
+			var location = document.location;
+			var protocol = location.protocol;
+			var hostname = location.hostname;
+			var port = (isPort ? origin : ':' + location.port);
+			return protocol + "//" + hostname + port;
+		}
+	})();
+
 	var postMessageAPI = new PostMessageAPI({
 		allowedPartners: ALLOWED_PARTNERS,
 		iframe: iframe
@@ -32,10 +48,11 @@ $(document).ready(function() {
 	var currentRoom = decodeURIComponent(window.location.hash.replace("#", "")) || "";
 
 	var getConfig = function() {
+		var host = OWN_ORIGIN;
 		postMessageAPI.post({
 			config: {
 				// Use own origin, as this is possibly used by a different context
-				baseURL: OwnCloudConfig.OWNCLOUD_ORIGIN + OC.generateUrl("/apps/spreedme")
+				baseURL: host + OC.generateUrl("/apps/spreedme")
 			},
 			type: "config"
 		});

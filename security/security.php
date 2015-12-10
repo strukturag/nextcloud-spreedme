@@ -35,10 +35,7 @@ class Security {
 	}
 
 	public static function getAllowedIframeDomains() {
-		$origin = Config::SPREED_WEBRTC_ORIGIN;
-		if (empty($origin)) {
-			$origin = Helper::getOwnHost();
-		}
+		$origin = Helper::getSpreedWebRtcOrigin();
 
 		return array(
 			$origin,

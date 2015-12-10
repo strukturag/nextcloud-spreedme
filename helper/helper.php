@@ -20,11 +20,13 @@ class Helper {
 
 	}
 
-	public static function getOwnHost() {
+	public static function getOwnHost($port = null) {
 		$is_http = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off');
 		$protocol = ($is_http ? 'http' : 'https');
 		$hostname = $_SERVER['SERVER_NAME'];
-		$port = $_SERVER['SERVER_PORT'];
+		if ($port === null) {
+			$port = $_SERVER['SERVER_PORT'];
+		}
 		$is_default_port = ($is_http && $port === '80') || (!$is_http && $port === '443');
 		$optional_port = (!empty($port) && !$is_default_port ? ':' . $port : '');
 
@@ -45,14 +47,22 @@ class Helper {
 		}
 	}
 
-	public static function getSpreedWebRtcUrl($debug = null) {
+	public static function getSpreedWebRtcOrigin() {
 		$origin = Config::SPREED_WEBRTC_ORIGIN;
-		$basepath = Config::SPREED_WEBRTC_BASEPATH;
-
-		if (empty($origin)) {
-			// TODO(leon): This shouldn't die, maybe use exceptions
-			die('Please edit the config/config.php file and set all required constants.');
+		$is_port = $origin[0] === ':';
+		$port = null;
+		if ($is_port) {
+			$port = str_replace(':', '', $origin);
 		}
+		if (empty($origin) || $is_port) {
+			$origin = self::getOwnHost($port);
+		}
+		return $origin;
+	}
+
+	public static function getSpreedWebRtcUrl($debug = null) {
+		$origin = self::getSpreedWebRtcOrigin();
+		$basepath = Config::SPREED_WEBRTC_BASEPATH;
 
 		$url = $origin . $basepath;
 		if ($debug !== false) {
