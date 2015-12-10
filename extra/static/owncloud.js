@@ -134,7 +134,7 @@ define([
 				var isOnline = false;
 				var guest = ownCloud.deferreds.guest;
 				var isGuest = false;
-				var authorize = $q.defer(); // Too risky to expose
+				var authorize = ownCloud.deferreds.authorize;
 
 				appData.e.on("selfReceived", function(event, data) {
 					log("selfReceived", data);
@@ -368,6 +368,7 @@ define([
 			app.service('ownCloud', ["$window", "$http", "$q", function($window, $http, $q) {
 
 				var deferreds = {
+					authorize: $q.defer(),
 					online: $q.defer(),
 					guest: $q.defer()
 				};
