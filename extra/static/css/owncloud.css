@@ -1,21 +1,21 @@
 #loader {
-background: url("../img/logo.svg") no-repeat center;
+	background: url("../img/logo.svg") no-repeat center;
 }
 
 .bar .left .logo a {
-display:none;
+	display:none;
 }
 
 .bar .left .logo {
-background: url("../img/spreedme.svg") no-repeat center;
-background-size: 100%;
-display: inline-block;
-width: 108px;
-height: 40px;
+	background: url("../img/spreedme.svg") no-repeat center;
+	background-size: 100%;
+	display: inline-block;
+	width: 108px;
+	height: 40px;
 }
 
 .bar .left {
-padding: 8px 10px 0px 15px;
+	padding: 8px 10px 0px 15px;
 }
 
 @media (max-width: 700px) {
@@ -29,28 +29,28 @@ padding: 8px 10px 0px 15px;
 	}
 }
 
-.buddyPicture  {
-background: #00bbd7 !important;
+.buddyPicture {
+	background: #00bbd7 !important;
 }
 
 .buddyPicture .fa {
-color: white !important;
+	color: white !important;
 }
 
 .bar .right .btn.active.aenablebtn {
-background-color: #00bbd7;
-border-color: #00bbd7;
+	background-color: #00bbd7;
+	border-color: #00bbd7;
 }
 
 .welcome .welcome-logo {
-background: url("../img/logo.svg") no-repeat left top;
+	background: url("../img/logo.svg") no-repeat left top;
 }
 
 .remoteVideo .overlayLogo {
-background: url("../img/logo.svg") no-repeat right center;
-max-height: 50px;
+	background: url("../img/logo.svg") no-repeat right center;
+	max-height: 50px;
 }
 
 .desktopnotify-icon {
-  background-image: url("../img/logo-48x48.png");
+	background-image: url("../img/logo-48x48.png");
 }
