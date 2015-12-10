@@ -1,0 +1,4 @@
+TODO:
+
+For TODOs not listed in here, search for them via:
+  $ grep -r --exclude-dir=".git" --exclude="TODO.txt" "TODO" .
