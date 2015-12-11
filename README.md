@@ -22,6 +22,9 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 **Note:** We recommend using option **1.** as it's much easier to maintain. Also it seems that you can't use Screensharing in latest browsers when using option **2.**. We're working on a workaround so Screensharing also works with option **2.**, but for now option **1.** seems the way to go.
 
 ## Installation / Setup of this app
+First off, here's a little encouragement:
+This list of steps might seem a bit long, but it's really easy to follow – we promise. You only have to set up this app once :)
+
 1. Place this app in the **apps/** folder of your ownCloud installation.
 2. Set up a Spreed WebRTC server and continue with the next step.
    An easy-to-follow installation guideline can be found further below, see **Installation / Setup of a Spreed WebRTC server**
