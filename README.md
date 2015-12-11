@@ -17,7 +17,9 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 1. Do you want to run ownCloud and Spreed WebRTC on the same origin (i.e. on the same domain+port combination)?  
    (e.g. access ownCloud at https://myowncloudserver.com:8443 and Spreed WebRTC at https://myowncloudserver.com:8443/webrtc/) **-->** Then use **/webrtc/** as your **basePath** for the next steps.
 2. Do you want to run ownCloud and Spreed WebRTC on two different origins?  
-   (e.g. access ownCloud at https://myowncloudserver.com:8443 and Spreed WebRTC at https://webrtc.myowncloudserver.com:8443) **-->** Then use an empty / no **basePath** for the next steps.
+   (e.g. access ownCloud at https://myowncloudserver.com:8443 and Spreed WebRTC at https://webrtc.myowncloudserver.com:8443) **-->** Then use an empty / no **basePath** for the next steps.  
+
+**Note:** We recommend using option **1.** as it's much easier to maintain. Also it seems that you can't use Screensharing in latest browsers when using option **2.**. We're working on a workaround so Screensharing also works with option **2.**, but for now option **1.** seems the way to go.
 
 ## Installation / Setup of this app
 1. Place this app in the **apps/** folder of your ownCloud installation.
