@@ -24,6 +24,9 @@ class Helper {
 		$is_http = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off');
 		$protocol = ($is_http ? 'http' : 'https');
 		$hostname = $_SERVER['SERVER_NAME'];
+		if (empty($hostname)) {
+			$hostname = $_SERVER['SERVER_ADDR'];
+		}
 		if ($port === null) {
 			$port = $_SERVER['SERVER_PORT'];
 		}
