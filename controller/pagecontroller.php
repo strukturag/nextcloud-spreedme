@@ -21,15 +21,20 @@ use OCP\IRequest;
 
 class PageController extends Controller {
 
+	private $userid;
+
 	public function __construct($appName, IRequest $request, $userId) {
 		parent::__construct($appName, $request);
 
 		Helper::notifyIfAppNotSetUp();
+
+		$this->userid = $userId;
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function index() {
 		return $this->webRTC();
@@ -38,9 +43,12 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 */
 	public function webRTC() {
-		$params = [];
+		$params = [
+			'is_guest' => ($this->userid === null),
+		];
 		$response = new TemplateResponse(Settings::APP_ID, 'webrtc', $params);
 
 		// Allow to embed iframes
@@ -48,6 +56,16 @@ class PageController extends Controller {
 		//$csp->addAllowedFrameDomain('*');
 		$csp->addAllowedFrameDomain(implode(' ', Security::getAllowedIframeDomains()));
 		$response->setContentSecurityPolicy($csp);
+
+		return $response;
+	}
+
+	/**
+	 * @NoCSRFRequired
+	 */
+	public function generateTemporaryPassword() {
+		$params = [];
+		$response = new TemplateResponse(Settings::APP_ID, 'generateTP', $params, 'empty');
 
 		return $response;
 	}

@@ -12,6 +12,7 @@
 namespace OCA\SpreedME\Controller;
 
 use OCA\SpreedME\Helper\Helper;
+use OCA\SpreedME\Security\Security;
 use OCA\SpreedME\User\User;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -81,6 +82,48 @@ class ApiController extends Controller {
 			$_response['success'] = true;
 		} catch (\Exception $e) {
 			$_response['error'] = $e->getCode();
+		}
+
+		return new DataResponse($_response);
+	}
+
+	/**
+	 * @NoCSRFRequired
+	 */
+	public function generateTemporaryPassword() {
+		$userid = isset($_POST['userid']) ? $_POST['userid'] : null;
+		$expiration = isset($_POST['expiration']) ? $_POST['expiration'] : null;
+
+		$_response = array('success' => false);
+		if ($userid !== null && $expiration !== null) {
+			try {
+				$_response['tp'] = Security::generateTemporaryPassword($userid, $expiration);
+				$_response['success'] = true;
+			} catch (\Exception $e) {
+				$_response['error'] = $e->getCode();
+			}
+		}
+
+		return new DataResponse($_response);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 */
+	public function getTokenWithTemporaryPassword() {
+		$tp = isset($_POST['tp']) ? $_POST['tp'] : null;
+
+		$_response = array('success' => false);
+		if ($tp !== null) {
+			try {
+				$token = Security::getSignedComboFromTemporaryPassword($tp);
+				$_response = array_merge($_response, $token);
+				$_response['success'] = true;
+			} catch (\Exception $e) {
+				$_response['error'] = $e->getCode();
+			}
 		}
 
 		return new DataResponse($_response);

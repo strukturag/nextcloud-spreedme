@@ -9,7 +9,11 @@ script('spreedme', '../extra/static/PostMessageAPI');
 script('spreedme', 'webrtc');
 style('spreedme', 'webrtc');
 
+$is_guest = $_['is_guest'];
+
 ?>
+
+<script data-shared-config='{"isGuest": <?php echo $is_guest ? 'true' : 'false'; ?>}'></script>
 
 <div id="debug"><b>Debug</b><br /></div>
 

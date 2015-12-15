@@ -15,6 +15,8 @@ $(document).ready(function() {
 
 	var iframe = $("#container iframe").get(0);
 
+	var sharedConfig = $.parseJSON($("script[data-shared-config]").attr("data-shared-config"));
+	var IS_GUEST = sharedConfig.isGuest;
 	var ALLOWED_PARTNERS = (function() {
 		var parser = document.createElement("a");
 		parser.href = iframe.src;
@@ -52,9 +54,19 @@ $(document).ready(function() {
 		postMessageAPI.post({
 			config: {
 				// Use own origin, as this is possibly used by a different context
-				baseURL: host + OC.generateUrl("/apps/spreedme")
+				baseURL: host + OC.generateUrl("/apps/spreedme"),
+				isGuest: IS_GUEST
 			},
 			type: "config"
+		});
+	};
+
+	var getGuestConfig = function() {
+		postMessageAPI.post({
+			guestConfig: {
+
+			},
+			type: "guestConfig"
 		});
 	};
 
@@ -123,8 +135,12 @@ $(document).ready(function() {
 			});
 		}
 		getConfig();
-		getToken();
-		getUserConfig();
+		if (IS_GUEST) {
+			getGuestConfig();
+		} else {
+			getToken();
+			getUserConfig();
+		}
 	};
 
 	var roomUpdated = function(room) {
@@ -139,6 +155,27 @@ $(document).ready(function() {
 				type: "selectedFiles"
 			});
 		}, config.allowMultiSelect, config.filterByMIME, null, config.withDetails);
+	};
+
+	var guestLogin = function(tp, event) {
+		var url = OC.generateUrl("/apps/spreedme/api/v1/token/withtp");
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: $.param({tp: tp})
+		}).done(function (response) {
+			postMessageAPI.answerRequest(event, {
+				useridcombo: response.useridcombo,
+				secret: response.secret,
+				success: response.success,
+				type: "guestLogin"
+			});
+		}).fail(function (response, code) {
+			postMessageAPI.answerRequest(event, {
+				success: false,
+				type: "guestLogin"
+			});
+		});
 	};
 
 	var downloadFile = function(file, event) {
@@ -256,6 +293,9 @@ $(document).ready(function() {
 			break;
 		case "openFilePicker":
 			openFilePicker(message);
+			break;
+		case "guestLogin":
+			guestLogin(message, event);
 			break;
 		case "downloadFile":
 			downloadFile(message, event);
