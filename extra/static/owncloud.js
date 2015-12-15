@@ -21,25 +21,22 @@ define([
 
 	var HAS_PARENT = window !== parent;
 	var ALLOWED_PARTNERS = (function() {
-		var OWNCLOUD_ORIGIN = OwnCloudConfig.OWNCLOUD_ORIGIN;
-		if (OWNCLOUD_ORIGIN && OWNCLOUD_ORIGIN !== "please-change-me") {
-			return [
-				OWNCLOUD_ORIGIN
-			];
+		var allowed = [];
+		var origin = OwnCloudConfig.OWNCLOUD_ORIGIN;
+		var isPort = origin[0] === ':';
+
+		if (origin && !isPort) {
+			allowed.push(origin);
+		} else {
+			// Not set - allow own host
+			var location = document.location;
+			var protocol = location.protocol;
+			var hostname = location.hostname;
+			var port = (isPort ? origin : ':' + location.port);
+			allowed.push(protocol + "//" + hostname + port);
 		}
 
-		console.error("Please make sure to edit your OwnCloudConfig.js file in extra/static/config");
-		// Boo! Not set - Only allow own host
-		var location = document.location;
-		var protocol = location.protocol;
-		var host = location.host;
-		// First element is default
-		// TODO(leon): When used with postMessage API, we have to iterate over this list
-		return [
-			protocol + "//" + host
-			//, "https://" + host
-			//, "http://" + host
-		];
+		return allowed;
 	})();
 	// Copied from directives/presentation.js
 	var SUPPORTED_DOCUMENT_TYPES = {
@@ -83,7 +80,7 @@ define([
 					var redirect = function() {
 						// This only redirects to the ownCloud host. No base path included!
 						// TODO(leon): Fix this somehow.
-						$window.location.replace(OwnCloudConfig.OWNCLOUD_ORIGIN);
+						$window.location.replace(ALLOWED_PARTNERS[0]);
 					};
 					alertify.dialog.exec("error", "Error", "Please do not directly access this service. Open the Spreed.ME app in your ownCloud installation instead.", redirect, redirect);
 					// Workaround to prevent app from continuing

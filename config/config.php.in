@@ -15,7 +15,8 @@ class Config {
 
 	// Domain of your Spreed WebRTC server (including protocol and optional port number), examples:
 	//const SPREED_WEBRTC_ORIGIN = 'https://myowncloudserver.com';
-	//const SPREED_WEBRTC_ORIGIN = 'https://webrtc.myowncloudserver.com:8443';
+	//const SPREED_WEBRTC_ORIGIN = 'https://webrtc.myowncloudserver.com:8080';
+	// If this is empty or only includes a port (e.g. :8080), host will automatically be determined (current host)
 	const SPREED_WEBRTC_ORIGIN = '';
 
 	// This has to be the same `basePath`

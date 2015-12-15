@@ -17,7 +17,7 @@ Before setting up this app (+ Spreed WebRTC) you need to ask yourself a few ques
 1. Do you want to run ownCloud and Spreed WebRTC on the same origin (i.e. on the same domain+port combination)?  
    (e.g. access ownCloud at https://myowncloudserver.com:8443 and Spreed WebRTC at https://myowncloudserver.com:8443/webrtc/) **-->** Then use **/webrtc/** as your **basePath** for the next steps.
 2. Do you want to run ownCloud and Spreed WebRTC on two different origins?  
-   (e.g. access ownCloud at https://myowncloudserver.com:8443 and Spreed WebRTC at https://webrtc.myowncloudserver.com:8443) **-->** Then use an empty / no **basePath** for the next steps.  
+   (e.g. access ownCloud at https://myowncloudserver.com:8443 and Spreed WebRTC at https://webrtc.myowncloudserver.com:8080) **-->** Then use an empty / no **basePath** for the next steps.
 
 **Note:** We recommend using option **1.** as it's much easier to maintain. Also it seems that you can't use Screensharing in latest browsers when using option **2.**. We're working on a workaround so Screensharing also works with option **2.**, but for now option **1.** seems the way to go.
 
@@ -53,12 +53,14 @@ This list of steps might seem a bit long, but it's really easy to follow – we
    4. Restart the Spreed WebRTC server for it to reload its configuration
 5. Head over to the **apps/spreedme/config** folder in your ownCloud installation. Copy `config.php.in` to `config.php` and adjust the constants as already done in `server.conf`:
    1. Set `SPREED_WEBRTC_ORIGIN` to the origin of your WebRTC server  
-      (e.g. `const SPREED_WEBRTC_ORIGIN = 'https://webrtc.myowncloudserver.com:8443';`)
+      (e.g. `const SPREED_WEBRTC_ORIGIN = 'https://webrtc.myowncloudserver.com:8443';`)  
+      **NOTE:** If you chose option **1.** in the Preparations step above, you can set `SPREED_WEBRTC_ORIGIN` to an empty string: `const SPREED_WEBRTC_ORIGIN = '';`
    2. Set `SPREED_WEBRTC_BASEPATH` to the same **basePath** you already set in the `server.conf` file
    3. Set `SPREED_WEBRTC_SHAREDSECRET` to the same **sharedsecret_secret** you already set in the `server.conf` file
 6. Head over to the **apps/spreedme/extra/static/config** folder in your ownCloud installation. Copy `OwnCloudConfig.js.in` to `OwnCloudConfig.js` and adjust the constants as already done in `server.conf` and `config.php`:
    1. Set `OWNCLOUD_ORIGIN` to the origin of your ownCloud server  
-      (e.g. `OWNCLOUD_ORIGIN: 'https://myowncloudserver.com:8443'`)
+      (e.g. `OWNCLOUD_ORIGIN: 'https://myowncloudserver.com:8443'`)  
+      **NOTE:** If you chose option **1.** in the Preparations step above, you can set `OWNCLOUD_ORIGIN` to an empty string: `OWNCLOUD_ORIGIN: ''`
 7. Enable this ownCloud app by browsing to **/index.php/settings/apps**
 8. **That's it.** You can now start communicating securely with your friends and family by opening **/index.php/apps/spreedme** of your ownCloud host in your browser.  
    For debugging, simply append `?debug` to that URL.
