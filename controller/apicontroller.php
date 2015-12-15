@@ -46,13 +46,6 @@ class ApiController extends Controller {
 			$_response['spreed_webrtc'] = array(
 				'url' => Helper::getSpreedWebRtcUrl(),
 			);
-			$_response['owncloud'] = array(
-				'login' => array(
-					'url' => $this->urlGenerator->linkTo(
-						'index.php'
-					),
-				),
-			);
 			$_response['success'] = true;
 		} catch (\Exception $e) {
 			$_response['error'] = $e->getCode();

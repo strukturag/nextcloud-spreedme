@@ -33,11 +33,6 @@ Available endpoints with request methods and content-type:
           "success": true,
           "spreed_webrtc": {
             "url": "https://pferdeapfel.intranet.struktur.de:9999/webrtc/"
-          },
-          "owncloud": {
-            "login": {
-                "url": "/index.php/"
-            }
           }
         }
 
