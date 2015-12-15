@@ -64,6 +64,10 @@ class Security {
 	public static function generateTemporaryPassword($userid, $expiration = 0) {
 		self::requireEnabledTemporaryPassword();
 
+		if (strpos($userid, ':') !== false) {
+			throw new \Exception('userid may not contain colon', 50103);
+		}
+
 		$key = Config::OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY;
 		$max_age = 60 * 60 * 2;
 
