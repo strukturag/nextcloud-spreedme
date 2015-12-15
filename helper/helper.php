@@ -49,7 +49,7 @@ class Helper {
 
 	public static function getSpreedWebRtcOrigin() {
 		$origin = Config::SPREED_WEBRTC_ORIGIN;
-		$is_port = $origin[0] === ':';
+		$is_port = !empty($origin) && $origin[0] === ':';
 		$port = null;
 		if ($is_port) {
 			$port = str_replace(':', '', $origin);
