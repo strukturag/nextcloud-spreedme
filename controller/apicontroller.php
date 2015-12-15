@@ -63,6 +63,7 @@ class ApiController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 */
 	public function getUserConfig() {
 		$_response = array('success' => false);
@@ -78,6 +79,7 @@ class ApiController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 */
 	public function getToken() {
 		$_response = array('success' => false);
