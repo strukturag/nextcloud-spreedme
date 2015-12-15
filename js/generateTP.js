@@ -13,7 +13,7 @@
 (function($, OC) {
 $(document).ready(function() {
 
-	var requestTP = function(userid, expiration, cb) {
+	var requestTP = function(userid, expiration, cb_success, cb_error) {
 		if (userid.length < 1) {
 			alert("Please enter a valid username to invite");
 			return;
@@ -40,7 +40,9 @@ $(document).ready(function() {
 			data: $.param(data)
 		}).done(function (response) {
 			if (response.success === true) {
-				cb(response.tp);
+				cb_success(response.tp);
+			} else {
+				cb_error(response.error);
 			}
 		}).fail(function (response, code) {
 			console.log(response, code);
@@ -65,6 +67,14 @@ $(document).ready(function() {
 				.append("Temporary Password generated:<br />")
 				.append(tpField)
 				.append("<br /><br />");
+		}, function(error) {
+			var errorElem = $("<p>")
+				.text("Code: " + error);
+			$("#tp")
+				.text("")
+				.append("Error!")
+				.append(errorElem)
+				.append("<br />");
 		});
 	});
 
