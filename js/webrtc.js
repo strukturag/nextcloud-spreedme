@@ -38,8 +38,10 @@ $(document).ready(function() {
 			var location = document.location;
 			var protocol = location.protocol;
 			var hostname = location.hostname;
-			var port = (isPort ? origin : ':' + location.port);
-			return protocol + "//" + hostname + port;
+			var port = (isPort ? origin.substring(1) : location.port);
+			var isDefaultPort = (protocol === 'http:' && port === '80') || (protocol === 'https:' && port === '443');
+			var optionalPort = (port && !isDefaultPort ? ':' + port : '');
+			return protocol + "//" + hostname + optionalPort;
 		}
 	})();
 
