@@ -23,6 +23,7 @@ class Helper {
 	public static function getOwnHost($port = null) {
 		$is_http = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off');
 		$protocol = ($is_http ? 'http' : 'https');
+		// TODO(leon): Maybe it's a good idea to use $_SERVER['HTTP_HOST'] – Don't forget about potential XSS issues
 		$hostname = $_SERVER['SERVER_NAME'];
 		if (empty($hostname)) {
 			$hostname = $_SERVER['SERVER_ADDR'];
