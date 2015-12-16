@@ -426,7 +426,7 @@ define([
 				FileSelector.prototype.log = function(message) {
 					var args = Array.prototype.slice.call(arguments);
 					args.unshift("FileSelector:");
-					console.log.apply(console, args);
+					log.apply(log, args);
 				};
 				FileSelector.prototype.init = function() {
 					var popup = $window.open(
@@ -599,7 +599,7 @@ define([
 
 						if (!file && !(file instanceof "FileWriterFake")) {
 							// We need file.file :)
-							console.log("No file found. Not downloading", file);
+							log("No file found. Not downloading", file);
 							return;
 						}
 
