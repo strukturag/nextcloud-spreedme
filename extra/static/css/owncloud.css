@@ -58,3 +58,7 @@
 .presentation .btn.download-to-owncloud {
 	left: 57px;
 }
+
+.generate-temporary-password .fa.fa-key {
+	color: #aaa;
+}

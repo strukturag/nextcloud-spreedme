@@ -136,6 +136,8 @@ define([
 				var currentRoom;
 				var online = ownCloud.deferreds.online;
 				var isOnline = false;
+				var admin = ownCloud.deferreds.admin;
+				var isAdmin = false;
 				var guest = ownCloud.deferreds.guest;
 				var isGuest = false;
 				var authorize = ownCloud.deferreds.authorize;
@@ -160,6 +162,9 @@ define([
 
 				online.promise.then(function() {
 					isOnline = true;
+				});
+				admin.promise.then(function() {
+					isAdmin = true;
 				});
 				guest.promise.then(function() {
 					isGuest = true;
@@ -215,6 +220,10 @@ define([
 
 				var setUserConfig = function(config) {
 					setUsername(config.display_name);
+
+					if (config.is_admin) {
+						admin.resolve(true);
+					}
 				};
 
 				var setUsername = function(displayName) {
@@ -358,13 +367,30 @@ define([
 				};
 			}]);
 
-			app.directive("roomBar", [function() {
+			app.directive("roomBar", ["$window", "ownCloud", function($window, ownCloud) {
 				return {
 					scope: false,
 					restrict: "E",
 					link: function(scope, element) {
 						// Hide roombar
 						//element.hide();
+						var addGenerateTemporaryPasswordButton = function() {
+							var $button = $('<a>')
+							.attr('title', 'Generate Temporary Password')
+							.addClass('btn btn-link btn-sm generate-temporary-password')
+							.html('<i class="fa fa-key fa-lg"></i>')
+							.on("click", function() {
+								var popup = $window.open(
+									ownCloud.getConfig().baseURL + "/admin/tp",
+									"Generate Temporary Password",
+									"height=420px,width=620px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
+								);
+							})
+							.prependTo(element.find('.socialshare'));
+						};
+						ownCloud.deferreds.admin.promise.then(function() {
+							addGenerateTemporaryPasswordButton();
+						});
 					}
 				};
 			}]);
@@ -374,6 +400,7 @@ define([
 				var deferreds = {
 					authorize: $q.defer(),
 					online: $q.defer(),
+					admin: $q.defer(),
 					guest: $q.defer()
 				};
 
