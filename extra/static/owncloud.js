@@ -467,7 +467,7 @@ define([
 				};
 			}]);
 
-			app.service('ownCloud', ["$window", "$http", "$q", function($window, $http, $q) {
+			app.service('ownCloud', ["$window", "$http", "$q", "$timeout", "alertify", function($window, $http, $q, $timeout, alertify) {
 
 				var deferreds = {
 					authorize: $q.defer(),
@@ -534,17 +534,49 @@ define([
 					log.apply(log, args);
 				};
 				FileSelector.prototype.init = function() {
-					var popup = $window.open(
+					/*var popup = $window.open(
 						config.baseURL + "/file-selector",
 						"FileSelector",
 						"height=740px,width=770px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
+					);*/
+					alertify.dialog.notify(
+						"Please select the file(s) you want to share",
+						' ', // Has to be non-empty, otherwise default title is used
+						function() {},
+						function() {}
 					);
+					var iframe = angular.element("<iframe>");
+					$timeout(function() {
+						var modal = angular.element(".modal");
+						modal.addClass("owncloud-iframe-modal");
+						iframe
+							.attr("src", config.baseURL + "/file-selector")
+							.attr("frameborder", "0")
+							.attr("seamless", "seamless")
+							.hide();
+						var loader = angular.element("<div>")
+							.addClass("loader")
+							.css({
+								"background-image": "url('" + config.baseURL.replace("/index.php/apps/spreedme", "/core/img/loading-dark.gif") + "')"
+							});
+						iframe.get(0).onload = function() {
+							loader.remove();
+							iframe.show();
+						};
+
+						modal.find(".modal-footer")
+							.hide();
+						modal.find(".modal-body")
+							.append(loader)
+							.append(iframe);
+					}, 100);
+
 					this.postMessageAPI = new PostMessageAPI({
 						allowedPartners: ALLOWED_PARTNERS,
-						popup: popup
+						iframe: iframe.get(0)
 					});
 
-					popup.onbeforeunload = function() {
+					iframe.get(0).onbeforeunload = function() {
 						// Timeout to retrieve last-second postMessages
 						setTimeout(this.postMessageAPI.unbindAll, 100);
 					};
@@ -559,6 +591,9 @@ define([
 						case "filesSelected":
 							that.gotSelectedFiles(event.data.message);
 							return;
+						case "close":
+							angular.element(iframe).scope().close();
+							return;
 						default:
 							that.log("Got unsupported message type", event.data.type);
 						}
@@ -570,7 +605,8 @@ define([
 							title: "Please select the file(s) you want to share",
 							allowMultiSelect: true,
 							filterByMIME: this.config.allowedFileTypes,
-							withDetails: false // TODO(leon): Set this to true at some point..
+							withDetails: false, // TODO(leon): Set this to true at some point..
+							inIframe: true
 						},
 						type: "open"
 					});
