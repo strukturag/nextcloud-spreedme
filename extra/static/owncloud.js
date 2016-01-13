@@ -80,13 +80,19 @@ define([
 
 			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "restURL", "alertify", "chromeExtension", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, restURL, alertify, chromeExtension) {
 
+				var redirectToOwncloud = function() {
+					// This only redirects to the ownCloud host. No base path included!
+					// TODO(leon): Fix this somehow.
+					$window.parent.location.replace(ALLOWED_PARTNERS[0]);
+				};
+
 				if (!HAS_PARENT) {
-					var redirect = function() {
-						// This only redirects to the ownCloud host. No base path included!
-						// TODO(leon): Fix this somehow.
-						$window.location.replace(ALLOWED_PARTNERS[0]);
-					};
-					alertify.dialog.exec("error", "Error", "Please do not directly access this service. Open the Spreed.ME app in your ownCloud installation instead.", redirect, redirect);
+					alertify.dialog.error(
+						"Access denied",
+						"Please do not directly access this service. Open the Spreed.ME app in your ownCloud installation instead.",
+						redirectToOwncloud,
+						redirectToOwncloud
+					);
 					// Workaround to prevent app from continuing
 					appData.authorizing(true);
 					return;
@@ -141,6 +147,8 @@ define([
 				var guest = ownCloud.deferreds.guest;
 				var isGuest = false;
 				var authorize = ownCloud.deferreds.authorize;
+				var temporaryPassword = ownCloud.deferreds.features.temporaryPassword;
+				var isTemporaryPasswordFeatureEnabled = false;
 
 				appData.e.on("selfReceived", function(event, data) {
 					log("selfReceived", data);
@@ -166,9 +174,25 @@ define([
 				admin.promise.then(function() {
 					isAdmin = true;
 				});
-				guest.promise.then(function() {
-					isGuest = true;
-					askForGuestPassword();
+				guest.promise.then(function(guest) {
+					isGuest = guest;
+				});
+				temporaryPassword.promise.then(function(enabled) {
+					isTemporaryPasswordFeatureEnabled = enabled;
+				});
+				$q.all([guest.promise, temporaryPassword.promise]).then(function() {
+					if (isGuest) {
+						if (isTemporaryPasswordFeatureEnabled) {
+							askForTemporaryPassword();
+						} else {
+							alertify.dialog.error(
+								"ownCloud account required",
+								"Please log in into your ownCloud account to use use this service.",
+								redirectToOwncloud,
+								redirectToOwncloud
+							);
+						}
+					}
 				});
 
 				var getUserSettings = function() {
@@ -182,7 +206,7 @@ define([
 					settingsScope.saveSettings();
 				};
 
-				var askForGuestPassword = function(previouslyFailed) {
+				var askForTemporaryPassword = function(previouslyFailed) {
 					previouslyFailed = !!previouslyFailed;
 					alertify.dialog.prompt("Please enter a password to log in", function(token) {
 						postMessageAPI.requestResponse((new Date().getTime()) /* id */, {
@@ -191,7 +215,7 @@ define([
 						}, function(event) {
 							var token = event.data;
 							if (!token.success) {
-								askForGuestPassword(true);
+								askForTemporaryPassword(true);
 								return;
 							}
 							doLogin({
@@ -200,15 +224,18 @@ define([
 							});
 						});
 					}, function() {
-						askForGuestPassword(true);
+						askForTemporaryPassword(true);
 					});
 				};
 
 				var setConfig = function(config) {
 					ownCloud.setConfig(config);
 
-					if (config.isGuest) {
-						guest.resolve(true);
+					if (typeof config.isGuest !== "undefined") {
+						guest.resolve(config.isGuest);
+					}
+					if (typeof config.features.temporaryPassword !== "undefined") {
+						temporaryPassword.resolve(!!config.features.temporaryPassword);
 					}
 				};
 
@@ -267,9 +294,9 @@ define([
 								var modal = angular.element(".modal");
 								var scope = modal.find(".modal-header").scope().$parent;
 								scope.msg = "Could not authenticate. Please try again.";
-								if (isGuest) {
+								if (isGuest && isTemporaryPasswordFeatureEnabled) {
 									//scope.close();
-									askForGuestPassword(true);
+									askForTemporaryPassword(true);
 								} else {
 									modal.find("button").remove();
 								}
@@ -401,7 +428,10 @@ define([
 					authorize: $q.defer(),
 					online: $q.defer(),
 					admin: $q.defer(),
-					guest: $q.defer()
+					guest: $q.defer(),
+					features: {
+						temporaryPassword: $q.defer()
+					}
 				};
 
 				var config = {
@@ -689,11 +719,13 @@ define([
 							};
 							$(element).on('mouseenter', '.presentations .thumbnail.ng-scope', onmouseenter);
 
-							ownCloud.deferreds.guest.promise.then(function() {
-								// Remove some features for guests
-								element.find('.owncloud-start-import').remove();
-								$thumb.remove();
-								$(element).off('mouseenter', '.presentations .thumbnail.ng-scope', onmouseenter);
+							ownCloud.deferreds.guest.promise.then(function(guest) {
+								if (guest) {
+									// Remove some features for guests
+									element.find('.owncloud-start-import').remove();
+									$thumb.remove();
+									$(element).off('mouseenter', '.presentations .thumbnail.ng-scope', onmouseenter);
+								}
 							});
 						};
 					},
