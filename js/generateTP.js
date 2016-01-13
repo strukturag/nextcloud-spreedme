@@ -13,6 +13,7 @@
 (function($, OC) {
 $(document).ready(function() {
 
+	var baseUrl = OC.generateUrl('/apps/spreedme');
 	var requestTP = function(userid, expiration, cb_success, cb_error) {
 		if (userid.length < 1) {
 			alert("Please enter a valid username to invite");
@@ -29,7 +30,6 @@ $(document).ready(function() {
 			}
 		}
 
-		var baseUrl = OC.generateUrl('/apps/spreedme');
 		var data = {
 			userid: userid,
 			expiration: expiration
@@ -55,26 +55,26 @@ $(document).ready(function() {
 		e.preventDefault();
 
 		requestTP(useridField.val(), Math.round(new Date(expirationField.datetimepicker("getDate")).getTime() / 1000), function(tp) {
-			var tpField = $("<input>")
+			$("[name=temporarypassword]")
 				.attr("value", tp)
-				.attr("size", "80")
-				.attr("readonly", "readonly")
 				.click(function() {
 					$(this).select();
 				});
-			$("#tp")
-				.text("")
-				.append("Temporary Password generated:<br />")
-				.append(tpField)
-				.append("<br /><br />");
+			$("[name=temporarypasswordurl]")
+				.attr("value", document.location.origin + baseUrl + "?tp=" + window.encodeURIComponent(tp))
+				.click(function() {
+					$(this).select();
+				});
+
+			$("body")
+				.removeClass("failure")
+				.addClass("success");
 		}, function(error) {
-			var errorElem = $("<p>")
-				.text("Code: " + error);
-			$("#tp")
-				.text("")
-				.append("Error!")
-				.append(errorElem)
-				.append("<br />");
+			$("#errorcode").text(error);
+
+			$("body")
+				.removeClass("success")
+				.addClass("failure");
 		});
 	});
 

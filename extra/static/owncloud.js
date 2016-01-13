@@ -140,6 +140,7 @@ define([
 				})();
 
 				var currentRoom;
+				var storedData = {};
 				var online = ownCloud.deferreds.online;
 				var isOnline = false;
 				var admin = ownCloud.deferreds.admin;
@@ -206,23 +207,33 @@ define([
 					settingsScope.saveSettings();
 				};
 
+				var tokenReceived = function(token) {
+					postMessageAPI.requestResponse((new Date().getTime()) /* id */, {
+						type: "guestLogin",
+						guestLogin: token
+					}, function(event) {
+						var token = event.data;
+						if (!token.success) {
+							askForTemporaryPassword(true);
+							return;
+						}
+						doLogin({
+							useridcombo: token.useridcombo,
+							secret: token.secret
+						});
+					});
+				};
+
 				var askForTemporaryPassword = function(previouslyFailed) {
+					if (!previouslyFailed && storedData.temporaryPassword) {
+						// Try to get tp from query params. Only done once, then prompt appears again
+						tokenReceived(storedData.temporaryPassword);
+						return;
+					}
+
 					previouslyFailed = !!previouslyFailed;
 					alertify.dialog.prompt("Please enter a password to log in", function(token) {
-						postMessageAPI.requestResponse((new Date().getTime()) /* id */, {
-							type: "guestLogin",
-							guestLogin: token
-						}, function(event) {
-							var token = event.data;
-							if (!token.success) {
-								askForTemporaryPassword(true);
-								return;
-							}
-							doLogin({
-								useridcombo: token.useridcombo,
-								secret: token.secret
-							});
-						});
+						tokenReceived(token);
 					}, function() {
 						askForTemporaryPassword(true);
 					});
@@ -233,6 +244,9 @@ define([
 
 					if (typeof config.isGuest !== "undefined") {
 						guest.resolve(config.isGuest);
+					}
+					if (typeof config.temporaryPassword !== "undefined") {
+						storedData.temporaryPassword = config.temporaryPassword;
 					}
 					if (typeof config.features.temporaryPassword !== "undefined") {
 						temporaryPassword.resolve(!!config.features.temporaryPassword);
@@ -410,7 +424,7 @@ define([
 								var popup = $window.open(
 									ownCloud.getConfig().baseURL + "/admin/tp",
 									"Generate Temporary Password",
-									"height=420px,width=620px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
+									"height=460px,width=620px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
 								);
 							})
 							.prependTo(element.find('.socialshare'));

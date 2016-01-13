@@ -14,7 +14,19 @@ style('spreedme', 'jquery-timepicker');
 		<li>The expiration date at which the Temporary Password ("TP") should expire.</li>
 	</ol>
 	<p><b>Please note</b>: Once you published a TP (to a friend, ..) it can't be invalidated, until expiration date has passed. So carefully set the expiration date.<br /><br /></p>
-	<div id="tp"></div>
+	<div id="tp">
+		<div id="error" class="hidden">
+			<p><b>Error!</b></p>
+			<p id="errorcode"></p>
+		</div>
+		<div id="generated" class="hidden">
+			<p class="info"><b>Temporary Password generated!</b><br /></p>
+			Copy and send this URL to your partner:<br />
+			<input type="text" readonly="readonly" name="temporarypasswordurl" /><br />
+			Alternatively, send the password:<br />
+			<input type="text" readonly="readonly" name="temporarypassword" />
+		</div>
+	</div>
 </div>
 
 <form action="#" method="POST">
