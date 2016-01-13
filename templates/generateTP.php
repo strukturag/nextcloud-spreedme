@@ -31,8 +31,14 @@ style('spreedme', 'jquery-timepicker');
 
 <form action="#" method="POST">
 
-	Username: <input type="text" name="userid" placeholder="John Doe" value="" /><br />
-	Expiration: <input type="text" name="expiration" value="" /><br />
+	<p>
+		<label for="userid">Name:</label>
+		<input type="text" id="userid" name="userid" placeholder="John Doe" value="" />
+	</p>
+	<p>
+		<label for="userid">Expiration:</label>
+		<input type="text" id="expiration" name="expiration" value="" />
+	</p>
 
 	<br /><input type="submit" value="Generate" />
 

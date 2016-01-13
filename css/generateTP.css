@@ -11,6 +11,16 @@ ol {
 	display: none;
 }
 
+form {
+	display: table;
+}
+form p {
+	display: table-row;
+}
+form label, form input {
+	display: table-cell;
+}
+
 #generated {
 	margin-left: 3%;
 	margin-bottom: 10px;
