@@ -426,37 +426,13 @@ define([
 									"Generate Temporary Password",
 									"height=460px,width=620px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
 								);*/
-								// TODO(leon): This is extremely ugly.
-								(function() {
-									alertify.dialog.notify(
-										"Generate Temporary Password",
-										' ', // Has to be non-empty, otherwise default title is used
-										function() {},
-										function() {}
-									);
-									$timeout(function() {
-										var modal = angular.element(".modal");
-										modal.addClass("owncloud-iframe-modal");
-										var iframe = angular.element("<iframe>")
-											.attr("src", ownCloud.getConfig().baseURL + "/admin/tp")
-											.attr("frameborder", "0")
-											.attr("seamless", "seamless")
-											.hide();
-										var loader = angular.element("<div>")
-											.addClass("loader")
-											.css({
-												"background-image": "url('" + ownCloud.getConfig().baseURL.replace("/index.php/apps/spreedme", "/core/img/loading-dark.gif") + "')"
-											});
-										iframe.get(0).onload = function() {
-											loader.remove();
-											iframe.show();
-										};
-
-										modal.find(".modal-body")
-											.append(loader)
-											.append(iframe);
-									}, 100);
-								})();
+								var iframe = ownCloud.openModalWithIframe(
+									"/admin/tp",
+									"Generate Temporary Password",
+									' ', // Has to be non-empty, otherwise default title is used
+									function() {},
+									function() {}
+								);
 							})
 							.prependTo(element.find('.socialshare'));
 						};
@@ -521,36 +497,20 @@ define([
 					return defer.promise;
 				};
 
-				var FileSelector = function(cb, config) {
-					this.cb = cb;
-					this.config = config;
-					this.postMessageAPI = null;
-
-					this.init();
-				};
-				FileSelector.prototype.log = function(message) {
-					var args = Array.prototype.slice.call(arguments);
-					args.unshift("FileSelector:");
-					log.apply(log, args);
-				};
-				FileSelector.prototype.init = function() {
-					/*var popup = $window.open(
-						config.baseURL + "/file-selector",
-						"FileSelector",
-						"height=740px,width=770px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
-					);*/
+				var openModalWithIframe = function(url, title, message, success_cb, error_cb) {
+					// TODO(leon): This is extremely ugly.
 					alertify.dialog.notify(
-						"Please select the file(s) you want to share",
-						' ', // Has to be non-empty, otherwise default title is used
-						function() {},
-						function() {}
+						title,
+						message,
+						success_cb,
+						error_cb
 					);
 					var iframe = angular.element("<iframe>");
 					$timeout(function() {
 						var modal = angular.element(".modal");
 						modal.addClass("owncloud-iframe-modal");
 						iframe
-							.attr("src", config.baseURL + "/file-selector")
+							.attr("src", config.baseURL + url)
 							.attr("frameborder", "0")
 							.attr("seamless", "seamless")
 							.hide();
@@ -570,6 +530,35 @@ define([
 							.append(loader)
 							.append(iframe);
 					}, 100);
+
+					return iframe;
+				};
+
+				var FileSelector = function(cb, config) {
+					this.cb = cb;
+					this.config = config;
+					this.postMessageAPI = null;
+
+					this.init();
+				};
+				FileSelector.prototype.log = function(message) {
+					var args = Array.prototype.slice.call(arguments);
+					args.unshift("FileSelector:");
+					log.apply(log, args);
+				};
+				FileSelector.prototype.init = function() {
+					/*var popup = $window.open(
+						config.baseURL + "/file-selector",
+						"FileSelector",
+						"height=740px,width=770px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
+					);*/
+					var iframe = openModalWithIframe(
+						"/file-selector",
+						"Please select the file(s) you want to share",
+						' ', // Has to be non-empty, otherwise default title is used
+						function() {},
+						function() {}
+					);
 
 					this.postMessageAPI = new PostMessageAPI({
 						allowedPartners: ALLOWED_PARTNERS,
@@ -644,7 +633,8 @@ define([
 					uploadFile: uploadFile,
 					downloadFile: downloadFile,
 					FileSelector: FileSelector,
-					deferreds: deferreds
+					deferreds: deferreds,
+					openModalWithIframe: openModalWithIframe
 				};
 
 			}]);
