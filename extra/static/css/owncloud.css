@@ -62,3 +62,21 @@
 .generate-temporary-password .fa.fa-key {
 	color: #aaa;
 }
+
+.owncloud-iframe-modal .modal-body {
+	margin: 0;
+	padding: 2px;
+	height: 280px;
+}
+
+.owncloud-iframe-modal iframe {
+	width: 100%;
+	height: 100%;
+}
+
+.owncloud-iframe-modal .loader {
+	min-width: 100%;
+	min-height: 100%;
+	background-repeat: no-repeat;
+	background-position: 50%;
+}

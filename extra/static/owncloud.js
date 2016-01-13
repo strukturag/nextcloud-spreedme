@@ -408,7 +408,7 @@ define([
 				};
 			}]);
 
-			app.directive("roomBar", ["$window", "ownCloud", function($window, ownCloud) {
+			app.directive("roomBar", ["$window", "$timeout", "ownCloud", "alertify", function($window, $timeout, ownCloud, alertify) {
 				return {
 					scope: false,
 					restrict: "E",
@@ -421,11 +421,42 @@ define([
 							.addClass('btn btn-link btn-sm generate-temporary-password')
 							.html('<i class="fa fa-key fa-lg"></i>')
 							.on("click", function() {
-								var popup = $window.open(
+								/*var popup = $window.open(
 									ownCloud.getConfig().baseURL + "/admin/tp",
 									"Generate Temporary Password",
 									"height=460px,width=620px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
-								);
+								);*/
+								// TODO(leon): This is extremely ugly.
+								(function() {
+									alertify.dialog.notify(
+										"Generate Temporary Password",
+										' ', // Has to be non-empty, otherwise default title is used
+										function() {},
+										function() {}
+									);
+									$timeout(function() {
+										var modal = angular.element(".modal");
+										modal.addClass("owncloud-iframe-modal");
+										var iframe = angular.element("<iframe>")
+											.attr("src", ownCloud.getConfig().baseURL + "/admin/tp")
+											.attr("frameborder", "0")
+											.attr("seamless", "seamless")
+											.hide();
+										var loader = angular.element("<div>")
+											.addClass("loader")
+											.css({
+												"background-image": "url('" + ownCloud.getConfig().baseURL.replace("/index.php/apps/spreedme", "/core/img/loading-dark.gif") + "')"
+											});
+										iframe.get(0).onload = function() {
+											loader.remove();
+											iframe.show();
+										};
+
+										modal.find(".modal-body")
+											.append(loader)
+											.append(iframe);
+									}, 100);
+								})();
 							})
 							.prependTo(element.find('.socialshare'));
 						};
