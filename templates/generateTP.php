@@ -8,12 +8,14 @@ style('spreedme', 'jquery-timepicker');
 ?>
 
 <div>
-	<p>Here you can generate Temporary Passwords for users which do not have an ownCloud account in your installation. Just enter:</p>
-	<ol>
-		<li>The username of the person you want to invite, e.g. "John Doe". This is the name which will be shown in the buddy list of spreed-webrtc.</li>
-		<li>The expiration date at which the Temporary Password ("TP") should expire.</li>
-	</ol>
-	<p><b>Please note</b>: Once you published a TP (to a friend, ..) it can't be invalidated, until expiration date has passed. So carefully set the expiration date.<br /><br /></p>
+	<div id="infotext">
+		<p>Enter the following information to generate a Temporary Password ("TP"), which non-ownCloud users can use to log in:</p>
+		<ol>
+			<li>The name of the person you want to invite.</li>
+			<li>The expiration date at which the TP should expire.</li>
+		</ol>
+		<p><b>Please note</b>: Once you published a TP (to a friend, ..) it can't be invalidated, until expiration date has passed. So carefully set the expiration date.<br /><br /></p>
+	</div>
 	<div id="tp">
 		<div id="error" class="hidden">
 			<p><b>Error!</b></p>
@@ -30,7 +32,6 @@ style('spreedme', 'jquery-timepicker');
 </div>
 
 <form action="#" method="POST">
-
 	<p>
 		<label for="userid">Name:</label>
 		<input type="text" id="userid" name="userid" placeholder="John Doe" value="" />
@@ -39,7 +40,5 @@ style('spreedme', 'jquery-timepicker');
 		<label for="userid">Expiration:</label>
 		<input type="text" id="expiration" name="expiration" value="" />
 	</p>
-
-	<br /><input type="submit" value="Generate" />
-
+	<input type="submit" value="Generate" />
 </form>
