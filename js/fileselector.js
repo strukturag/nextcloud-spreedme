@@ -17,8 +17,8 @@ $(document).ready(function() {
 		return;
 	}
 
-	var sharedConfig = $.parseJSON($("script[data-shared-config]").attr("data-shared-config"));
-	var ALLOWED_PARTNERS = sharedConfig.allowedPartners.split(",");
+	var sharedConfig = $.parseJSON($("#sharedconfig").html());
+	var ALLOWED_PARTNERS = sharedConfig.allowed_partners.split(",");
 
 	var postMessageAPI = new PostMessageAPI({
 		allowedPartners: ALLOWED_PARTNERS,
