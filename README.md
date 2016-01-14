@@ -74,7 +74,7 @@ This list of steps might seem a bit long, but it's really easy to follow – we
 
 ## Access by non-ownCloud users
 - If you want to use spreed-webrtc with users who do not have an ownCloud account, you can enable the "Temporary Password" feature in `config/config.php`
-- This allows them to use spreed-webrtc with a temporary password, which ownCloud admins can generate at **/index.php/apps/spreedme/admin/tp**
+- This allows them to use spreed-webrtc with a temporary password, which ownCloud admins can generate by clicking on the key icon in the room bar of spreed-webrtc or at **/index.php/apps/spreedme/admin/tp**
 
 ## Upgrading this app
 1. Save the `config/config.php` and the `extra/static/config/OwnCloudConfig.js` file of your current **spreedme** apps directory
