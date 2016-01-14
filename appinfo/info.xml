@@ -16,6 +16,6 @@
     <repository type="git">https://github.com/strukturag/owncloud-spreedme.git</repository>
     <ocsid>174436</ocsid>
     <dependencies>
-        <owncloud min-version="8.1" />
+        <owncloud min-version="8.1" max-version="9" />
     </dependencies>
 </info>
