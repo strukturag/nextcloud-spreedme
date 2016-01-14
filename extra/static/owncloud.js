@@ -402,6 +402,7 @@ define([
 						"height=460px,width=620px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
 					);*/
 					var iframe = ownCloud.openModalWithIframe(
+						"generate-tp",
 						"/admin/tp",
 						"Generate Temporary Password",
 						' ', // Has to be non-empty, otherwise default title is used
@@ -515,7 +516,7 @@ define([
 					return defer.promise;
 				};
 
-				var openModalWithIframe = function(url, title, message, success_cb, error_cb) {
+				var openModalWithIframe = function(name, url, title, message, success_cb, error_cb) {
 					// TODO(leon): This is extremely ugly.
 					alertify.dialog.notify(
 						title,
@@ -526,7 +527,9 @@ define([
 					var iframe = angular.element("<iframe>");
 					$timeout(function() {
 						var modal = angular.element(".modal");
-						modal.addClass("owncloud-iframe-modal");
+						modal
+							.addClass("owncloud-iframe-modal")
+							.addClass(name);
 						iframe
 							.attr("src", config.baseURL + url)
 							.attr("frameborder", "0")
@@ -571,6 +574,7 @@ define([
 						"height=740px,width=770px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
 					);*/
 					var iframe = openModalWithIframe(
+						"file-selector",
 						"/file-selector",
 						"Please select the file(s) you want to share",
 						' ', // Has to be non-empty, otherwise default title is used

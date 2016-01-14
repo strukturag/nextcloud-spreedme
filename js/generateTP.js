@@ -13,7 +13,9 @@
 (function($, OC) {
 $(document).ready(function() {
 
-	if (window.parent) {
+	if (window.parent !== window) {
+		$("body").addClass("in-iframe");
+
 		var sharedConfig = $.parseJSON($("#sharedconfig").html());
 		var ALLOWED_PARTNERS = sharedConfig.allowed_partners.split(",");
 

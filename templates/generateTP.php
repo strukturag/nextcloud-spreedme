@@ -26,7 +26,7 @@ $sharedConfig = array(
 		</ol>
 		<p><b>Please note</b>: Once you published a TP (to a friend, ..) it can't be invalidated, until expiration date has passed. So carefully set the expiration date.<br /><br /></p>
 	</div>
-	<div id="tp">
+	<div id="tp" class="hidden">
 		<div id="error" class="hidden">
 			<p><b>Error!</b></p>
 			<p id="errorcode"></p>

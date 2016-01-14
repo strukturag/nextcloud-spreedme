@@ -13,6 +13,7 @@ ol {
 
 form {
 	display: table;
+	margin-top: 15px;
 }
 form p {
 	display: table-row;
@@ -20,8 +21,11 @@ form p {
 form label, form input {
 	display: table-cell;
 }
+form input[type="submit"] {
+	margin-top: 15px;
+}
 
-#infotext {
+#infotext, #tp {
 	min-height: 146px;
 }
 
@@ -38,9 +42,17 @@ form label, form input {
 body.success #infotext, body.failure #infotext {
 	display: none;
 }
+body.success #tp, body.failure #tp {
+	display: block;
+}
 body.success #generated {
 	display: block !important;
 }
 body.failure #error {
 	display: block !important;
+}
+
+body.in-iframe #ui-datepicker-div {
+	top: 0 !important;
+	left: 230px !important;
 }
