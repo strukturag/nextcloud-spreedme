@@ -30,7 +30,7 @@ $(document).ready(function() {
 	};
 	var requestTP = function(userid, expiration, cb_success, cb_error) {
 		if (userid.length < 1) {
-			alert("Please enter a valid username to invite");
+			alert("Please enter a valid name to invite");
 			return;
 		}
 		if (expiration.length < 1 || expiration < 1 || parseInt(expiration, 10) != expiration) {
