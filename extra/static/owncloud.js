@@ -140,7 +140,7 @@ define([
 				})();
 
 				var currentRoom;
-				var storedData = {};
+				var dataStore = {};
 				var online = ownCloud.deferreds.online;
 				var isOnline = false;
 				var admin = ownCloud.deferreds.admin;
@@ -225,9 +225,9 @@ define([
 				};
 
 				var askForTemporaryPassword = function(previouslyFailed) {
-					if (!previouslyFailed && storedData.temporaryPassword) {
+					if (!previouslyFailed && dataStore.temporaryPassword) {
 						// Try to get tp from query params. Only done once, then prompt appears again
-						tokenReceived(storedData.temporaryPassword);
+						tokenReceived(dataStore.temporaryPassword);
 						return;
 					}
 
@@ -246,7 +246,7 @@ define([
 						guest.resolve(config.isGuest);
 					}
 					if (typeof config.temporaryPassword !== "undefined") {
-						storedData.temporaryPassword = config.temporaryPassword;
+						dataStore.temporaryPassword = config.temporaryPassword;
 					}
 					if (typeof config.features.temporaryPassword !== "undefined") {
 						temporaryPassword.resolve(!!config.features.temporaryPassword);
