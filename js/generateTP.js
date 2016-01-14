@@ -40,7 +40,7 @@ $(document).ready(function() {
 			return;
 		}
 		if (expiration > (new Date().getTime() / 1000) + (60 * 60 * 24)) {
-			var response = confirm("Do you really want to generate a Temporary Passwords which is valid for more than 1 day?");
+			var response = confirm("Do you really want to generate a Temporary Password which is valid for more than 1 day?");
 			if (!response) {
 				return;
 			}
