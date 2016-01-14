@@ -535,7 +535,7 @@ define([
 						var loader = angular.element("<div>")
 							.addClass("loader")
 							.css({
-								"background-image": "url('" + config.baseURL.replace("/index.php/apps/spreedme", "/core/img/loading-dark.gif") + "')"
+								"background-image": "url('" + config.baseURL.replace("/index.php/apps/spreedme", "/core/img/loading.gif") + "')"
 							});
 						iframe.get(0).onload = function() {
 							loader.remove();
