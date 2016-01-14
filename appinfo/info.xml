@@ -6,8 +6,8 @@
     <licence>AGPL</licence>
     <author>struktur AG</author>
     <documentation>
-        <user>../README.md</user>
-        <admin>../README.md</admin>
+        <user>https://github.com/strukturag/owncloud-spreedme/blob/master/README.md</user>
+        <admin>https://github.com/strukturag/owncloud-spreedme/blob/master/README.md</admin>
     </documentation>
     <version>0.1.0</version>
     <namespace>SpreedME</namespace>
