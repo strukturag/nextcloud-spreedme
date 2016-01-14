@@ -139,8 +139,6 @@ define([
 					}
 				})();
 
-				var currentRoom;
-				var dataStore = {};
 				var online = ownCloud.deferreds.online;
 				var isOnline = false;
 				var admin = ownCloud.deferreds.admin;
@@ -225,9 +223,9 @@ define([
 				};
 
 				var askForTemporaryPassword = function(previouslyFailed) {
-					if (!previouslyFailed && dataStore.temporaryPassword) {
+					if (!previouslyFailed && ownCloud.dataStore.temporaryPassword) {
 						// Try to get tp from query params. Only done once, then prompt appears again
-						tokenReceived(dataStore.temporaryPassword);
+						tokenReceived(ownCloud.dataStore.temporaryPassword);
 						return;
 					}
 
@@ -246,7 +244,7 @@ define([
 						guest.resolve(config.isGuest);
 					}
 					if (typeof config.temporaryPassword !== "undefined") {
-						dataStore.temporaryPassword = config.temporaryPassword;
+						ownCloud.dataStore.temporaryPassword = config.temporaryPassword;
 					}
 					if (typeof config.features.temporaryPassword !== "undefined") {
 						temporaryPassword.resolve(!!config.features.temporaryPassword);
@@ -321,33 +319,21 @@ define([
 
 				var changeRoom = function(room) {
 					authorize.promise.then(function() {
-						currentRoom = room;
+						ownCloud.dataStore.currentRoom = room;
 						rooms.joinByName(room, true);
 					});
 				};
 
-				$rootScope.$on('$routeChangeSuccess', function(e, current, previous) {
-					var inform = function(newRoom) {
+				$rootScope.$on("room.updated", function(event, room) {
+					var update = function(newRoom) {
+						ownCloud.dataStore.currentRoom = newRoom;
 						postMessageAPI.post({
 							type: "roomChanged",
 							roomChanged: newRoom
 						});
 					};
 
-					if (!current || !current.params) {
-						inform("");
-						return;
-					}
-
-					var newRoom = decodeURIComponent(current.params.room);
-					var oldRoom = "";
-					if (previous) {
-						oldRoom = decodeURIComponent(previous.params.room);
-					}
-
-					if (newRoom !== oldRoom && newRoom !== currentRoom) {
-						inform(newRoom);
-					}
+					update(room.Name);
 				});
 
 				postMessageAPI.bind(function(event) {
@@ -409,35 +395,63 @@ define([
 			}]);
 
 			app.directive("roomBar", ["$window", "$timeout", "ownCloud", "alertify", function($window, $timeout, ownCloud, alertify) {
+				var open = function() {
+					/*var popup = $window.open(
+						ownCloud.getConfig().baseURL + "/admin/tp",
+						"Generate Temporary Password",
+						"height=460px,width=620px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
+					);*/
+					var iframe = ownCloud.openModalWithIframe(
+						"/admin/tp",
+						"Generate Temporary Password",
+						' ', // Has to be non-empty, otherwise default title is used
+						function() {},
+						function() {}
+					);
+					var postMessageApiTP = new PostMessageAPI({
+						allowedPartners: ALLOWED_PARTNERS,
+						iframe: iframe.get(0)
+					});
+					iframe.get(0).onbeforeunload = function() {
+						// Timeout to retrieve last-second postMessages
+						setTimeout(postMessageApiTP.unbindAll, 100);
+					};
+
+					var init = function() {
+						postMessageApiTP.post({
+							message: {
+								room: ownCloud.dataStore.currentRoom
+							},
+							type: "roomChanged"
+						});
+					};
+					postMessageApiTP.bind(function(event) {
+						switch (event.data.type) {
+						case "init":
+							init(event.data.message);
+							break;
+						default:
+							log("Got unsupported message type", event.data.type);
+						}
+					});
+				};
+				var addGenerateTemporaryPasswordButton = function(element) {
+					var $button = $('<a>')
+					.attr('title', 'Generate Temporary Password')
+					.addClass('btn btn-link btn-sm generate-temporary-password')
+					.html('<i class="fa fa-key fa-lg"></i>')
+					.on("click", open)
+					.prependTo(element.find('.socialshare'));
+				};
+
 				return {
 					scope: false,
 					restrict: "E",
 					link: function(scope, element) {
 						// Hide roombar
 						//element.hide();
-						var addGenerateTemporaryPasswordButton = function() {
-							var $button = $('<a>')
-							.attr('title', 'Generate Temporary Password')
-							.addClass('btn btn-link btn-sm generate-temporary-password')
-							.html('<i class="fa fa-key fa-lg"></i>')
-							.on("click", function() {
-								/*var popup = $window.open(
-									ownCloud.getConfig().baseURL + "/admin/tp",
-									"Generate Temporary Password",
-									"height=460px,width=620px,location=no,menubar=no,status=no,titlebar=no,toolbar=no"
-								);*/
-								var iframe = ownCloud.openModalWithIframe(
-									"/admin/tp",
-									"Generate Temporary Password",
-									' ', // Has to be non-empty, otherwise default title is used
-									function() {},
-									function() {}
-								);
-							})
-							.prependTo(element.find('.socialshare'));
-						};
 						ownCloud.deferreds.admin.promise.then(function() {
-							addGenerateTemporaryPasswordButton();
+							addGenerateTemporaryPasswordButton(element);
 						});
 					}
 				};
@@ -453,6 +467,10 @@ define([
 					features: {
 						temporaryPassword: $q.defer()
 					}
+				};
+
+				var dataStore = {
+					currentRoom: ""
 				};
 
 				var config = {
@@ -634,7 +652,8 @@ define([
 					downloadFile: downloadFile,
 					FileSelector: FileSelector,
 					deferreds: deferreds,
-					openModalWithIframe: openModalWithIframe
+					openModalWithIframe: openModalWithIframe,
+					dataStore: dataStore
 				};
 
 			}]);

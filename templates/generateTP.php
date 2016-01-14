@@ -1,11 +1,21 @@
 <?php
 
+use \OCA\SpreedME\Helper\Helper;
+
+script('spreedme', '../extra/static/PostMessageAPI');
 script('spreedme', 'generateTP');
 script('spreedme', 'jquery-timepicker');
 style('spreedme', 'generateTP');
 style('spreedme', 'jquery-timepicker');
 
+// TODO(leon): Check if this could result in a potential XSS vulnerability
+$sharedConfig = array(
+	'allowed_partners' => Helper::getSpreedWebRtcOrigin(),
+);
+
 ?>
+
+<script id="sharedconfig" type="application/json"><?php echo json_encode($sharedConfig); ?></script>
 
 <div>
 	<div id="infotext">
