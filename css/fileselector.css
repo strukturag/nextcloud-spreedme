@@ -30,5 +30,5 @@
 }
 
 .oc-dialog.in-iframe .filelist {
-	height: 198px;
+	height: 198px !important;
 }
