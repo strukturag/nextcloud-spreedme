@@ -47,7 +47,7 @@ $sharedConfig = array(
 		<input type="text" id="userid" name="userid" placeholder="John Doe" value="" />
 	</p>
 	<p>
-		<label for="userid">Expiration:</label>
+		<label for="expiration">Expiration:</label>
 		<input type="text" id="expiration" name="expiration" value="" />
 	</p>
 	<input type="submit" value="Generate" />
