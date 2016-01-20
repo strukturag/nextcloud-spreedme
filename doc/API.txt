@@ -1,7 +1,7 @@
 
                     Spreed.ME ownCloud API v1.0.0
             ===============================================
-                        (c)2015 struktur AG
+                        (c)2016 struktur AG
 
 The Spreed.ME ownCloud app provides an (currently not RESTful) API endpoint.
 REST is not fulfilled, as ownCloud core currently doesn't support it.
@@ -119,4 +119,4 @@ End of API.
 For questions, contact mailto:owncloud@struktur.de.
 
 
-(c)2015 struktur AG
+(c)2016 struktur AG

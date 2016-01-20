@@ -6,7 +6,7 @@
  * later. See the COPYING file.
  *
  * @author Leon <leon@struktur.de>
- * @copyright Leon 2015
+ * @copyright Leon 2016
  */
 
 namespace OCA\SpreedME\Settings;
