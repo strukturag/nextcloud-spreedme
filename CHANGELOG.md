@@ -1,6 +1,6 @@
 owncloud-spreedme (0.1.1)
 * 'File Selector' and 'Temporary Password' no longer open a popup
-* 'Temporary Password' can now be passed directly in the URL. This allows you to send a URL to you partner
+* 'Temporary Password' can now be passed directly in the URL. This allows you to send a URL to your partner
   and as soon as it is clicked, the person will automatically join your room
 * Various other changes
 
