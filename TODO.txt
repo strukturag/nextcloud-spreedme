@@ -3,5 +3,7 @@ TODO:
 For TODOs not listed in here, search for them via:
   $ grep -r --exclude-dir=".git" --exclude="TODO.txt" "TODO" .
 
+- Unit Tests
+- Add adminPageController for admin stuff
 - Temporary Password:
   - Also include version? This makes it easier to switch to new schemes. Seems to be a bit late though.
