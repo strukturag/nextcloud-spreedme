@@ -1,3 +1,7 @@
+owncloud-spreedme (0.1.2)
+* Add example nginx configuration
+* Various fixes and other smaller changes
+
 owncloud-spreedme (0.1.1)
 * 'File Selector' and 'Temporary Password' no longer open a popup
 * 'Temporary Password' can now be passed directly in the URL. This allows you to send a URL to your partner
