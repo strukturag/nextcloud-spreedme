@@ -32,6 +32,15 @@ form input[type="submit"] {
 #expiration {
 	display: block;
 }
+#ui-datepicker-div .ui-datepicker-header > a {
+	top: 1px;
+}
+#ui-datepicker-div .ui-datepicker-header > a:nth-child(1) {
+	left: 2px;
+}
+#ui-datepicker-div .ui-datepicker-header > a:nth-child(2) {
+	right: 2px;
+}
 
 #generated {
 	margin-left: 3%;
