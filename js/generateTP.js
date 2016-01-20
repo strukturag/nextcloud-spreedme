@@ -67,7 +67,7 @@ $(document).ready(function() {
 
 	var useridField = $("form input[name=userid]");
 	var expirationField = $("form input[name=expiration]");
-	$("form input[type=submit]").click(function(e) {
+	$("form").submit(function(e) {
 		e.preventDefault();
 
 		requestTP(useridField.val(), Math.round(new Date(expirationField.datetimepicker("getDate")).getTime() / 1000), function(tp) {

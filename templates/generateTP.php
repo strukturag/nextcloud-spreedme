@@ -50,5 +50,5 @@ $sharedConfig = array(
 		<label for="expiration">Expiration:</label>
 		<input type="text" id="expiration" name="expiration" value="" />
 	</p>
-	<input type="submit" value="Generate" />
+	<button type="submit" class="primary">Generate</button>
 </form>
