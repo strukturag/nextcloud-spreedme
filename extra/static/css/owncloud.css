@@ -55,7 +55,7 @@
 }
 
 .owncloud-iframe-modal.generate-tp .modal-body {
-	height: 340px;
+	height: 340px !important;
 }
 
 .owncloud-iframe-modal iframe {
