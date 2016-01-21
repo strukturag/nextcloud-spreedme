@@ -21,6 +21,9 @@ form p {
 form label, form input {
 	display: table-cell;
 }
+form label {
+	vertical-align: middle;
+}
 form input[type="submit"] {
 	margin-top: 15px;
 }
