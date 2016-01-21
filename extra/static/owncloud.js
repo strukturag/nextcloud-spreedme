@@ -5,7 +5,7 @@
  * later. See the COPYING file.
  *
  * @author Leon <leon@struktur.de>
- * @copyright Leon 2016
+ * @copyright struktur AG 2016
  */
 
 // This file is loaded in WebRTC context
