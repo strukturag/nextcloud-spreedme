@@ -234,8 +234,15 @@ $(document).ready(function() {
 	var uploadBlob = function(obj, event) {
 		var doUpload = function(blob, filename) {
 			var uploadFolderPath = (function() {
+				var padNum = function(num, count) {
+					var str = '' + num;
+					while (str.length < count) {
+						str = '0' + str;
+					}
+					return str;
+				};
 				var date = new Date();
-				return 'Spreed.ME Downloads/' + date.getFullYear() + '/' + (date.getMonth() + 1);
+				return 'Spreed.ME Downloads/' + date.getFullYear() + '/' + padNum(date.getMonth() + 1, 2);
 			})();
 			var upload = function(blob, filename) {
 				var fd = new FormData();
