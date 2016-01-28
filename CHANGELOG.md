@@ -1,3 +1,8 @@
+owncloud-spreedme (0.1.3)
+* Fix 'Temporary Password' page layout
+* Use proper folder name when downloading presentations
+* Various other changes
+
 owncloud-spreedme (0.1.2)
 * Add example nginx configuration
 * Various fixes and other smaller changes
