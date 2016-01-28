@@ -10,8 +10,6 @@ script('spreedme', '../extra/static/PostMessageAPI');
 script('spreedme', 'webrtc');
 style('spreedme', 'webrtc');
 
-// Be careful with this!
-// Only use boolean values, else this could result in a potential XSS vulnerability
 $sharedConfig = array(
 	'is_guest' => $_['is_guest'] === true,
 	'features' => array(
@@ -21,7 +19,10 @@ $sharedConfig = array(
 
 ?>
 
-<script id="sharedconfig" type="application/json"><?php echo json_encode($sharedConfig); ?></script>
+<script id="sharedconfig" type="application/json"><?php
+// Not an issue to output this directly, json_encode by default has disabled JSON_UNESCAPED_SLASHES
+echo json_encode($sharedConfig);
+?></script>
 
 <div id="debug"><b>Debug</b><br /></div>
 
