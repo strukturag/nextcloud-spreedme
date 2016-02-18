@@ -1,0 +1,36 @@
+before_script:
+  - echo 'Acquire::http { Proxy "http://iridium.intranet.struktur.de:3142"; };' > /etc/apt/apt.conf.d/01proxy
+
+variables:
+  BRANCH: master
+  DB: mysql
+
+runtests:
+  script:
+    - apt-get update
+    # install system dependencies
+    - apt-get -y --no-install-recommends install eatmydata
+    - eatmydata apt-get -y --no-install-recommends install mysql-client mysql-server phpunit php5-curl php5-gd php5-intl php5-mysql
+    # install ocdev
+    - eatmydata apt-get -y --no-install-recommends install python3-jinja2 python3-setuptools
+    - easy_install3 requests
+    - easy_install3 ocdev
+    # install phpenv
+    #- git clone --depth 1 git://github.com/phpenv/phpenv.git $HOME/.phpenv
+    #- $HOME/.phpenv/bin/phpenv config-add tests/travis/php.ini
+    # set up mysql
+    - service mysql start
+    - mysql -e 'create database oc_autotest;'
+    - mysql -u root -e "CREATE USER 'oc_autotest'@'localhost' IDENTIFIED BY '';"
+    - mysql -u root -e "grant all on oc_autotest.* to 'oc_autotest'@'localhost';"
+    # install owncloud
+    - cd ..
+    - rm -rf owncloud
+    - ocdev setup core --dir owncloud --branch $BRANCH --no-history
+    - cp -r owncloud-spreedme owncloud/apps/spreedme
+    - cd owncloud
+    - ./occ maintenance:install --database-name oc_autotest --database-user oc_autotest --database-pass --admin-user admin --admin-pass admin --database $DB
+    - ./occ app:enable spreedme
+    - cd apps/spreedme
+    - phpunit -c phpunit.xml
+    - phpunit -c phpunit.integration.xml
