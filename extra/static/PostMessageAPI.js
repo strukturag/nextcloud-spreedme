@@ -13,6 +13,18 @@
 (function(window) {
 
 	var PostMessageAPI = function(config) {
+		// Bind polyfill
+		if (!Function.prototype.bind) {
+			Function.prototype.bind = function(that) {
+				var context = this;
+				var s = Array.prototype.slice;
+				var sc = s.call(arguments, 1);
+				return function() {
+					return context.apply(that, sc.concat(s.call(arguments)));
+				}
+			};
+		}
+
 		var IN_IFRAME = (function() {
 			try {
 				return window.self !== window.top;
@@ -28,6 +40,7 @@
 		this.allowedPartners = config.allowedPartners;
 		this.partnerOrigin = null;
 		this.listeners = [];
+		this.eventListener = this.gotEvent.bind(this); // To stay in context
 
 		this.init();
 	};
@@ -47,13 +60,12 @@
 	PostMessageAPI.prototype.requestResponse = function(id, data, cb) {
 		data.id = data.type + ":" + id;
 
-		var that = this;
 		var listener = function(event) {
 			if (event.data.id === data.id) {
-				that.unbind(listener);
+				this.unbind(listener);
 				cb(event);
 			}
-		};
+		}.bind(this);
 		this.bind(listener);
 		this.post(data);
 	};
@@ -108,10 +120,7 @@
 		var firstListener = !this.listeners[0];
 		this.listeners.push(fnct);
 		if (firstListener) {
-			var that = this;
-			window.addEventListener("message", function(e) {
-				that.gotEvent(e);
-			}, false);
+			window.addEventListener("message", this.eventListener, false);
 		}
 	};
 	PostMessageAPI.prototype.unbind = function(fnct) {
@@ -123,7 +132,7 @@
 		}
 	};
 	PostMessageAPI.prototype.unbindAll = function() {
-		window.removeEventListener("message", this.gotEvent, false);
+		window.removeEventListener("message", this.eventListener, false);
 		this.listeners = [];
 	};
 
