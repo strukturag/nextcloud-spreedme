@@ -21,20 +21,32 @@ class Helper {
 	}
 
 	public static function getOwnHost($port = null) {
-		$is_http = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off');
-		$protocol = ($is_http ? 'http' : 'https');
-		// TODO(leon): Maybe it's a good idea to use $_SERVER['HTTP_HOST'] – Don't forget about potential XSS issues
-		$hostname = $_SERVER['SERVER_NAME'];
-		if (empty($hostname)) {
-			$hostname = $_SERVER['SERVER_ADDR'];
-		}
-		if ($port === null) {
-			$port = $_SERVER['SERVER_PORT'];
-		}
-		$is_default_port = ($is_http && $port === '80') || (!$is_http && $port === '443');
-		$optional_port = (!empty($port) && !$is_default_port ? ':' . $port : '');
+		$request = \OC::$server->getRequest();
 
-		return $protocol . '://' . $hostname . $optional_port;
+		$protocol = $request->getServerProtocol();
+		$hostname = $request->getInsecureServerHost();
+		// The host has already been checked against the trusted_domains in
+		// lib/base.php (function init).
+
+		if (!empty($port)) {
+			// Strip existing port (if any) from hostname.
+			$pos = strrpos($hostname, ':');
+			if ($pos !== false) {
+				$hostport = substr($hostname, $pos + 1);
+				if (is_numeric($hostport)) {
+					$hostname = substr($hostname, 0, $pos);
+				}
+			}
+
+			// Append new port (but only if it isn't the default port for the current protocol).
+			$is_http = ($protocol === 'http');
+			$is_https = ($protocol === 'https');
+			if (($is_http && $port !== '80') || ($is_https && $port !== '443')) {
+				$hostname = $hostname . ':' . $port;
+			}
+		}
+
+		return $protocol . '://' . $hostname;
 	}
 
 	public static function getOwnAppVersion() {
