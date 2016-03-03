@@ -61,11 +61,25 @@ class Security {
 		}
 	}
 
-	public static function generateTemporaryPassword($userid, $expiration = 0) {
+	private static function decorateUserId($userid, $prefix) {
+		// Prefix userid with ext/ or int/ and append /uniqueid
+		$uniqueid = uniqid('', true);
+		return sprintf('%s/%s/%s', $prefix, $userid, $uniqueid);
+	}
+
+	public static function generateTemporaryPassword($userid, $expiration = 0, $forValidation = false) {
 		self::requireEnabledTemporaryPassword();
 
-		if (strpos($userid, ':') !== false) {
-			throw new \Exception('userid may not contain colon', 50103);
+		// Only prevent certain characters and decorate userid if we don't want to validate a given TP
+		if (!$forValidation) {
+			$disallowed = array(':', '/');
+			foreach ($disallowed as $char) {
+				if (strpos($userid, $char) !== false) {
+					throw new \Exception('userid may not contain one of these symbols: ' . join(' or ', $disallowed), 50103);
+				}
+			}
+
+			$userid = self::decorateUserId($userid, 'ext');
 		}
 
 		$key = Config::OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY;
@@ -108,7 +122,7 @@ class Security {
 			return false;
 		}
 
-		$calctp = self::generateTemporaryPassword($userid, $expiration);
+		$calctp = self::generateTemporaryPassword($userid, $expiration, true); // Set forValidation flag
 		if (self::constantTimeEquals($tp, $calctp) !== true) {
 			// Incorrect hmac
 			return false;
