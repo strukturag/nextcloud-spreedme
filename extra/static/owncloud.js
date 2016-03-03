@@ -294,10 +294,18 @@ define([
 				var doLogin = function(login) {
 					online.promise.then(function() {
 						mediaStream.users.authorize(login, function(data) {
+							// TODO(leon): Next block should move to somewhere else
 							if (isGuest) {
 								authorize.promise.then(function() {
+									// Guest userid example: ext/test/56d859b12aaa12.12345678
+									var userid = data.userid;
+									var displayName = userid;
+									var parts = userid.split("/");
+									if (parts.length === 3) {
+										displayName = parts[1]; // This is the actual user name
+									}
 									setGuestConfig({
-										display_name: data.userid
+										display_name: displayName
 									});
 								});
 							}
