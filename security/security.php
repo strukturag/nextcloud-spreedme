@@ -161,7 +161,7 @@ class Security {
 		$split = explode(':', $tp);
 		list($expiration, $userid, $version, $hmac) = $split;
 
-		return self::getSignedCombo($userid, $expiration);
+		return self::getSignedCombo($userid);
 	}
 
 	public static function constantTimeEquals($a, $b) {
