@@ -1,3 +1,7 @@
+owncloud-spreedme (0.1.4)
+* External users (invited via 'Temporary Password') are now marked as such
+* Various other changes
+
 owncloud-spreedme (0.1.3)
 * Fix 'Temporary Password' page layout
 * Use proper folder name when downloading presentations
