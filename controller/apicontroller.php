@@ -97,7 +97,7 @@ class ApiController extends Controller {
 		$_response = array('success' => false);
 		if ($userid !== null && $expiration !== null) {
 			try {
-				$_response['tp'] = Security::generateTemporaryPassword($userid, $expiration);
+				$_response['tp'] = base64_encode(Security::generateTemporaryPassword($userid, $expiration));
 				$_response['success'] = true;
 			} catch (\Exception $e) {
 				$_response['error'] = $e->getCode();
@@ -114,9 +114,14 @@ class ApiController extends Controller {
 	 */
 	public function getTokenWithTemporaryPassword() {
 		$tp = isset($_POST['tp']) ? $_POST['tp'] : null;
+		$tmp = base64_decode($tp, true);
+		// We support both base64 encoded and unencoded TPs
+		if ($tmp !== false) {
+			$tp = $tmp;
+		}
 
 		$_response = array('success' => false);
-		if ($tp !== null) {
+		if ($tp) {
 			try {
 				$token = Security::getSignedComboFromTemporaryPassword($tp);
 				$_response = array_merge($_response, $token);
