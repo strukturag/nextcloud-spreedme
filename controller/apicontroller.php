@@ -90,10 +90,7 @@ class ApiController extends Controller {
 	/**
 	 * @NoCSRFRequired
 	 */
-	public function generateTemporaryPassword() {
-		$userid = isset($_POST['userid']) ? $_POST['userid'] : null;
-		$expiration = isset($_POST['expiration']) ? $_POST['expiration'] : null;
-
+	public function generateTemporaryPassword($userid, $expiration) {
 		$_response = array('success' => false);
 		if ($userid !== null && $expiration !== null) {
 			try {
@@ -112,8 +109,7 @@ class ApiController extends Controller {
 	 * @NoCSRFRequired
 	 * @PublicPage
 	 */
-	public function getTokenWithTemporaryPassword() {
-		$tp = isset($_POST['tp']) ? $_POST['tp'] : null;
+	public function getTokenWithTemporaryPassword($tp) {
 		$tmp = base64_decode($tp, true);
 		// We support both base64 encoded and unencoded TPs
 		if ($tmp !== false) {
