@@ -268,7 +268,7 @@ define([
 				var setUsername = function(displayName) {
 					authorize.promise.then(function() {
 						var userSettings = getUserSettings();
-						if (true || userSettings.displayName !== displayName) {
+						if (userSettings.displayName !== displayName) {
 							// Update
 							appData.get().user.displayName = displayName;
 							userSettings.displayName = displayName;
@@ -281,7 +281,7 @@ define([
 				var setBuddyPicture = function(buddyPicture) {
 					authorize.promise.then(function() {
 						var userSettings = getUserSettings();
-						if (true || userSettings.buddyPicture !== buddyPicture) {
+						if (userSettings.buddyPicture !== buddyPicture) {
 							// Update
 							appData.get().user.buddyPicture = buddyPicture;
 							userSettings.buddyPicture = buddyPicture;
@@ -309,6 +309,7 @@ define([
 									});
 								});
 							}
+
 							log("Retrieved nonce - authenticating as user:", data.userid);
 							mediaStream.api.requestAuthentication(data.userid, data.nonce);
 							delete data.nonce;
