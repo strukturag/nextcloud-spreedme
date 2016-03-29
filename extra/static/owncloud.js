@@ -212,7 +212,7 @@ define([
 					}, function(event) {
 						var token = event.data;
 						if (!token.success) {
-							askForTemporaryPassword(true);
+							askForTemporaryPassword();
 							return;
 						}
 						doLogin({
@@ -222,20 +222,22 @@ define([
 					});
 				};
 
-				var askForTemporaryPassword = function(previouslyFailed) {
-					if (!previouslyFailed && ownCloud.dataStore.temporaryPassword) {
-						// Try to get tp from query params. Only done once, then prompt appears again
-						tokenReceived(ownCloud.dataStore.temporaryPassword);
-						return;
-					}
-
-					previouslyFailed = !!previouslyFailed;
-					alertify.dialog.prompt("Please enter a password to log in", function(token) {
-						tokenReceived(token);
-					}, function() {
-						askForTemporaryPassword(true);
-					});
-				};
+				var askForTemporaryPassword = (function() {
+					var alreadyAsked = false;
+					return function() {
+						if (!alreadyAsked && ownCloud.dataStore.temporaryPassword) {
+							// Try to get tp from query params. Only done once, then prompt appears again
+							tokenReceived(ownCloud.dataStore.temporaryPassword);
+						} else {
+							alertify.dialog.prompt("Please enter a password to log in", function(token) {
+								tokenReceived(token);
+							}, function() {
+								askForTemporaryPassword();
+							});
+						}
+						alreadyAsked = true;
+					};
+				})();
 
 				var setConfig = function(config) {
 					ownCloud.setConfig(config);
@@ -321,7 +323,7 @@ define([
 								scope.msg = "Could not authenticate. Please try again.";
 								if (isGuest && isTemporaryPasswordFeatureEnabled) {
 									//scope.close();
-									askForTemporaryPassword(true);
+									askForTemporaryPassword();
 								} else {
 									modal.find("button").remove();
 								}
