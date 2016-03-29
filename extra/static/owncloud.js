@@ -234,6 +234,11 @@ define([
 							}, function() {
 								askForTemporaryPassword();
 							});
+							// TODO(leon): There is no better way?
+							$timeout(function() {
+								var modal = angular.element(".modal");
+								modal.find(".modal-footer button[ng-click='cancel()']").hide();
+							}, 100);
 						}
 						alreadyAsked = true;
 					};
