@@ -237,7 +237,12 @@ define([
 							// TODO(leon): There is no better way?
 							$timeout(function() {
 								var modal = angular.element(".modal");
-								modal.find(".modal-footer button[ng-click='cancel()']").hide();
+								modal.find(".modal-footer button[ng-click='cancel()']")
+									.css('float', 'left')
+									.text('Go to ownCloud')
+									.click(function() {
+										redirectToOwncloud();
+									});
 							}, 100);
 						}
 						alreadyAsked = true;
