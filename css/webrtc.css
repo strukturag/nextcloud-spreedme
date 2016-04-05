@@ -3,9 +3,10 @@
 	display: none;
 }
 
-#container, #container iframe {
+body, #container, #container iframe {
 	width: 100%;
 	height: 100%;
+	display: block;
 }
 
 #container iframe {

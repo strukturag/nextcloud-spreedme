@@ -49,7 +49,7 @@ class PageController extends Controller {
 		$params = [
 			'is_guest' => ($this->userid === null),
 		];
-		$response = new TemplateResponse(Settings::APP_ID, 'webrtc', $params);
+		$response = new TemplateResponse(Settings::APP_ID, 'webrtc', $params, ($this->userid === null ? 'empty' : 'user'));
 
 		// Allow to embed iframes
 		$csp = new ContentSecurityPolicy();
