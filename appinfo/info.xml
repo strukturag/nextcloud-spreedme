@@ -9,7 +9,7 @@
         <user>https://github.com/strukturag/owncloud-spreedme/blob/master/README.md</user>
         <admin>https://github.com/strukturag/owncloud-spreedme/blob/master/README.md</admin>
     </documentation>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
     <namespace>SpreedME</namespace>
     <category>tools</category>
     <bugs>https://github.com/strukturag/owncloud-spreedme/issues</bugs>
