@@ -1,3 +1,6 @@
+owncloud-spreedme (0.1.6)
+* Fix for ownCloud 9, bug was introduced in the previous release
+
 owncloud-spreedme (0.1.5)
 * Allow non-ownCloud admins to generate 'Temporary Passwords' if they are admin for a 'Spreed.ME' group
 * Various other changes
