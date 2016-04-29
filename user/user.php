@@ -65,7 +65,22 @@ class User {
 		$this->requireLogin();
 
 		// TODO(leon): This looks like a private API.
-		return \OC_SubAdmin::getSubAdminsGroups($this->userId);
+		if (class_exists('\OC_SubAdmin', true)) {
+			return \OC_SubAdmin::getSubAdminsGroups($this->userId);
+		}
+		// ownCloud 9
+		$subadmin = new \OC\SubAdmin(
+			\OC::$server->getUserManager(),
+			\OC::$server->getGroupManager(),
+			\OC::$server->getDatabaseConnection()
+		);
+		$user = \OC::$server->getUserSession()->getUser();
+		$ocgroups = $subadmin->getSubAdminsGroups($user);
+		$groups = array();
+		foreach ($ocgroups as $ocgroup) {
+			$groups[] = $ocgroup->getGID();
+		}
+		return $groups;
 	}
 
 	private function isAdmin() {
