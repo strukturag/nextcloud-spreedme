@@ -273,7 +273,7 @@ define([
 				var setUserConfig = function(config) {
 					setUsername(config.display_name);
 
-					if (config.is_admin) {
+					if (config.is_spreedme_admin) {
 						admin.resolve(true);
 					}
 				};

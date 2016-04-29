@@ -88,11 +88,13 @@ class ApiController extends Controller {
 	}
 
 	/**
+	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
 	public function generateTemporaryPassword($userid, $expiration) {
 		$_response = array('success' => false);
-		if ($userid !== null && $expiration !== null) {
+		// TODO(leon): Move this to user.php
+		if ($this->user->isSpreedMeAdmin() && $userid !== null && $expiration !== null) {
 			try {
 				$_response['tp'] = base64_encode(Security::generateTemporaryPassword($userid, $expiration));
 				$_response['success'] = true;

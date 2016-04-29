@@ -49,7 +49,8 @@ Available endpoints with request methods and content-type:
           "success": true,
           "id": "admin",
           "display_name": "Administrator",
-          "is_admin": true
+          "is_admin": true,
+          "is_spreedme_admin": true
         }
 
 
