@@ -175,6 +175,7 @@ define([
 				});
 				guest.promise.then(function(guest) {
 					isGuest = guest;
+					angular.element("body").addClass((guest ? "is-guest" : "is-no-guest"));
 				});
 				temporaryPassword.promise.then(function(enabled) {
 					isTemporaryPasswordFeatureEnabled = enabled;

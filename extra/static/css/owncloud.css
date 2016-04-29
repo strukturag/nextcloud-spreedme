@@ -6,7 +6,7 @@
 	display: none;
 }
 
-.bar .left .logo {
+body.is-guest .bar .left .logo {
 	background: url("../img/spreedme.svg") no-repeat center;
 	background-size: 100%;
 	display: inline-block;
@@ -14,17 +14,21 @@
 	height: 40px;
 }
 
+body.is-no-guest .bar .left .logo {
+	display: none;
+}
+
 .bar .left {
 	padding: 8px 10px 0px 15px;
 }
 
 @media (max-width: 700px) {
-	.bar .left .logo {
+	body.is-guest .bar .left .logo {
 		background: url("../img/logo.svg") no-repeat center;
 		width: 46px;
 		height: 46px;
 	}
-	.bar .left {
+	body.is-guest .bar .left {
 		padding: 2px 5px 0px 11px;
 	}
 }
