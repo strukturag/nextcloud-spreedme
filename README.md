@@ -39,6 +39,8 @@ This list of steps might seem a bit long, but it's really easy to follow – we
         (`authorizeRoomJoin = true`)
       - Enable **extra** and set it to the full absolute path of the **spreedme/extra** directory in your **apps** folder of your ownCloud installation  
         (e.g. `extra = /absolute/path/to/owncloud/apps/spreedme/extra`)
+
+      In case your Owncloud installation resides in a different origin than Spreed WebRTC, you will need to copy the entire **apps/spreedme/extra** directory from your Owncloud host to Spreed WebRTC host (e.g. **/var/www/spreedme/extra** ), and set the **extra** parameter to this location. Remember to keep synced this copied directory with the original version in your Owncloud installation.
       - Enable **plugin** and set it to **extra/static/owncloud.js**  
         (`plugin = extra/static/owncloud.js`)
    3. In the **[users]** section:
