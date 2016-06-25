@@ -54,7 +54,7 @@ class Helper {
 	}
 
 	public static function getOwnAppPath() {
-		return getcwd() . '/apps/' . Settings::APP_ID . '/';
+		return realpath(__DIR__ . '/..') . '/';
 	}
 
 	public static function notifyIfAppNotSetUp() {
