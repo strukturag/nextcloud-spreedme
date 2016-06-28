@@ -35,7 +35,7 @@ install:
   # install owncloud
   - cd ..
   - ocdev setup core --dir owncloud --branch $BRANCH --no-history
-  - mv spreedme owncloud/apps
+  - mv owncloud-spreedme owncloud/apps/spreedme
   - phpenv config-add owncloud/apps/spreedme/tests/travis/php.ini
   - cd owncloud
   - ./occ maintenance:install --database-name oc_autotest --database-user oc_autotest --database-pass --admin-user admin --admin-pass admin --database $DB
