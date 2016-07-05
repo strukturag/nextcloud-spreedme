@@ -128,7 +128,8 @@ define([
 						var chromeStoreLink = "https://chrome.google.com/webstore/detail/labcnlicceloglidikcjbfglhnjibcbd";
 						chromeExtension.registerAutoInstall(function() {
 							var d = $q.defer();
-							alertify.dialog.alert('Screen sharing requires a browser extension. Please add the Spreed WebRTC screen sharing extension to Chrome and try again. Copy the url ' + chromeStoreLink + ' open it in your browser, and install the extension.');
+							// TODO(leon): Don't write HTML in JS
+							alertify.dialog.alert('Screen sharing requires a browser extension. Please add the Spreed.ME screen sharing extension to Chrome and try again. Open the URL<br /><a href="' + chromeStoreLink + '" target="_blank">' + chromeStoreLink + '</a><br />in your browser to install the extension.');
 							//d.reject(); // This will cause an additional dialog. Uncomment if wanted.
 							return d.promise;
 						});
