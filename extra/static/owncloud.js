@@ -125,11 +125,7 @@ define([
 				// Chrome extension
 				(function() {
 					if ($window.webrtcDetectedBrowser === 'chrome') {
-						var chromeStoreElem = $window.document.head.querySelector('link[rel=chrome-webstore-item]');
-						if (!chromeStoreElem) {
-							return;
-						}
-						var chromeStoreLink = chromeStoreElem.href;
+						var chromeStoreLink = "https://chrome.google.com/webstore/detail/labcnlicceloglidikcjbfglhnjibcbd";
 						chromeExtension.registerAutoInstall(function() {
 							var d = $q.defer();
 							alertify.dialog.alert('Screen sharing requires a browser extension. Please add the Spreed WebRTC screen sharing extension to Chrome and try again. Copy the url ' + chromeStoreLink + ' open it in your browser, and install the extension.');
