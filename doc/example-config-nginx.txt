@@ -1,3 +1,6 @@
+# DO NOT USE IN PRODUCTION. The `ownCloud blocks` have been reduced to a minimum.
+# If you use this configuration directly, everyone can access your ownCloud files.
+# https://doc.owncloud.org/server/9.0/admin_manual/installation/nginx_owncloud_9x.html
 # This is a rather minimalistic configuration to run both OC and spreed-webrtc on the same host
 
 map $http_upgrade $connection_upgrade {
