@@ -1,3 +1,6 @@
+nextcloud-spreedme (0.2.0)
+* Nextcloud transition
+
 owncloud-spreedme (0.1.6)
 * Fix for ownCloud 9, bug was introduced in the previous release
 

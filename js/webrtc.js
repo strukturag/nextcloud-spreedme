@@ -1,5 +1,5 @@
 /**
- * ownCloud - spreedme
+ * Nextcloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -8,7 +8,7 @@
  * @copyright struktur AG 2016
  */
 
-// This file is loaded in ownCloud context
+// This file is loaded in Nextcloud context
 
 (function($, OC, OwnCloudConfig, PostMessageAPI) {
 $(document).ready(function() {

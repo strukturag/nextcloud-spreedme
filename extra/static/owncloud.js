@@ -1,5 +1,5 @@
 /**
- * ownCloud - spreedme
+ * Nextcloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -81,7 +81,7 @@ define([
 			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "restURL", "alertify", "chromeExtension", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, restURL, alertify, chromeExtension) {
 
 				var redirectToOwncloud = function() {
-					// This only redirects to the ownCloud host. No base path included!
+					// This only redirects to the Nextcloud host. No base path included!
 					// TODO(leon): Fix this somehow.
 					$window.parent.location.replace(ALLOWED_PARTNERS[0]);
 				};
@@ -89,7 +89,7 @@ define([
 				if (!HAS_PARENT) {
 					alertify.dialog.error(
 						"Access denied",
-						"Please do not directly access this service. Open the Spreed.ME app in your ownCloud installation instead.",
+						"Please do not directly access this service. Open the Spreed.ME app in your Nextcloud installation instead.",
 						redirectToOwncloud,
 						redirectToOwncloud
 					);
@@ -183,8 +183,8 @@ define([
 							askForTemporaryPassword();
 						} else {
 							alertify.dialog.error(
-								"ownCloud account required",
-								"Please log in into your ownCloud account to use use this service.",
+								"Nextcloud account required",
+								"Please log in into your Nextcloud account to use use this service.",
 								redirectToOwncloud,
 								redirectToOwncloud
 							);
@@ -237,7 +237,7 @@ define([
 								var modal = angular.element(".modal");
 								modal.find(".modal-footer button[ng-click='cancel()']")
 									.css('float', 'left')
-									.text('Go to ownCloud')
+									.text('Go to Nextcloud')
 									.click(function() {
 										redirectToOwncloud();
 									});
@@ -761,7 +761,7 @@ define([
 										.replace(/"/g, "&quot;")
 										.replace(/'/g, "&#039;");
 								};
-								toastr.info(moment().format("lll"), info.savedFilename + " has been saved to your ownCloud drive");
+								toastr.info(moment().format("lll"), info.savedFilename + " has been saved to your Nextcloud drive");
 							});
 						};
 
@@ -801,7 +801,7 @@ define([
 							// Link
 							var $button = $('<button>');
 							$button
-								.text('ownCloud Import')
+								.text('Nextcloud Import')
 								.addClass('btn btn-primary owncloud-start-import');
 							$button.on("click", importFromOwnCloud.bind(scope));
 

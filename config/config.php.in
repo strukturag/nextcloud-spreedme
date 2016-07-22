@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedme
+ * Nextcloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -14,8 +14,8 @@ namespace OCA\SpreedME\Config;
 class Config {
 
 	// Domain of your Spreed WebRTC server (including protocol and optional port number), examples:
-	//const SPREED_WEBRTC_ORIGIN = 'https://myowncloudserver.com';
-	//const SPREED_WEBRTC_ORIGIN = 'https://webrtc.myowncloudserver.com:8080';
+	//const SPREED_WEBRTC_ORIGIN = 'https://mynextcloudserver.com';
+	//const SPREED_WEBRTC_ORIGIN = 'https://webrtc.mynextcloudserver.com:8080';
 	// If this is empty or only includes a port (e.g. :8080), host will automatically be determined (current host)
 	const SPREED_WEBRTC_ORIGIN = '';
 
@@ -27,8 +27,8 @@ class Config {
 	// you already set in the [users] section of the `server.conf` file from Spreed WebRTC server
 	const SPREED_WEBRTC_SHAREDSECRET = 'bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX';
 
-	// Set to true if you want to allow access to this app + spreed-webrtc for non-registered users who received a temporary password by an ownCloud admin.
-	// You can generate such a temporary password at: /index.php/apps/spreedme/admin/tp (ownCloud admin user account required)
+	// Set to true if you want to allow access to this app + spreed-webrtc for non-registered users who received a temporary password by an Nextcloud admin.
+	// You can generate such a temporary password at: /index.php/apps/spreedme/admin/tp (Nextcloud admin user account required)
 	const OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED = false;
 
 	// If 'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED' is set to true, you also have to provide a signing key here (64-character HEX string)

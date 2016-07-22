@@ -2,18 +2,18 @@
 <info>
     <id>spreedme</id>
     <name>Spreed.ME</name>
-    <description>Securely communicate with your friends and family using rich audio-, video- and text chat, and much more right from your ownCloud installation – in your browser</description>
+    <description>Securely communicate with your friends and family using rich audio-, video- and text chat, and much more right from your Nextcloud installation – in your browser</description>
     <licence>AGPL</licence>
     <author>struktur AG</author>
     <documentation>
-        <user>https://github.com/strukturag/owncloud-spreedme/blob/master/README.md</user>
-        <admin>https://github.com/strukturag/owncloud-spreedme/blob/master/README.md</admin>
+        <user>https://github.com/strukturag/nextcloud-spreedme/blob/master/README.md</user>
+        <admin>https://github.com/strukturag/nextcloud-spreedme/blob/master/README.md</admin>
     </documentation>
     <version>0.1.6</version>
     <namespace>SpreedME</namespace>
     <category>tools</category>
-    <bugs>https://github.com/strukturag/owncloud-spreedme/issues</bugs>
-    <repository type="git">https://github.com/strukturag/owncloud-spreedme.git</repository>
+    <bugs>https://github.com/strukturag/nextcloud-spreedme/issues</bugs>
+    <repository type="git">https://github.com/strukturag/nextcloud-spreedme.git</repository>
     <ocsid>174436</ocsid>
     <dependencies>
         <owncloud min-version="8.1" max-version="9" />
