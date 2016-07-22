@@ -1,4 +1,8 @@
-# This is a rather minimalistic configuration to run both OC and spreed-webrtc on the same host
+# DO NOT USE IN PRODUCTION. The `Nextcloud blocks` have been reduced to a minimum.
+# If you use this configuration directly, everyone can access your Nextcloud files.
+# https://docs.nextcloud.org/server/9.0/admin_manual/installation/nginx_nextcloud_9x.html
+# This is a rather minimalistic configuration to run both Nextcloud and spreed-webrtc on
+# the same host.
 
 map $http_upgrade $connection_upgrade {
 	default	upgrade;
@@ -12,12 +16,12 @@ upstream php-fpm-handler {
 server {
 
 	listen 443 ssl;
-	server_name myowncloudserver.com;
-	root /srv/www/owncloud;
+	server_name mynextcloudserver.com;
+	root /srv/www/nextcloud;
 
 	include conf.d/ssl.conf;
 
-	# ownCloud blocks
+	# Nextcloud blocks
 	location / {
 		try_files $uri $uri/ /index.php;
 	}

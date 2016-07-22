@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedme
+ * Nextcloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -68,7 +68,7 @@ class User {
 		if (class_exists('\OC_SubAdmin', true)) {
 			return \OC_SubAdmin::getSubAdminsGroups($this->userId);
 		}
-		// ownCloud 9
+		// Nextcloud 9
 		$subadmin = new \OC\SubAdmin(
 			\OC::$server->getUserManager(),
 			\OC::$server->getGroupManager(),

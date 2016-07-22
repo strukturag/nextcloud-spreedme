@@ -1,5 +1,5 @@
 /**
- * ownCloud - spreedme
+ * Nextcloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -8,7 +8,7 @@
  * @copyright struktur AG 2016
  */
 
-// This file is loaded both in ownCloud and in WebRTC context
+// This file is loaded both in Nextcloud and in WebRTC context
 
 (function(window) {
 

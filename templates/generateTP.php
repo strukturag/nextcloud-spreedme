@@ -21,7 +21,7 @@ echo json_encode($sharedConfig);
 
 <div>
 	<div id="infotext">
-		<p>Enter the following information to generate a Temporary Password ("TP"), which non-ownCloud users can use to log in:</p>
+		<p>Enter the following information to generate a Temporary Password ("TP"), which non-Nextcloud users can use to log in:</p>
 		<ol>
 			<li>The name of the person you want to invite.</li>
 			<li>The expiration date at which the TP should expire.</li>

@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - spreedme
+ * Nextcloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -59,7 +59,7 @@ class Helper {
 
 	public static function notifyIfAppNotSetUp() {
 		if (!class_exists('\OCA\SpreedME\Config\Config', true) || !is_file(self::getOwnAppPath() . 'extra/static/config/OwnCloudConfig.js')) {
-			die('You didn\'t set up this ownCloud app. Please follow the instructions in the README.md file in the apps/' . Settings::APP_ID . ' folder.');
+			die('You didn\'t set up this Nextcloud app. Please follow the instructions in the README.md file in the apps/' . Settings::APP_ID . ' folder.');
 		}
 	}
 

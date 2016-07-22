@@ -1,5 +1,5 @@
 /**
- * ownCloud - spreedme
+ * Nextcloud - spreedme
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
@@ -14,9 +14,9 @@
 
 	var OwnCloudConfig = function() {
 		return {
-			// Domain of your ownCloud server (including protocol and optional port number), examples:
-			//OWNCLOUD_ORIGIN: 'https://myowncloudserver.com',
-			//OWNCLOUD_ORIGIN: 'https://owncloud.myserver.com:8443',
+			// Domain of your Nextcloud server (including protocol and optional port number), examples:
+			//OWNCLOUD_ORIGIN: 'https://mynextcloudserver.com',
+			//OWNCLOUD_ORIGIN: 'https://nextcloud.myserver.com:8443',
 			// If this is empty or only includes a port (e.g. :8443), host will automatically be determined (current host)
 			OWNCLOUD_ORIGIN: '',
 		};
