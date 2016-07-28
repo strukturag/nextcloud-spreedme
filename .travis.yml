@@ -42,7 +42,7 @@ install:
   # install owncloud
   - cd ..
   - ocdev setup core --dir owncloud --branch $BRANCH --no-history
-  - ln -s $TRAVIS_BUILD_DIR owncloud/apps/spreedme
+  - mv $TRAVIS_BUILD_DIR owncloud/apps/spreedme
   - cd owncloud/apps/spreedme
   - cp config/config.php.in config/config.php
   - cp extra/static/config/OwnCloudConfig.js.in extra/static/config/OwnCloudConfig.js
