@@ -1,8 +1,8 @@
 language: php
 php:
-  - 5.4
   - 5.5
   - 5.6
+  - 7.0
   - hhvm
 
 env:
@@ -15,11 +15,18 @@ matrix:
   allow_failures:
     - php: hhvm
   include:
-    - php: 5.4
+    - php: 5.5
       env: DB=sqlite
-    - php: 5.4
+    - php: 5.5
       env: DB=pgsql
-
+    - php: 5.6
+      env: DB=sqlite
+    - php: 5.6
+      env: DB=pgsql
+    - php: 7.0
+      env: DB=sqlite
+    - php: 7.0
+      env: DB=pgsql
 
 install:
   # install ocdev
@@ -35,7 +42,7 @@ install:
   # install owncloud
   - cd ..
   - ocdev setup core --dir owncloud --branch $BRANCH --no-history
-  - mv owncloud-spreedme owncloud/apps/spreedme
+  - ln -s $TRAVIS_BUILD_DIR owncloud/apps/spreedme
   - cd owncloud/apps/spreedme
   - cp config/config.php.in config/config.php
   - cp extra/static/config/OwnCloudConfig.js.in extra/static/config/OwnCloudConfig.js
