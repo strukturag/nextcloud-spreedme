@@ -39,8 +39,8 @@ This list of steps might seem a bit long, but it's really easy to follow – we
         (`authorizeRoomJoin = true`)
       - Enable **extra** and set it to the full absolute path of the **spreedme/extra** directory in your **apps** folder of your Nextcloud installation
         (e.g. `extra = /absolute/path/to/nextcloud/apps/spreedme/extra`)
-      - Enable **plugin** and set it to **extra/static/nextcloud.js**
-        (`plugin = extra/static/nextcloud.js`)
+      - Enable **plugin** and set it to **extra/static/owncloud.js**
+        (`plugin = extra/static/owncloud.js`)
    3. In the **[users]** section:
       - Enable **enabled** and set it to **true**
         (`enabled = true`)
