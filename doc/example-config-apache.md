@@ -14,19 +14,19 @@ virtual host.
 
 ## Apache configuration sniplet
 
-```
-<Location /webrtc>
-    ProxyPass http://127.0.0.1:8080/webrtc
-    ProxyPassReverse /webrtc
-</Location>
+```apacheconf
+	<Location /webrtc>
+		ProxyPass http://127.0.0.1:8080/webrtc
+		ProxyPassReverse /webrtc
+	</Location>
 
-<Location /webrtc/ws>
-    ProxyPass ws://127.0.0.1:8080/webrtc/ws
-</Location>
+	<Location /webrtc/ws>
+		ProxyPass ws://127.0.0.1:8080/webrtc/ws
+	</Location>
 
-ProxyVia On
-ProxyPreserveHost On
-RequestHeader set X-Forwarded-Proto 'https' env=HTTPS
+	ProxyVia On
+	ProxyPreserveHost On
+	RequestHeader set X-Forwarded-Proto 'https' env=HTTPS
 ```
 
 ## Spreed WebRTC subpath configuration
