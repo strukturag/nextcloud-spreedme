@@ -29,9 +29,21 @@ ProxyPreserveHost On
 RequestHeader set X-Forwarded-Proto 'https' env=HTTPS
 ```
 
-After you added this, make sure to reload the Apache HTTP server and the
-WebRTC server should become available at https://yourserver/webrtc and is ready
-to be used from the Nextcloud plugin.
+## Spreed WebRTC subpath configuration
+
+To let Spreed WebRTC know that it is running in a subpath, you need to set the
+`basePath` configuration in the `[http]` section of your `server.conf`. Use the
+same value as for the `<Location ...>` in the Apache configuration. So if you
+use the example from above, make sure you have `basePath = /webrtc` in your
+Spreed WebRTC `server.conf` and restart Spreed WebRTC after the change. Also
+make sure you use the same ports for the `ProxyPass` lines in Apache as they are
+set in the `server.conf` `[http]` `listen` setting.
+
+## Done, now testing
+
+Make sure to also reload the Apache HTTP server and the WebRTC server should
+become available at https://yourserver/webrtc and is ready to be used from the
+Nextcloud plugin.
 
 That's it.
 
