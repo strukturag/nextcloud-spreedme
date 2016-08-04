@@ -91,6 +91,6 @@ This list of steps might seem a bit long, but it's really easy to follow – we
 1. Head over to [github.com/strukturag/spreed-webrtc](https://github.com/strukturag/spreed-webrtc) and follow the instructions to install the Spreed WebRTC server.
    For a packaged version (preferred) see [github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository](https://github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository)
    **Please note**: Your Spreed WebRTC server has to be _publicly_ accessible.
-   You certainly want to adjust your [nginx](https://github.com/strukturag/spreed-webrtc/blob/master/doc/NGINX.txt) / [Apache](https://github.com/strukturag/spreed-webrtc/blob/master/doc/APACHE.txt) configuration accordingly.
-   See `./doc/example-config-nginx.txt` for an example configuration on how to run Nextcloud and spreed-webrtc on the same host.
+   You need to ajust your existing web server configuration to make Spreed WebRTC available in a subpath. Follow our guides for [Nginx](./doc/example-config-nginx.md) or [Apache](./doc/example-config-apache.md) on how to run Spreed WebRTC on the same host.
+
 2. **Don't forget** to set your own secrets in the **[app]** section of spreed-webrtc's config file. At the very least you should change **sessionSecret** and **encryptionSecret**.
