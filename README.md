@@ -72,14 +72,27 @@ be accessed with HTTPS.
 
 ## Installation / Setup of a Spreed WebRTC server
 
-Minimum Spreed WebRTC version: **0.27.0**.
+Minimum [Spreed WebRTC](https://github.com/strukturag/spreed-webrtc) version: **0.27.0**.
 
-1. Head over to [github.com/strukturag/spreed-webrtc](https://github.com/strukturag/spreed-webrtc) and follow the instructions to install the Spreed WebRTC server.
-   For a packaged version (preferred) see [github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository](https://github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository).
-   You need to adjust your existing web server configuration to make Spreed WebRTC available in a subpath. Follow our guides for [Nginx](./doc/example-config-nginx.md) or [Apache](./doc/example-config-apache.md) on how to run Spreed WebRTC on the same host in a subpath.
-2. **Don't forget** to set your own secrets in the **[app]** section of spreed-webrtc's config file. At the very least you should change **sessionSecret** and **encryptionSecret**.
+### Ubuntu installation with packages
 
-## Debugging this app
+So if your Nextcloud runs on Ubuntu this is the way to go. See [Ubuntu-Repository instructions ](https://github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository) on the Spreed WebRTC wiki.
 
-- If you're having trouble getting this app and Spreed WebRTC server to run, simply open **/index.php/apps/spreedme/admin/debug** of your Nextcloud host in your browser.
-  It might contain information which can help to debug the issue.
+### Installation with Docker
+
+If you have Docker it is also a one liner to get Spreed WebRTC (amd64 architecture required). See [Spreed WebRTC Docker](https://hub.docker.com/r/spreed/webrtc/) on Dockerhub.
+
+### Installation from source
+
+Of course you can always install Spreed WebRTC from source. Head over to [github.com/strukturag/spreed-webrtc](https://github.com/strukturag/spreed-webrtc) and follow the instructions to install the Spreed WebRTC server.
+
+
+## Add Spreed WebRTC to your Nextcloud web server
+
+You need to adjust your existing web server configuration to make Spreed WebRTC available in a subpath. Follow our guides for [Nginx](./doc/example-config-nginx.md) or [Apache](./doc/example-config-apache.md) on how to run Spreed WebRTC on the same host in a subpath. **Don't forget** to set your own secrets in the **[app]** section of spreed-webrtc's config file. At the very least you should change **sessionSecret** and **encryptionSecret**.
+
+## Debugging / Problems?
+
+If you're having trouble getting this app and Spreed WebRTC server to run, simply open **/index.php/apps/spreedme/admin/debug** of your Nextcloud host in your browser. It might contain information which can help to debug the issue.
+
+To get help and issues please use the issue tracker at https://github.com/strukturag/nextcloud-spreedme/issues.
