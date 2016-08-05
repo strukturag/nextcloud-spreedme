@@ -89,11 +89,29 @@ sudo apt-get install spreed-webrtc
 
 If you have Docker it is also a one liner to get Spreed WebRTC (amd64 architecture required). See [Spreed WebRTC Docker](https://hub.docker.com/r/spreed/webrtc/) on Dockerhub.
 
+Additional Spreed WebRTC custom configuration example (spreed-webrtc-nextcloud.conf):
+```
+[http]
+basePath = /webrtc/
+
+[app]
+authorizeRoomJoin = true
+extra.d = /srv/extra/extra.d
+
+[users]
+enabled = true
+mode = sharedsecret
+```
+
 tl;dr:
 ```sh
-docker run --rm --name my-spreed-webrtc -p 8080:8080 -p 8443:8443 \
-       -v `pwd`:/srv/extra -i -t spreed/webrtc
+docker run --name my-spreed-webrtc -p 8080:8080 -p 8443:8443 \
+       -v `pwd`:/srv/extra -i -t spreed/webrtc -c /srv/extra/spreed-webrtc-nextcloud.conf
 ```
+
+This assumes you have stored the additional configuration `spreed-webrtc-nextcloud.conf` in the current directory and also have created the `extra.d` folder there. For real world use it would be wise to replace `pwd` with the absolute folder where you have put this stuff.
+
+The Docker container also automatically creates all the required secrets for you on first start. They are printed in the console / log for you. The `SHARED_SECRET` line shows the value which needs to be configured in the Spreed.ME Nextcloud app as `SPREED_WEBRTC_SHAREDSECRET` value.
 
 ### Installation from source
 
