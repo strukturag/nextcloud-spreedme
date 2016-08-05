@@ -78,9 +78,22 @@ Minimum [Spreed WebRTC](https://github.com/strukturag/spreed-webrtc) version: **
 
 So if your Nextcloud runs on Ubuntu this is the way to go. See [Ubuntu-Repository instructions ](https://github.com/strukturag/spreed-webrtc/wiki/Ubuntu-Repository) on the Spreed WebRTC wiki.
 
+tl;dr:
+```sh
+sudo apt-add-repository ppa:strukturag/spreed-webrtc-unstable
+sudo apt-get update
+sudo apt-get install spreed-webrtc
+```
+
 ### Installation with Docker
 
 If you have Docker it is also a one liner to get Spreed WebRTC (amd64 architecture required). See [Spreed WebRTC Docker](https://hub.docker.com/r/spreed/webrtc/) on Dockerhub.
+
+tl;dr:
+```sh
+docker run --rm --name my-spreed-webrtc -p 8080:8080 -p 8443:8443 \
+       -v `pwd`:/srv/extra -i -t spreed/webrtc
+```
 
 ### Installation from source
 
