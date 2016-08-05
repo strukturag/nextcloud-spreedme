@@ -14,7 +14,7 @@ virtual host.
 
 ## Apache configuration sniplet
 
-```
+```apacheconf
 	<Location /webrtc>
 		ProxyPass http://127.0.0.1:8080/webrtc
 		ProxyPassReverse /webrtc

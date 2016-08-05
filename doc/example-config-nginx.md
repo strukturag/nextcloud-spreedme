@@ -15,7 +15,7 @@ require HTTPS and thus it only make sense to use and TLS encrypted `server`.
 The following section, needs to go inside the `http` context of your Nginx
 configuration. This enables Websocket proxy - make sure you have it only once.
 
-```
+```nginx
 	map $http_upgrade $connection_upgrade {
 		default	upgrade;
 		''		close;
@@ -26,7 +26,7 @@ configuration. This enables Websocket proxy - make sure you have it only once.
 
 Put the following part into the `server` context of your Nginx configuration.
 
-```
+```nginx
 	# Spreed WebRTC
 	location /webrtc {
 		proxy_pass http://127.0.0.1:8080;
