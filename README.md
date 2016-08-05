@@ -15,7 +15,9 @@
 
 ## Installation / Setup of this app
 
-This set of installation steps assume that you already have set up Nextcloud using a web server like Apache or Nginx and will help you to set up Spreed WebRTC below the `/webrtc` subpath at your existing web server. If your Nextcloud server is not using SSL yet, you need to [enable SSL now](https://docs.nextcloud.com/server/9/admin_manual/installation/source_installation.html#enabling-ssl-label), as Spreed WebRTC does require an encrypted connection.
+This set of installation steps assume that you already have set up Nextcloud using a web server like Apache or Nginx and will help you to set up Spreed WebRTC below the `/webrtc` subpath at your existing web server. If your Nextcloud server is not using SSL yet, you need to [enable SSL now](https://docs.nextcloud.com/server/9/admin_manual/installation/source_installation.html#enabling-ssl-label). Spreed WebRTC does require an encrypted connection and
+as this app is running within Nextcloud that means that your Nextcloud needs to
+be accessed with HTTPS.
 
 1. Place this app in the **apps/** folder of your Nextcloud installation.
 2. Set up a Spreed WebRTC server and continue with the next step.
