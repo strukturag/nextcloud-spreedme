@@ -38,7 +38,7 @@ class Changelog {
 	}
 
 	private static function getAllChangesByRelease() {
-		$version_regex = '/^owncloud-' . Settings::APP_ID . ' \((.*)\)/';
+		$version_regex = '/^.*-' . Settings::APP_ID . ' \((.*)\)/';
 		$contents = file_get_contents(Helper::getOwnAppPath() . self::CHANGELOG_FILE);
 		$releases = explode("\n\n", $contents);
 		$changes_by_version = array();
