@@ -2,11 +2,11 @@
 
 To support Spreed WebRTC with an Nginx HTTP Server, you require at least Nginx
 version 1.3.13 to be able to proxy Websocket protocol. All current distributions
-should have this in their respositories.
+should have this in their repositories.
 
-Add the configuration section from below to your Nginx configuration, to make
-available Spreed WebRTC below the `/webrtc` subpath. Note that Spreed WebRTC does
-require HTTPS and thus it only make sense to use and TLS encrypted `server`.
+Add the configuration section from below to your Nginx configuration to make
+Spreed WebRTC available below the `/webrtc` subpath. Note that Spreed WebRTC does
+require HTTPS and thus needs to be available via HTTPS.
 
 ## Nginx configuration sniplets
 
@@ -56,17 +56,18 @@ Put the following part into the `server` context of your Nginx configuration.
 
 To let Spreed WebRTC know that it is running in a subpath, you need to set the
 `basePath` configuration in the `[http]` section of your `server.conf`. Use the
-same value as for the `<Location ...>` in the Apache configuration. So if you
+same value as for the `location .. {` in the Nginx configuration. So if you
 use the example from above, make sure you have `basePath = /webrtc` in your
-Spreed WebRTC `server.conf` and restart Spreed WebRTC after the change. Also
-make sure you use the same ports for the `ProxyPass` lines in Apache as they are
-set in the `server.conf` `[http]` `listen` setting.
+Spreed WebRTC `server.conf`. Restart Spreed WebRTC after the change. Also
+make sure to use the same port in the `proxy_pass` line as they are set
+in the `[http]` `listen` setting of `server.conf`.
 
 ## Done, now testing
 
-Make sure to also reload the Apache HTTP server and the WebRTC server should
-become available at https://yourserver/webrtc and is ready to be used from the
-Nextcloud plugin.
+Make sure to reload Nginx. Spreed WebRTC should become available at
+https://yourserver/webrtc and is ready to be used from the Nextcloud plugin.
+Note: Your browser might cache redirects. If you get redirected, clear your
+browser cache and try again.
 
 That's it.
 
