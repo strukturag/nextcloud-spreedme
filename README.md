@@ -22,7 +22,7 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
 2. Set up a Spreed WebRTC server and continue with the next step.
    An easy-to-follow installation guideline can be found further below, see [Installation / Setup of a Spreed WebRTC server](#installation--setup-of-a-spreed-webrtc-server).
 3. You now should have a running Spreed WebRTC server.
-4. Create a new folder **extra.d** in the root directory of Spreed WebRTC (e.g. `mkdir /absolute/path/to/spreed-webrtc/extra.d`). Now symlink the Nextcloud plugin into this folder, `ln -sf /absolute/path/to/nextcloud/apps/spreedme/extra /absolute/path/to/spreed-webrtc/extra.d/spreedme`
+4. Create a new folder **extra.d** in the root directory of Spreed WebRTC (e.g. `mkdir /absolute/path/to/spreed-webrtc/extra.d`). Now symlink the Nextcloud plugin into this folder (e.g. `ln -sf /absolute/path/to/nextcloud/apps/spreedme/extra /absolute/path/to/spreed-webrtc/extra.d/spreedme`)
 5. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server (`webrtc.conf` if you use the packaged version), namely:
    1. In the **[http]** section:
         Enable (= uncomment) **basePath** and set it to **/webrtc/**
