@@ -22,24 +22,27 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
 2. Set up a Spreed WebRTC server and continue with the next step.
    An easy-to-follow installation guideline can be found further below, see [Installation / Setup of a Spreed WebRTC server](#installation--setup-of-a-spreed-webrtc-server).
 3. You now should have a running Spreed WebRTC server.
-4. Create a new folder **extra.d** in the root directory of Spreed WebRTC (e.g. `mkdir /absolute/path/to/spreed-webrtc/extra.d`). Now symlink the Nextcloud plugin into this folder (e.g. `ln -sf /absolute/path/to/nextcloud/apps/spreedme/extra /absolute/path/to/spreed-webrtc/extra.d/spreedme`)
+4. Create a new folder **extra.d** in the root directory of Spreed WebRTC  
+   (e.g. `mkdir /absolute/path/to/spreed-webrtc/extra.d`).  
+   Now symlink the Nextcloud plugin into this folder  
+   (e.g. `ln -sf /absolute/path/to/nextcloud/apps/spreedme/extra /absolute/path/to/spreed-webrtc/extra.d/spreedme`)
 5. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server (`webrtc.conf` if you use the packaged version), namely:
    1. In the **[http]** section:
-      - Enable (= uncomment) **basePath** and set it to **/webrtc/**
+      - Enable (= uncomment) **basePath** and set it to **/webrtc/**  
         (`basePath = /webrtc/`)
    2. In the **[app]** section:
-      - Enable **authorizeRoomJoin** and set it to **true**
+      - Enable **authorizeRoomJoin** and set it to **true**  
         (`authorizeRoomJoin = true`)
-      - Enable **extra.d** and set it to the full absolute path to Spreed WebRTC's **extra.d** directory (the directory you created in step 4.)
+      - Enable **extra.d** and set it to the full absolute path to Spreed WebRTC's **extra.d** directory (the directory you created in step 4.)  
         (e.g. `extra.d = /absolute/path/to/spreed-webrtc/extra.d`)
    3. In the **[users]** section:
-      - Enable **enabled** and set it to **true**
+      - Enable **enabled** and set it to **true**  
         (`enabled = true`)
-      - Enable **mode** and set it to **sharedsecret**
+      - Enable **mode** and set it to **sharedsecret**  
         (`mode = sharedsecret`)
-      - Enable **sharedsecret_secret** and set it to a random 64-character HEX string
+      - Enable **sharedsecret_secret** and set it to a random 64-character HEX string.  
         **Please note:** Do **NOT** use the string given below. Generate your own random 64-character HEX string!
-        You can generate your own 64-character HEX string by running `xxd -ps -l 32 -c 32 /dev/random` or `openssl rand -hex 32`
+        You can generate your own 64-character HEX string by running `xxd -ps -l 32 -c 32 /dev/random` or `openssl rand -hex 32`  
         (e.g. `sharedsecret_secret = bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX`)
    4. Restart the Spreed WebRTC server to reload its configuration
 6. Head over to the **apps/spreedme/config** folder in your Nextcloud installation. Copy `config.php.in` to `config.php` and adjust the constants as already done in `server.conf`:
