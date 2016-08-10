@@ -42,8 +42,8 @@ in the `[http]` `listen` setting of `server.conf`.
 
 Make sure to reload Apache. Spreed WebRTC should become available at
 https://yourserver/webrtc and is ready to be used from the Nextcloud plugin.
-Note: Your browser might cache redirects, so we recommend opening the URL in
-an anonymous browser window.
+Note: Your browser might cache redirects. If you get redirected, clear your
+browser cache and try again.
 
 That's it.
 

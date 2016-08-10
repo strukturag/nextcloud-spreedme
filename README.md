@@ -18,7 +18,7 @@
 This set of installation steps assume that you already have set up Nextcloud using a web server like Nginx or Apache.  
 Your server has to be available via HTTPS. If your Nextcloud server is not using SSL/TLS yet, you need to [enable SSL now](https://docs.nextcloud.com/server/9/admin_manual/installation/source_installation.html#enabling-ssl-label).
 
-1. Place this app in the **apps/** folder of your Nextcloud installation. Note that this app's directory has to be named `spreedme` (this only should affect you if you cloned it from Github).
+1. Place this app in the **apps/** folder of your Nextcloud installation. Make sure the directory of this app is named `spreedme`.
 2. Set up a Spreed WebRTC server and continue with the next step.
    An easy-to-follow installation guideline can be found further below, see [Installation / Setup of a Spreed WebRTC server](#installation--setup-of-a-spreed-webrtc-server).
 3. You now should have a running Spreed WebRTC server.
