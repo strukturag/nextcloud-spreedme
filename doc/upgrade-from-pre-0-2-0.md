@@ -4,7 +4,7 @@ If you want to upgrade this app from a version pre-v0.2.0 (e.g. v0.1.6, check
 /index.php/apps/spreedme/admin/debug to see the version you currently have installed),
 please follow these steps:
 
-1. Upgrade [Spreed WebRTC](https://github.com/strukturag/spreed-webrtc) to a at least version 0.27.0.
+1. Upgrade [Spreed WebRTC](https://github.com/strukturag/spreed-webrtc) to at least version 0.27.0.
 2. Create a new folder **extra.d** in the root directory of Spreed WebRTC  
    (e.g. `mkdir /absolute/path/to/spreed-webrtc/extra.d`).  
    Now symlink the Nextcloud plugin into this folder  
