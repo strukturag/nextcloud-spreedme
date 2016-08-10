@@ -25,7 +25,7 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
 4. Create a new folder **extra.d** in the root directory of Spreed WebRTC (e.g. `mkdir /absolute/path/to/spreed-webrtc/extra.d`). Now symlink the Nextcloud plugin into this folder (e.g. `ln -sf /absolute/path/to/nextcloud/apps/spreedme/extra /absolute/path/to/spreed-webrtc/extra.d/spreedme`)
 5. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server (`webrtc.conf` if you use the packaged version), namely:
    1. In the **[http]** section:
-      -  Enable (= uncomment) **basePath** and set it to **/webrtc/**
+      - Enable (= uncomment) **basePath** and set it to **/webrtc/**
         (`basePath = /webrtc/`)
    2. In the **[app]** section:
       - Enable **authorizeRoomJoin** and set it to **true**
