@@ -119,8 +119,15 @@ Of course you can always install Spreed WebRTC from source. Head over to [github
 
 ## Add Spreed WebRTC to your Nextcloud web server
 
-You need to adjust your existing web server configuration to make Spreed WebRTC available in a subpath. Follow our guides for [Nginx](./doc/example-config-nginx.md) or [Apache](./doc/example-config-apache.md) on how to run Spreed WebRTC on the same host in a subpath.  
-**Don't forget** to set your own secrets in the **[app]** section of Spreed WebRTC's config file. At the very least you should change **sessionSecret** and **encryptionSecret**.
+You need to adjust your existing web server configuration to make Spreed WebRTC available in a subpath. Also **don't forget** to set your own secrets in the **[app]** section of Spreed WebRTC's config file. At the very least you should change **sessionSecret** and **encryptionSecret**.
+
+### Spreed WebRTC Apache configuration
+
+Follow our guides for [Apache](./doc/example-config-apache.md) on how to run Spreed WebRTC on the same host as Nextcloud in an Apache subpath.
+
+### Spreed WebRTC Nginx configuration
+
+Follow our guides for [Nginx](./doc/example-config-nginx.md) on how to run Spreed WebRTC on the same host as Nextcloud in a Nginx subpath.
 
 ## Debugging / Problems?
 
