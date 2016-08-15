@@ -22,19 +22,17 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
 2. Set up a Spreed WebRTC server and continue with the next step.
    An easy-to-follow installation guideline can be found further below, see [Installation / Setup of a Spreed WebRTC server](#installation--setup-of-a-spreed-webrtc-server).
 3. You now should have a running Spreed WebRTC server.
-4. Create a new folder **extra.d** in the root directory of Spreed WebRTC  
-   (e.g. `mkdir /absolute/path/to/spreed-webrtc/extra.d`).  
-   Now symlink the Nextcloud plugin into this folder  
-   (e.g. `ln -sf /absolute/path/to/nextcloud/apps/spreedme/extra /absolute/path/to/spreed-webrtc/extra.d/spreedme`)
-5. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server (`webrtc.conf` if you use the packaged version), namely:
+4. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server (`webrtc.conf` if you use the packaged version), namely:
    1. In the **[http]** section:
       - Enable (= uncomment) **basePath** and set it to **/webrtc/**  
         (`basePath = /webrtc/`)
    2. In the **[app]** section:
       - Enable **authorizeRoomJoin** and set it to **true**  
         (`authorizeRoomJoin = true`)
-      - Enable **extra.d** and set it to the full absolute path to Spreed WebRTC's **extra.d** directory (the directory you created in step 4.)  
-        (e.g. `extra.d = /absolute/path/to/spreed-webrtc/extra.d`)
+      - Enable **extra** and set it to the full absolute path of the **spreedme/extra** directory in your **apps** folder of your Nextcloud installation  
+        (e.g. `extra = /absolute/path/to/nextcloud/apps/spreedme/extra`)
+      - Enable **plugin** and set it to **extra/static/owncloud.js**  
+        (`plugin = extra/static/owncloud.js`)
    3. In the **[users]** section:
       - Enable **enabled** and set it to **true**  
         (`enabled = true`)
@@ -45,11 +43,11 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
         You can generate your own 64-character HEX string by running `xxd -ps -l 32 -c 32 /dev/random` or `openssl rand -hex 32`  
         (e.g. `sharedsecret_secret = bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX`)
    4. Restart the Spreed WebRTC server to reload its configuration
-6. Head over to the **apps/spreedme/config** folder in your Nextcloud installation. Copy `config.php.in` to `config.php` and adjust the constants as already done in `server.conf`:
+5. Head over to the **apps/spreedme/config** folder in your Nextcloud installation. Copy `config.php.in` to `config.php` and adjust the constants as already done in `server.conf`:
    1. Set `SPREED_WEBRTC_SHAREDSECRET` to the same **sharedsecret_secret** you set in the `server.conf` file before
-7. Head over to the **apps/spreedme/extra/static/config** folder in your Nextcloud installation. Copy `OwnCloudConfig.js.in` to `OwnCloudConfig.js`.
-8. Enable this Nextcloud app by browsing to **/index.php/settings/apps**
-9. **That's it.** You can now start communicating securely with your friends and family by opening the **Spreed.ME app** of your Nextcloud host in your browser.
+6. Head over to the **apps/spreedme/extra/static/config** folder in your Nextcloud installation. Copy `OwnCloudConfig.js.in` to `OwnCloudConfig.js`.
+7. Enable this Nextcloud app by browsing to **/index.php/settings/apps**
+8. **That's it.** You can now start communicating securely with your friends and family by opening the **Spreed.ME app** of your Nextcloud host in your browser.
 
 ## Limiting access to this app
 
