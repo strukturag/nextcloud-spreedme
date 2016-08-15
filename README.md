@@ -123,11 +123,11 @@ You need to adjust your existing web server configuration to make Spreed WebRTC 
 
 ### Spreed WebRTC Apache configuration
 
-Follow our guides for [Apache](./doc/example-config-apache.md) on how to run Spreed WebRTC on the same host as Nextcloud in an Apache subpath.
+Follow our [Guide for Apache](./doc/example-config-apache.md) on how to run Spreed WebRTC on the same host as Nextcloud in an Apache subpath.
 
 ### Spreed WebRTC Nginx configuration
 
-Follow our guides for [Nginx](./doc/example-config-nginx.md) on how to run Spreed WebRTC on the same host as Nextcloud in a Nginx subpath.
+Follow our [Guide for Nginx](./doc/example-config-nginx.md) on how to run Spreed WebRTC on the same host as Nextcloud in a Nginx subpath.
 
 ## Debugging / Problems?
 
