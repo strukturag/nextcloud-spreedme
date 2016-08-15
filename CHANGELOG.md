@@ -1,5 +1,9 @@
 nextcloud-spreedme (0.2.0)
 * Nextcloud transition
+* Make the setup guides easier to understand
+* Add nginx and Apache example configurations
+* Add Docker setup guide
+* Fix a problem with custom apps/ directory path
 
 owncloud-spreedme (0.1.6)
 * Fix for ownCloud 9, bug was introduced in the previous release
