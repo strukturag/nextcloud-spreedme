@@ -11,12 +11,11 @@
 // This file is loaded in WebRTC context
 
 "use strict";
-var webrtcBasePath = document.location.pathname;
 define([
 	'angular',
 	'moment',
-	webrtcBasePath + 'extra/static/PostMessageAPI.js',
-	webrtcBasePath + 'extra/static/config/OwnCloudConfig.js'
+	'./PostMessageAPI.js',
+	'./config/OwnCloudConfig.js',
 ], function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 	'use strict';
 
