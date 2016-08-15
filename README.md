@@ -29,8 +29,8 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
    2. In the **[app]** section:
       - Enable **authorizeRoomJoin** and set it to **true**  
         (`authorizeRoomJoin = true`)
-      - Enable **extra** and set it to the full absolute path of the **spreedme/extra** directory in your **apps** folder of your ownCloud installation  
-        (e.g. `extra = /absolute/path/to/owncloud/apps/spreedme/extra`)
+      - Enable **extra** and set it to the full absolute path of the **spreedme/extra** directory in your **apps** folder of your Nextcloud installation  
+        (e.g. `extra = /absolute/path/to/nextcloud/apps/spreedme/extra`)
       - Enable **plugin** and set it to **extra/static/owncloud.js**  
         (`plugin = extra/static/owncloud.js`)
    3. In the **[users]** section:
