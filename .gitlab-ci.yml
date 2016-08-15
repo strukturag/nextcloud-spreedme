@@ -21,10 +21,11 @@ runtests:
     - mysql -u root -e "CREATE USER 'oc_autotest'@'localhost' IDENTIFIED BY '';"
     - mysql -u root -e "grant all on oc_autotest.* to 'oc_autotest'@'localhost';"
     # install owncloud
+    - export APP_DIR=$(basename "$PWD")
     - cd ..
     - rm -rf owncloud
     - ocdev setup core --dir owncloud --branch $BRANCH --no-history
-    - cp -r owncloud-spreedme owncloud/apps/spreedme
+    - cp -r $APP_DIR owncloud/apps/spreedme
     - cd owncloud/apps/spreedme
     - cp config/config.php.in config/config.php
     - cp extra/static/config/OwnCloudConfig.js.in extra/static/config/OwnCloudConfig.js
