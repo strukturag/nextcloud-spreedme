@@ -12,6 +12,7 @@
 namespace OCA\SpreedME\Security;
 
 use OCA\SpreedME\Config\Config;
+use OCA\SpreedME\Errors\ErrorCodes;
 use OCA\SpreedME\Helper\Helper;
 use OCA\SpreedME\Settings\Settings;
 
@@ -67,7 +68,7 @@ class Security {
 
 	private static function requireEnabledTemporaryPassword() {
 		if (Config::OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED !== true) {
-			throw new \Exception('Temporary Passwords not enabled in config/config.php', 50101);
+			throw new \Exception('Temporary Passwords not enabled in config/config.php', ErrorCodes::TEMPORARY_PASSWORD_NOT_ENABLED);
 		}
 	}
 
@@ -86,7 +87,7 @@ class Security {
 			$disallowed = array(':', '/');
 			foreach ($disallowed as $char) {
 				if (strpos($userid, $char) !== false) {
-					throw new \Exception('userid may not contain one of these symbols: ' . join(' or ', $disallowed), 50103);
+					throw new \Exception('userid may not contain one of these symbols: ' . join(' or ', $disallowed), ErrorCodes::TEMPORARY_PASSWORD_INVALID_USERID);
 				}
 			}
 
@@ -154,7 +155,7 @@ class Security {
 		self::requireEnabledTemporaryPassword();
 
 		if (self::validateTemporaryPassword($tp) !== true) {
-			throw new \Exception('Invalid Temporary Password', 50102);
+			throw new \Exception('Invalid Temporary Password', ErrorCodes::TEMPORARY_PASSWORD_INVALID);
 		}
 
 		// TODO(leon): Do we need to split again?

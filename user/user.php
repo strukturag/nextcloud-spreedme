@@ -11,6 +11,7 @@
 
 namespace OCA\SpreedME\User;
 
+use OCA\SpreedME\Errors\ErrorCodes;
 use OCA\SpreedME\Security\Security;
 
 class User {
@@ -24,7 +25,7 @@ class User {
 
 	public function requireLogin() {
 		if (!$this->userId) {
-			throw new \Exception('Not logged in', 50001);
+			throw new \Exception('Not logged in', ErrorCodes::NOT_LOGGED_IN);
 		}
 		if (!$this->user) {
 			$this->user = new \OCP\User($this->userId);
