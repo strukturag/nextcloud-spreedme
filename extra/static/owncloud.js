@@ -135,6 +135,7 @@ define([
 					}
 				})();
 
+				// TODO(leon): Remove is* values
 				var online = ownCloud.deferreds.online;
 				var isOnline = false;
 				var admin = ownCloud.deferreds.admin;
