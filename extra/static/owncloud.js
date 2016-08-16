@@ -407,7 +407,7 @@ define([
 				};
 			}]);
 
-			app.directive("roomBar", ["$window", "$timeout", "ownCloud", "alertify", function($window, $timeout, ownCloud, alertify) {
+			app.directive("roomBar", ["$window", "$q", "$timeout", "ownCloud", "alertify", function($window, $q, $timeout, ownCloud, alertify) {
 				var open = function() {
 					/*var popup = $window.open(
 						ownCloud.getConfig().baseURL + "/admin/tp",
@@ -464,8 +464,13 @@ define([
 					link: function(scope, element) {
 						// Hide roombar
 						//element.hide();
-						ownCloud.deferreds.admin.promise.then(function() {
-							addGenerateTemporaryPasswordButton(element);
+						$q.all({
+							"isAdmin": ownCloud.deferreds.admin.promise,
+							"isTemporaryPasswordFeatureEnabled": ownCloud.deferreds.features.temporaryPassword.promise,
+						}).then(function(args) {
+							if (args.isAdmin && args.isTemporaryPasswordFeatureEnabled) {
+								addGenerateTemporaryPasswordButton(element);
+							}
 						});
 					}
 				};
