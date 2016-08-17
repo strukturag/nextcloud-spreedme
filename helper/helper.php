@@ -69,7 +69,7 @@ class Helper {
 		return self::getDatabaseConfigValue($key);
 	}
 
-	private static function setConfigValue($key, $value) {
+	private static function setDatabaseConfigValue($key, $value) {
 		\OC::$server->getConfig()->setAppValue(Settings::APP_ID, $key, $value);
 	}
 
@@ -77,7 +77,7 @@ class Helper {
 		if (self::doesPhpConfigExist()) {
 			throw new \Exception('config/config.php exists. Can\'t modify DB config values', ErrorCodes::DB_CONFIG_ERROR_CONFIG_PHP_EXISTS);
 		}
-		self::setConfigValue($key, $value);
+		self::setDatabaseConfigValue($key, $value);
 	}
 
 	public static function getOwnAppVersion() {
