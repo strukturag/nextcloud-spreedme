@@ -78,6 +78,6 @@ $classes[] = (Helper::doesJsConfigExist() ? 'js-config-found' : 'js-config-missi
 	</div>
 	<div class="show-if-js-config-missing">
 		<p><code>extra/static/config/OwnCloudConfig.js</code> was not found.</p>
-		<p>If you want to run Spreed WebRTC and Nextcloud on different origins, please read <a href="https://github.com/strukturag/nextcloud-spreedme/blob/v0.3.0/README.md#running-spreed-webrtc-and-nextcloud-on-different-origins" target="_blank">README.md</a>.</p>
+		<p>If you want to run Spreed WebRTC and Nextcloud on different origins, please read the <a href="https://github.com/strukturag/nextcloud-spreedme/blob/owncloud-spreedme_v016/README.md#preparations" target="_blank">README.md of v0.1.6</a>.</p>
 	</div>
 </div>
