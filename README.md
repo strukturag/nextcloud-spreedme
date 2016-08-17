@@ -19,10 +19,14 @@ This set of installation steps assume that you already have set up Nextcloud usi
 Your server has to be available via HTTPS. If your Nextcloud server is not using SSL/TLS yet, you need to [enable SSL now](https://docs.nextcloud.com/server/9/admin_manual/installation/source_installation.html#enabling-ssl-label).
 
 1. Place this app in the **apps/** folder of your Nextcloud installation. Make sure the directory of this app is named `spreedme`.
-2. Set up a Spreed WebRTC server and continue with the next step.
+2. Enable this Nextcloud app by browsing to **/index.php/settings/apps**
+3. Open the Nextcloud admin settings page (**/index.php/settings/admin#goto-spreed.me**) in your browser and configure this app:
+   1. Click on **Generate new shared secret**. It will output a random string which you will need in of the next steps. Copy it to your clipboard.
+   2. Click on **Save settings**.
+4. Set up a Spreed WebRTC server and continue with the next step.
    An easy-to-follow installation guideline can be found further below, see [Installation / Setup of a Spreed WebRTC server](#installation--setup-of-a-spreed-webrtc-server).
-3. You now should have a running Spreed WebRTC server.
-4. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server (`webrtc.conf` if you use the packaged version), namely:
+5. You now should have a running Spreed WebRTC server.
+6. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server (`webrtc.conf` if you use the packaged version), namely:
    1. In the **[http]** section:
       - Enable (= uncomment) **basePath** and set it to **/webrtc/**  
         (`basePath = /webrtc/`)
@@ -38,16 +42,9 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
         (`enabled = true`)
       - Enable **mode** and set it to **sharedsecret**  
         (`mode = sharedsecret`)
-      - Enable **sharedsecret_secret** and set it to a random 64-character HEX string.  
-        **Please note:** Do **NOT** use the string given below. Generate your own random 64-character HEX string!
-        You can generate your own 64-character HEX string by running `xxd -ps -l 32 -c 32 /dev/random` or `openssl rand -hex 32`  
-        (e.g. `sharedsecret_secret = bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX`)
+      - Enable **sharedsecret_secret** and set it to the random string from step 1..  
    4. Restart the Spreed WebRTC server to reload its configuration
-5. Head over to the **apps/spreedme/config** folder in your Nextcloud installation. Copy `config.php.in` to `config.php` and adjust the constants as already done in `server.conf`:
-   1. Set `SPREED_WEBRTC_SHAREDSECRET` to the same **sharedsecret_secret** you set in the `server.conf` file before
-6. Head over to the **apps/spreedme/extra/static/config** folder in your Nextcloud installation. Copy `OwnCloudConfig.js.in` to `OwnCloudConfig.js`.
-7. Enable this Nextcloud app by browsing to **/index.php/settings/apps**
-8. **That's it.** You can now start communicating securely with your friends and family by opening the **Spreed.ME app** of your Nextcloud host in your browser.
+7. **That's it.** You can now start communicating securely with your friends and family by opening the **Spreed.ME app** of your Nextcloud host in your browser.
 
 ## Limiting access to this app
 
