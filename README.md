@@ -42,7 +42,7 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
         (`enabled = true`)
       - Enable **mode** and set it to **sharedsecret**  
         (`mode = sharedsecret`)
-      - Enable **sharedsecret_secret** and set it to the random string from step 1..  
+      - Enable **sharedsecret_secret** and set it to the random string from step 1.  
    4. Restart the Spreed WebRTC server to reload its configuration
 7. **That's it.** You can now start communicating securely with your friends and family by opening the **Spreed.ME app** of your Nextcloud host in your browser.
 
