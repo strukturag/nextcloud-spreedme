@@ -92,6 +92,10 @@ $(document).ready(function() {
 	$c.find('.select-on-click').click(function(e) {
 		$(this).select();
 	});
+	$c.find('.do-show-advanced-settings').click(function(e) {
+		$c.addClass('show-advanced-settings');
+		$(this).remove();
+	});
 
 	$c.find('[name="REGENERATE_SPREED_WEBRTC_SHAREDSECRET"]').click(function(e) {
 		regenerateSharedSecret(function(sharedSecret) {
