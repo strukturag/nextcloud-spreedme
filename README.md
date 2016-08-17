@@ -119,6 +119,11 @@ Follow our [Guide for Apache](./doc/example-config-apache.md) on how to run Spre
 
 Follow our [Guide for Nginx](./doc/example-config-nginx.md) on how to run Spreed WebRTC on the same host as Nextcloud in a Nginx subpath.
 
+## Running Spreed WebRTC and Nextcloud on different origins
+
+Running Spreed WebRTC and Nextcloud on different origins is not recommended, as you will not be able to use the Screensharing feature due to browser restrictions.
+If you still prefer to run them on differnet origins, please see the [README.md of v0.1.6](https://github.com/strukturag/nextcloud-spreedme/blob/owncloud-spreedme_v016/README.md#preparations).
+
 ## Debugging / Problems?
 
 If you're having trouble getting this app and Spreed WebRTC server to run, simply open **/index.php/apps/spreedme/admin/debug** of your Nextcloud host in your browser. It might contain information which can help to debug the issue.
