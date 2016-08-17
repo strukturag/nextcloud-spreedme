@@ -132,6 +132,55 @@ class ApiController extends Controller {
 		return new DataResponse($_response);
 	}
 
+	public function saveConfig($config) {
+		$allowedKeys = array(
+			'SPREED_WEBRTC_ORIGIN',
+			'SPREED_WEBRTC_BASEPATH',
+			'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED',
+		);
+
+		$_response = array('success' => false);
+		try {
+			foreach ($allowedKeys as $key) {
+				if (isset($config[$key])) {
+					Helper::setDatabaseConfigValueIfEnabled($key, $config[$key]);
+				}
+			}
+			Helper::setDatabaseConfigValueIfEnabled('is_set_up', 'true');
+			$_response['success'] = true;
+		} catch (\Exception $e) {
+			$_response['error'] = $e->getCode();
+		}
+
+		return new DataResponse($_response);
+	}
+
+	public function regenerateSharedSecret() {
+		$_response = array('success' => false);
+		try {
+			$key = Security::regenerateSharedSecret();
+			$_response['sharedsecret'] = $key;
+			$_response['success'] = true;
+		} catch (\Exception $e) {
+			$_response['error'] = $e->getCode();
+		}
+
+		return new DataResponse($_response);
+	}
+
+	public function regenerateTemporaryPasswordSigningKey() {
+		// TODO(leon): Should we also allow Spreed.ME group admins to regenerate the signing key?
+		$_response = array('success' => false);
+		try {
+			Security::regenerateTemporaryPasswordSigningKey();
+			$_response['success'] = true;
+		} catch (\Exception $e) {
+			$_response['error'] = $e->getCode();
+		}
+
+		return new DataResponse($_response);
+	}
+
 	/**
 	 * @NoAdminRequired
 	 */

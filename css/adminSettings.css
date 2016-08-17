@@ -1,0 +1,60 @@
+/* Everything has to be prefixed with #spreedme as all admin settings of all apps are on the same page */
+/* :( */
+
+#spreedme .app-name {
+	display: inline-block;
+}
+
+#spreedme .message {
+	margin-bottom: 8px;
+}
+
+#spreedme .hidden,
+#spreedme .show-if-php-config-file,
+#spreedme .show-if-php-config-database,
+#spreedme .show-if-js-config-found,
+#spreedme .show-if-js-config-missing {
+	display: none;
+}
+
+#spreedme.php-config-file .show-if-php-config-file,
+#spreedme.php-config-database .show-if-php-config-database,
+#spreedme.js-config-found .show-if-js-config-found,
+#spreedme.js-config-missing .show-if-js-config-missing {
+	display: block;
+}
+
+#spreedme form {
+	display: table;
+	margin-top: 15px;
+}
+#spreedme form p,
+#spreedme form input[type="checkbox"] {
+	height: 38px;
+}
+#spreedme form p {
+	display: table-row;
+}
+#spreedme form label {
+	padding-right: 5px;
+}
+#spreedme form label,
+#spreedme form input {
+	display: table-cell;
+	vertical-align: middle;
+}
+#spreedme form input[type="text"] {
+	width: 250px;
+}
+#spreedme form button[type="submit"] {
+	margin-top: 15px;
+}
+
+/* TODO(leon): You know.. */
+#spreedme > div:not(.show-if-php-config-file):not(.show-if-php-config-database):not(:first-of-type) {
+	margin-top: 28px;
+}
+
+#spreedme .settings-saved {
+	margin-right: 4px;
+}
