@@ -57,7 +57,7 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
 
 ## Access by non-Nextcloud users
 
-- If you want to use Spreed WebRTC with users who do not have an Nextcloud account, you can enable the "Temporary Password" feature in `config/config.php`.
+- If you want to use Spreed WebRTC with users who do not have an Nextcloud account, you can enable the "Temporary Password" feature on the Nextcloud admin settings page.
 - This allows them to use Spreed WebRTC with a "Temporary Password", which admins can generate by clicking on the key icon in the room bar of Spreed WebRTC or at **/index.php/apps/spreedme/admin/tp**. Admins are either Nextcloud admins or Spreed.ME group admins. Create a group named `Spreed.ME` and add users as a group admin for that group to allow them to generate "Temporary Passwords".
 
 ## Installation / Setup of a Spreed WebRTC server
