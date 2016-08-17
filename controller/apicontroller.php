@@ -143,7 +143,17 @@ class ApiController extends Controller {
 		try {
 			foreach ($allowedKeys as $key) {
 				if (isset($config[$key])) {
-					Helper::setDatabaseConfigValueIfEnabled($key, $config[$key]);
+					$value = $config[$key];
+					Helper::setDatabaseConfigValueIfEnabled($key, $value);
+					// Extra configuration for some of the keys
+					switch ($key) {
+						case 'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED':
+							if ($value === 'true' && Helper::getDatabaseConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY') === '') {
+								// Also generate a 'Temporary Password signing key'
+								Security::regenerateTemporaryPasswordSigningKey();
+							}
+							break;
+					}
 				}
 			}
 			Helper::setDatabaseConfigValueIfEnabled('is_set_up', 'true');
