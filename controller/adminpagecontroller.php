@@ -31,7 +31,7 @@ class AdminPageController extends Controller {
 	 */
 	public function index() {
 		$params = [];
-		$response = new TemplateResponse(Settings::APP_ID, 'adminSettings', $params, 'blank');
+		$response = new TemplateResponse(Settings::APP_ID, 'settings-admin', $params, 'blank');
 
 		return $response;
 	}

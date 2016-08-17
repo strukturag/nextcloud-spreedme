@@ -2,11 +2,11 @@
 
 use \OCA\SpreedME\Helper\Helper;
 
-style('spreedme', 'adminSettings');
+style('spreedme', 'settings-admin');
 if (Helper::doesJsConfigExist()) {
 	script('spreedme', '../extra/static/config/OwnCloudConfig');
 }
-script('spreedme', 'adminSettings');
+script('spreedme', 'settings-admin');
 
 $classes = array();
 $classes[] = (Helper::doesPhpConfigExist() ? 'php-config-file' : 'php-config-database');
