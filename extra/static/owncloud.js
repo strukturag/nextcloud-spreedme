@@ -11,13 +11,36 @@
 // This file is loaded in WebRTC context
 
 "use strict";
-define([
+
+// TODO(leon): :(
+(function() {
+var modules = [
 	'angular',
 	'moment',
 	'./PostMessageAPI.js',
-	'./config/OwnCloudConfig.js',
-], function(angular, moment, PostMessageAPI, OwnCloudConfig) {
+];
+// TODO(leon): Create helper script with this function, as we also need it in webrtc.js
+var getQueryParam = function(param) {
+	var query = window.location.search.substring(1);
+	var vars = query.split("&");
+	for (var i = 0; i < vars.length; i++) {
+		var pair = vars[i].split("=");
+		if (pair[0] === param) {
+			return window.decodeURIComponent(pair[1]);
+		}
+	}
+	return false;
+};
+if (getQueryParam('load_config_js') !== false) {
+	modules.push('./config/OwnCloudConfig.js');
+}
+// Make sure OwnCloudConfig is always the last argument
+define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 	'use strict';
+
+	if (typeof OwnCloudConfig === 'undefined') {
+		OwnCloudConfig = {OWNCLOUD_ORIGIN: '',};
+	}
 
 	var HAS_PARENT = window !== parent;
 	// TODO(leon): Create helper script with this function, as we also need it in webrtc.js
@@ -850,3 +873,4 @@ define([
 	}
 
 });
+})();

@@ -10,7 +10,7 @@
 
 // This file is loaded in Nextcloud context
 
-(function($, OC, OwnCloudConfig, PostMessageAPI) {
+(function($, OC, PostMessageAPI) {
 $(document).ready(function() {
 
 	var iframe = $("#container iframe").get(0);
@@ -28,24 +28,6 @@ $(document).ready(function() {
 		];
 	})();
 
-	var OWN_ORIGIN = (function() {
-		var origin = OwnCloudConfig.OWNCLOUD_ORIGIN;
-		var isPort = origin[0] === ':';
-
-		if (origin && !isPort) {
-			return origin;
-		} else {
-			// Not set - allow own host
-			var location = document.location;
-			var protocol = location.protocol;
-			var hostname = location.hostname;
-			var port = (isPort ? origin.substring(1) : location.port);
-			var isDefaultPort = (protocol === 'http:' && port === '80') || (protocol === 'https:' && port === '443');
-			var optionalPort = (port && !isDefaultPort ? ':' + port : '');
-			return protocol + "//" + hostname + optionalPort;
-		}
-	})();
-
 	var getQueryParam = function(param) {
 		var query = window.parent.location.search.substring(1);
 		var vars = query.split("&");
@@ -56,7 +38,7 @@ $(document).ready(function() {
 			}
 		}
 		return false;
-	}
+	};
 
 	var postMessageAPI = new PostMessageAPI({
 		allowedPartners: ALLOWED_PARTNERS,
@@ -65,11 +47,9 @@ $(document).ready(function() {
 	var currentRoom = decodeURIComponent(window.location.hash.replace("#", "")) || "";
 
 	var getConfig = function() {
-		var host = OWN_ORIGIN;
 		postMessageAPI.post({
 			config: {
-				// Use own origin, as this is possibly used by a different context
-				baseURL: host + OC.generateUrl("/apps/spreedme"),
+				baseURL: OC.generateUrl("/apps/spreedme"),
 				isGuest: IS_GUEST,
 				temporaryPassword: getQueryParam("tp"),
 				features: {
@@ -335,4 +315,4 @@ $(document).ready(function() {
 	});
 
 });
-})(jQuery, OC, OwnCloudConfig, PostMessageAPI);
+})(jQuery, OC, PostMessageAPI);

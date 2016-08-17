@@ -11,7 +11,6 @@
 
 namespace OCA\SpreedME\Debug;
 
-use OCA\SpreedME\Config\Config;
 use OCA\SpreedME\Helper\Helper;
 use OCA\SpreedME\Settings\Settings;
 
@@ -51,20 +50,20 @@ class Debug {
 	}
 
 	private static function testOwncloudPhpConfigFile() {
-		if (strlen(Config::SPREED_WEBRTC_SHAREDSECRET) !== 64) {
+		if (strlen(Helper::getConfigValue('SPREED_WEBRTC_SHAREDSECRET')) !== 64) {
 			return 'SPREED_WEBRTC_SHAREDSECRET in config/config.php must be a 64 character hexadecimal string.';
 		}
 
-		if (!ctype_xdigit(Config::SPREED_WEBRTC_SHAREDSECRET)) {
+		if (!ctype_xdigit(Helper::getConfigValue('SPREED_WEBRTC_SHAREDSECRET'))) {
 			return 'Invalid SPREED_WEBRTC_SHAREDSECRET in config/config.php. Secret may only contain hexadecimal characters.';
 		}
 
-		if (Config::OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED === true) {
-			if (strlen(Config::OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY) !== 64) {
+		if (Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true) {
+			if (strlen(Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY')) !== 64) {
 				return 'OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY in config/config.php must be a 64 character hexadecimal string.';
 			}
 
-			if (!ctype_xdigit(Config::OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY)) {
+			if (!ctype_xdigit(Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY'))) {
 				return 'Invalid OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY in config/config.php. Key may only contain hexadecimal characters.';
 			}
 		}
@@ -74,14 +73,18 @@ class Debug {
 		$url = 'apps/' . Settings::APP_ID . '/extra/static/config/OwnCloudConfig.js';
 		$response = file_get_contents($url);
 
+		if (!Helper::doesJsConfigExist()) {
+			return;
+		}
+
 		if (strpos($response, 'OWNCLOUD_ORIGIN') === false) {
 			return 'Did not find OwnCloudConfig.js at ' . $url;
 		}
 	}
 
 	private static function testSpreedWebRTCAPI() {
-		// Force ?debug param removal
-		$url = Helper::getSpreedWebRtcUrl(false);
+		// Force ?debug & other query params removal
+		$url = Helper::getSpreedWebRtcUrl(false, false);
 		$config_url = $url . 'api/v1/config';
 
 		// TODO(leon): Switch to curl as this is shitty?
