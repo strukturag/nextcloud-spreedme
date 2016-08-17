@@ -21,7 +21,7 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
 1. Place this app in the **apps/** folder of your Nextcloud installation. Make sure the directory of this app is named `spreedme`.
 2. Enable this Nextcloud app by browsing to **/index.php/settings/apps**
 3. Open the Nextcloud admin settings page (**/index.php/settings/admin#goto-spreed.me**) in your browser and configure this app:
-   1. Click on **Generate new shared secret**. It will output a random string which you will need in of the next steps. Copy it to your clipboard.
+   1. Click on **Generate new shared secret**. It will output a random string which you will need in one of the next steps. Copy it to your clipboard.
    2. Click on **Save settings**.
 4. Set up a Spreed WebRTC server and continue with the next step.
    An easy-to-follow installation guideline can be found further below, see [Installation / Setup of a Spreed WebRTC server](#installation--setup-of-a-spreed-webrtc-server).
