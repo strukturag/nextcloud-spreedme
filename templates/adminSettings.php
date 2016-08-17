@@ -42,17 +42,17 @@ $classes[] = (Helper::doesJsConfigExist() ? 'js-config-found' : 'js-config-missi
 			<p class="show-if-advanced-settings">
 				<label for="SPREED_WEBRTC_ORIGIN">SPREED_WEBRTC_ORIGIN:</label>
 				<input type="text" id="SPREED_WEBRTC_ORIGIN" name="SPREED_WEBRTC_ORIGIN" placeholder=""
-					value="<?php p(Helper::getDatabaseConfigValue('SPREED_WEBRTC_ORIGIN'));?>" />
+					value="<?php p(Helper::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_ORIGIN'));?>" />
 			</p>
 			<p class="show-if-advanced-settings">
 				<label for="SPREED_WEBRTC_BASEPATH">SPREED_WEBRTC_BASEPATH:</label>
 				<input type="text" id="SPREED_WEBRTC_BASEPATH" name="SPREED_WEBRTC_BASEPATH" placeholder="/webrtc/"
-					value="<?php p(Helper::getDatabaseConfigValue('SPREED_WEBRTC_BASEPATH'));?>" />
+					value="<?php p(Helper::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_BASEPATH'));?>" />
 			</p>
 			<p class="show-if-advanced-settings">
 				<label for="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED">OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED:</label>
 				<input type="checkbox" id="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED" name="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED"
-					<?php echo (Helper::getDatabaseConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true ? 'checked="checked"' : ''); ?> />
+					<?php echo (Helper::getDatabaseConfigValueOrDefault('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true ? 'checked="checked"' : ''); ?> />
 			</p>
 			<p class="hidden OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY warning">
 				A new OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY was generated.<br />Previously generated 'Temporary Passwords' are no longer valid.

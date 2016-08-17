@@ -62,6 +62,21 @@ class Helper {
 		return $value;
 	}
 
+	public static function getDatabaseConfigValueOrDefault($key) {
+		$defaultConfig = array(
+			'SPREED_WEBRTC_ORIGIN' => '',
+			'SPREED_WEBRTC_BASEPATH' => '/webrtc/',
+			'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED' => false,
+		);
+		if (self::getDatabaseConfigValue('is_set_up') === true) {
+			return self::getDatabaseConfigValue($key);
+		}
+		if (isset($defaultConfig[$key])) {
+			return $defaultConfig[$key];
+		}
+		return '';
+	}
+
 	public static function getConfigValue($key) {
 		if (self::doesPhpConfigExist()) {
 			return self::getFileConfigValue($key);

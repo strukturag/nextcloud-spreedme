@@ -5,6 +5,7 @@ For TODOs not listed in here, search for them via:
 
 - Return error message along with error code
 - Fix scope.msg = "Could not authenticate. Please try again.";
+- Move config stuff from helper.php to own class
 - Move owncloud.js, owncloud.js should be an empty file (for extra folder backwards-compatibility)
 - Unit Tests
 - Add adminPageController for admin stuff
