@@ -66,6 +66,7 @@ class Helper {
 		$defaultConfig = array(
 			'SPREED_WEBRTC_ORIGIN' => '',
 			'SPREED_WEBRTC_BASEPATH' => '/webrtc/',
+			'SPREED_WEBRTC_IS_SHARED_INSTANCE' => false,
 			'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED' => false,
 		);
 		if (self::getDatabaseConfigValue('is_set_up') === true) {

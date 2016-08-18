@@ -125,6 +125,11 @@ Running Spreed WebRTC and Nextcloud on different origins is not recommended,
 as you will not be able to use the Screensharing feature due to browser restrictions.
 If you still prefer to run them on different origins, please read [this document](./doc/running-on-different-origins.md).
 
+## Using a single Spreed WebRTC server for multiple Nextcloud instances
+
+If you plan to use a single Spreed WebRTC server with multiple Nextcloud instances,
+you should enable / check the `SPREED_WEBRTC_IS_SHARED_INSTANCE` flag in this app's configuration.
+
 ## Debugging / Problems?
 
 If you're having trouble getting this app and Spreed WebRTC server to run, simply open **/index.php/apps/spreedme/admin/debug** of your Nextcloud host in your browser. It might contain information which can help to debug the issue.

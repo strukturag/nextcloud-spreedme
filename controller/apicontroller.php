@@ -137,6 +137,7 @@ class ApiController extends Controller {
 			'SPREED_WEBRTC_ORIGIN',
 			'SPREED_WEBRTC_BASEPATH',
 			'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED',
+			'SPREED_WEBRTC_IS_SHARED_INSTANCE',
 		);
 
 		$_response = array('success' => false);

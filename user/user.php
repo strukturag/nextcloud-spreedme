@@ -12,6 +12,7 @@
 namespace OCA\SpreedME\User;
 
 use OCA\SpreedME\Errors\ErrorCodes;
+use OCA\SpreedME\Helper\Helper;
 use OCA\SpreedME\Security\Security;
 
 class User {
@@ -40,6 +41,10 @@ class User {
 	private function getUserId() {
 		$this->requireLogin();
 
+		if (Helper::getConfigValue('SPREED_WEBRTC_IS_SHARED_INSTANCE')) {
+			// Return cloud id instead
+			return $this->getCloudId();
+		}
 		return $this->user->getUID();
 	}
 
@@ -47,6 +52,18 @@ class User {
 		$this->requireLogin();
 
 		return $this->user->getUID();
+	}
+
+	private function getCloudId() {
+		$this->requireLogin();
+
+		if (!method_exists($this->user, 'getCloudId')) {
+			$uid = \OC::$server->getUserSession()->getUser()->getUID();
+			$server = \OC::$server->getURLGenerator()->getAbsoluteURL('/');
+			return $uid . '@' . rtrim(\OCA\Files_Sharing\Helper::removeProtocolFromUrl($server), '/');
+		}
+		// Nextcloud 9
+		return $this->user->getCloudId();
 	}
 
 	private function getDisplayName() {
@@ -100,6 +117,11 @@ class User {
 
 	public function getSignedCombo() {
 		$id = $this->getUserId();
+		// Spreed WebRTC uses colons as a delimiter for the useridcombo.
+		// As the user id might contain colons (if it's a cloud id), we need to
+		// replace it with a non-valid URL character, e.g. a pipe (|).
+		// The reverse happens in the 'displayUserid' filter of owncloud.js
+		$id = str_replace(':', '|', $id);
 		return Security::getSignedCombo($id);
 	}
 

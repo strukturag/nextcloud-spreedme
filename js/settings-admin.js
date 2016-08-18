@@ -123,6 +123,7 @@ $(document).ready(function() {
 		var config = {
 			SPREED_WEBRTC_ORIGIN: $c.find('[name="SPREED_WEBRTC_ORIGIN"]').val(),
 			SPREED_WEBRTC_BASEPATH: $c.find('[name="SPREED_WEBRTC_BASEPATH"]').val(),
+			SPREED_WEBRTC_IS_SHARED_INSTANCE: $c.find('[name="SPREED_WEBRTC_IS_SHARED_INSTANCE"]').is(':checked'),
 			OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED: $c.find('[name="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED"]').is(':checked'),
 		};
 
