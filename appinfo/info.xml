@@ -2,6 +2,7 @@
 <info>
     <id>spreedme</id>
     <name>Spreed.ME</name>
+    <summary>Audio-, video- and text chat for your Nextcloud installation</summary>
     <description>Securely communicate with your friends and family using rich audio-, video- and text chat, and much more right from your Nextcloud installation – in your browser</description>
     <licence>AGPL</licence>
     <author>struktur AG</author>
@@ -9,7 +10,7 @@
         <user>https://github.com/strukturag/nextcloud-spreedme/blob/master/README.md</user>
         <admin>https://github.com/strukturag/nextcloud-spreedme/blob/master/README.md</admin>
     </documentation>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <namespace>SpreedME</namespace>
     <category>tools</category>
     <bugs>https://github.com/strukturag/nextcloud-spreedme/issues</bugs>
@@ -17,5 +18,6 @@
     <ocsid>174436</ocsid>
     <dependencies>
         <owncloud min-version="8.1" max-version="9" />
+        <nextcloud min-version="9" max-version="10" />
     </dependencies>
 </info>

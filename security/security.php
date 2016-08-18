@@ -11,7 +11,7 @@
 
 namespace OCA\SpreedME\Security;
 
-use OCA\SpreedME\Config\Config;
+use OCA\SpreedME\Errors\ErrorCodes;
 use OCA\SpreedME\Helper\Helper;
 use OCA\SpreedME\Settings\Settings;
 
@@ -44,7 +44,7 @@ class Security {
 
 	public static function getSignedCombo($userid, $expiration = 0) {
 		$version = self::COMBO_VERSION;
-		$key = Config::SPREED_WEBRTC_SHAREDSECRET;
+		$key = Helper::getConfigValue('SPREED_WEBRTC_SHAREDSECRET');
 		$max_age = Settings::SPREED_WEBRTC_USERCOMBO_MAX_AGE;
 
 		if ($expiration > 0) {
@@ -66,8 +66,8 @@ class Security {
 	}
 
 	private static function requireEnabledTemporaryPassword() {
-		if (Config::OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED !== true) {
-			throw new \Exception('Temporary Passwords not enabled in config/config.php', 50101);
+		if (Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') !== true) {
+			throw new \Exception('Temporary Passwords not enabled in config/config.php', ErrorCodes::TEMPORARY_PASSWORD_NOT_ENABLED);
 		}
 	}
 
@@ -86,14 +86,14 @@ class Security {
 			$disallowed = array(':', '/');
 			foreach ($disallowed as $char) {
 				if (strpos($userid, $char) !== false) {
-					throw new \Exception('userid may not contain one of these symbols: ' . join(' or ', $disallowed), 50103);
+					throw new \Exception('userid may not contain one of these symbols: ' . join(' or ', $disallowed), ErrorCodes::TEMPORARY_PASSWORD_INVALID_USERID);
 				}
 			}
 
 			$userid = self::decorateUserId($userid, 'ext');
 		}
 
-		$key = Config::OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY;
+		$key = Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY');
 		$max_age = 60 * 60 * 2;
 
 		if ($expiration > 0) {
@@ -154,7 +154,7 @@ class Security {
 		self::requireEnabledTemporaryPassword();
 
 		if (self::validateTemporaryPassword($tp) !== true) {
-			throw new \Exception('Invalid Temporary Password', 50102);
+			throw new \Exception('Invalid Temporary Password', ErrorCodes::TEMPORARY_PASSWORD_INVALID);
 		}
 
 		// TODO(leon): Do we need to split again?
@@ -162,6 +162,21 @@ class Security {
 		list($expiration, $userid, $version, $hmac) = $split;
 
 		return self::getSignedCombo($userid);
+	}
+
+	public static function getRandomHexString($length) {
+		return \OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate($length, '0123456789abcdef');
+	}
+
+	public static function regenerateSharedSecret() {
+		$key = Security::getRandomHexString(256 / 4); // 256 bit
+		Helper::setDatabaseConfigValueIfEnabled('SPREED_WEBRTC_SHAREDSECRET', $key);
+		return $key;
+	}
+
+	public static function regenerateTemporaryPasswordSigningKey() {
+		$key = Security::getRandomHexString(256 / 4); // 256 bit
+		Helper::setDatabaseConfigValueIfEnabled('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY', $key);
 	}
 
 	public static function constantTimeEquals($a, $b) {

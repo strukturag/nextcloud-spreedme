@@ -11,29 +11,25 @@
 
 namespace OCA\SpreedME\User;
 
+use OCA\SpreedME\Errors\ErrorCodes;
+use OCA\SpreedME\Helper\Helper;
 use OCA\SpreedME\Security\Security;
 
 class User {
 
-	private $userId;
 	private $user;
 
-	public function __construct($userId = null) {
-		$this->userId = $userId;
+	public function __construct() {
+		$this->user = \OC::$server->getUserSession()->getUser();
 	}
 
 	public function requireLogin() {
-		if (!$this->userId) {
-			throw new \Exception('Not logged in', 50001);
-		}
-		if (!$this->user) {
-			$this->user = new \OCP\User($this->userId);
+		if ($this->user === null) {
+			throw new \Exception('Not logged in', ErrorCodes::NOT_LOGGED_IN);
 		}
 	}
 
 	public function getInfo() {
-		$this->requireLogin();
-
 		return array(
 			'id' => $this->getUserId(),
 			'display_name' => $this->getDisplayName(),
@@ -45,7 +41,29 @@ class User {
 	private function getUserId() {
 		$this->requireLogin();
 
-		return $this->user->getUser();
+		if (Helper::getConfigValue('SPREED_WEBRTC_IS_SHARED_INSTANCE')) {
+			// Return cloud id instead
+			return $this->getCloudId();
+		}
+		return $this->user->getUID();
+	}
+
+	private function getUID() {
+		$this->requireLogin();
+
+		return $this->user->getUID();
+	}
+
+	private function getCloudId() {
+		$this->requireLogin();
+
+		if (!method_exists($this->user, 'getCloudId')) {
+			$uid = \OC::$server->getUserSession()->getUser()->getUID();
+			$server = \OC::$server->getURLGenerator()->getAbsoluteURL('/');
+			return $uid . '@' . rtrim(\OCA\Files_Sharing\Helper::removeProtocolFromUrl($server), '/');
+		}
+		// Nextcloud 9
+		return $this->user->getCloudId();
 	}
 
 	private function getDisplayName() {
@@ -58,15 +76,14 @@ class User {
 		$this->requireLogin();
 
 		// TODO(leon): This looks like a private API.
-		return \OC_Group::getUserGroups($this->userId);
+		return \OC_Group::getUserGroups($this->getUserId());
 	}
 
 	private function getAdministeredGroups() {
 		$this->requireLogin();
 
-		// TODO(leon): This looks like a private API.
 		if (class_exists('\OC_SubAdmin', true)) {
-			return \OC_SubAdmin::getSubAdminsGroups($this->userId);
+			return \OC_SubAdmin::getSubAdminsGroups($this->getUserId());
 		}
 		// Nextcloud 9
 		$subadmin = new \OC\SubAdmin(
@@ -74,8 +91,7 @@ class User {
 			\OC::$server->getGroupManager(),
 			\OC::$server->getDatabaseConnection()
 		);
-		$user = \OC::$server->getUserSession()->getUser();
-		$ocgroups = $subadmin->getSubAdminsGroups($user);
+		$ocgroups = $subadmin->getSubAdminsGroups($this->user);
 		$groups = array();
 		foreach ($ocgroups as $ocgroup) {
 			$groups[] = $ocgroup->getGID();
@@ -100,9 +116,13 @@ class User {
 	}
 
 	public function getSignedCombo() {
-		$info = $this->getInfo();
-
-		return Security::getSignedCombo($info['id']);
+		$id = $this->getUserId();
+		// Spreed WebRTC uses colons as a delimiter for the useridcombo.
+		// As the user id might contain colons (if it's a cloud id), we need to
+		// replace it with a non-valid URL character, e.g. a pipe (|).
+		// The reverse happens in the 'displayUserid' filter of owncloud.js
+		$id = str_replace(':', '|', $id);
+		return Security::getSignedCombo($id);
 	}
 
 }

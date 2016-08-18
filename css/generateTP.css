@@ -24,7 +24,7 @@ form label, form input {
 form label {
 	vertical-align: middle;
 }
-form input[type="submit"] {
+form button[type="submit"] {
 	margin-top: 15px;
 }
 

@@ -40,3 +40,5 @@ $container->query('OCP\INavigationManager')->add(function () use ($container) {
 		'name' => $l10n->t(Settings::APP_TITLE),
 	];
 });
+
+\OCP\App::registerAdmin(Settings::APP_ID, 'settings/admin');

@@ -27,6 +27,9 @@ class Config {
 	// you already set in the [users] section of the `server.conf` file from Spreed WebRTC server
 	const SPREED_WEBRTC_SHAREDSECRET = 'bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX';
 
+	// Set to true if at least one another Nextcloud instance uses the same Spreed WebRTC server
+	const SPREED_WEBRTC_IS_SHARED_INSTANCE = false;
+
 	// Set to true if you want to allow access to this app + spreed-webrtc for non-registered users who received a temporary password by an Nextcloud admin.
 	// You can generate such a temporary password at: /index.php/apps/spreedme/admin/tp (Nextcloud admin user account required)
 	const OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED = false;
