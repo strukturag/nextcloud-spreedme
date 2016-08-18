@@ -1,11 +1,9 @@
 <?php
 
-use \OCA\SpreedME\Config\Config;
 use \OCA\SpreedME\Helper\Helper;
 
 $iframe_url = Helper::getSpreedWebRtcUrl();
 
-script('spreedme', '../extra/static/config/OwnCloudConfig');
 script('spreedme', '../extra/static/PostMessageAPI');
 script('spreedme', 'webrtc');
 style('spreedme', 'webrtc');
@@ -13,7 +11,7 @@ style('spreedme', 'webrtc');
 $sharedConfig = array(
 	'is_guest' => $_['is_guest'] === true,
 	'features' => array(
-		'temporary_password' => Config::OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED === true,
+		'temporary_password' => Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true,
 	),
 );
 
