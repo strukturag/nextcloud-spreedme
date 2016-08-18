@@ -3,6 +3,8 @@ TODO:
 For TODOs not listed in here, search for them via:
   $ grep -r --exclude-dir=".git" --exclude="TODO.txt" "TODO" .
 
+- Return API error message along with error code
+- Fix scope.msg = "Could not authenticate. Please try again.";
 - Move config stuff from helper.php to own class
 - Move owncloud.js, owncloud.js should be an empty file (for extra folder backwards-compatibility)
 - Unit Tests
