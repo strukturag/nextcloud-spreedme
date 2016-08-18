@@ -10,7 +10,7 @@
 
 // This file is loaded in Nextcloud context
 
-(function($, OC, OwnCloudConfig, PostMessageAPI) {
+(function($, OC, PostMessageAPI) {
 $(document).ready(function() {
 
 	if (!window.parent) {
@@ -128,4 +128,4 @@ $(document).ready(function() {
 	});
 
 });
-})(jQuery, OC, OwnCloudConfig, PostMessageAPI);
+})(jQuery, OC, PostMessageAPI);
