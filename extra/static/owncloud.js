@@ -418,6 +418,13 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 
 			}]);
 
+			// See User::getSignedCombo()
+			app.filter("displayUserid", [function() {
+				return function(id) {
+					return id.replace(/\|/g, ":");
+				};
+			}]);
+
 			app.directive("settingsAccount", [function() {
 				return {
 					scope: false,

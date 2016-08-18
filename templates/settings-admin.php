@@ -50,6 +50,11 @@ $classes[] = (Helper::doesJsConfigExist() ? 'js-config-found' : 'js-config-missi
 					value="<?php p(Helper::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_BASEPATH'));?>" />
 			</p>
 			<p class="show-if-advanced-settings">
+				<label for="SPREED_WEBRTC_IS_SHARED_INSTANCE">SPREED_WEBRTC_IS_SHARED_INSTANCE:</label>
+				<input type="checkbox" id="SPREED_WEBRTC_IS_SHARED_INSTANCE" name="SPREED_WEBRTC_IS_SHARED_INSTANCE"
+					<?php echo (Helper::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_IS_SHARED_INSTANCE') === true ? 'checked="checked"' : ''); ?> />
+			</p>
+			<p class="show-if-advanced-settings">
 				<label for="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED">OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED:</label>
 				<input type="checkbox" id="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED" name="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED"
 					<?php echo (Helper::getDatabaseConfigValueOrDefault('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true ? 'checked="checked"' : ''); ?> />
