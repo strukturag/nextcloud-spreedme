@@ -27,7 +27,7 @@ You need to make some adjustments to the configuration of this app.
 If you have configured this app via the Nextcloud web interface (**/index.php/settings/admin#goto-spreed.me**),
 please tweak the settings there. If you have configured this app via `config/config.php`, please make the adjustments there.
 
-- Set `SPREED_WEBRTC_ORIGIN` to the origin of your Spreed WebRTC server
+- Set `SPREED_WEBRTC_ORIGIN` to the origin of your Spreed WebRTC server  
   (e.g. https://webrtc.mynextcloudserver.com:8443)
 
 From your command line, head over to the **apps/spreedme/extra/static/config** folder of your Nextcloud installation.
