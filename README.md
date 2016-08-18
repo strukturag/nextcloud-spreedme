@@ -123,7 +123,7 @@ Follow our [Guide for Nginx](./doc/example-config-nginx.md) on how to run Spreed
 
 Running Spreed WebRTC and Nextcloud on different origins is not recommended,
 as you will not be able to use the Screensharing feature due to browser restrictions.
-If you still prefer to run them on different origins, please read [this document](https://github.com/strukturag/nextcloud-spreedme/blob/master/doc/running-on-different-origins.md).
+If you still prefer to run them on different origins, please read [this document](./doc/running-on-different-origins.md).
 
 ## Debugging / Problems?
 
