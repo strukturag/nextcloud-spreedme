@@ -10,7 +10,7 @@
 
 // This file is loaded in Nextcloud context
 
-(function($, OC, OwnCloudConfig) {
+(function($, OC) {
 $(document).ready(function() {
 
 	if (typeof OwnCloudConfig === 'undefined') {
@@ -134,4 +134,4 @@ $(document).ready(function() {
 	});
 
 });
-})(jQuery, OC, OwnCloudConfig);
+})(jQuery, OC);
