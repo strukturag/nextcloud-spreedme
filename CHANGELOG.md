@@ -1,5 +1,5 @@
 nextcloud-spreedme (0.3.0)
-* Allow to configure the app via Nextcloud's "Admin settings web interface
+* Allow to configure the app via Nextcloud's "Admin settings" web interface
 * Support running multiple Nextcloud instances with a single spreed-webrtc server
 * Upgrade notes:
   1. This app can now be configured from the web interface.
