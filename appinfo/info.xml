@@ -2,8 +2,8 @@
 <info>
     <id>spreedme</id>
     <name>Spreed.ME</name>
-    <summary>Audio-, video- and text chat for your Nextcloud installation</summary>
-    <description>Securely communicate with your friends and family using rich audio-, video- and text chat, and much more right from your Nextcloud installation – in your browser</description>
+    <summary>Audio-, video- and text chat for your Nextcloud</summary>
+    <description>Securely communicate with your friends and family using rich audio-, video- and text chat, and much more right from your Nextcloud – in your browser</description>
     <licence>AGPL</licence>
     <author>struktur AG</author>
     <documentation>
