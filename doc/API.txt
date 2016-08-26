@@ -102,8 +102,8 @@ Available endpoints with request methods and content-type:
 
   /api/v1/file/download
 
-    The file/download endpoint provides download functionality
-    of Nextcloud documents. It redirects to a URL where the file ultimately can be found.
+    The file/download endpoint provides download functionality of Nextcloud documents.
+    It redirects to a URL where the file ultimately can be found.
     This endpoint and the URL it redirects to both require a valid session (cookie).
 
     GET application/x-www-form-urlencoded
@@ -111,6 +111,47 @@ Available endpoints with request methods and content-type:
       Response 200: Redirect to the requested file which can then be downloaded.
 
 
+  /api/v1/admin/config
+
+    The admin/config endpoint allows admins to update the app configuration.
+    Please also see config/config.php.in.
+    This endpoint requires admin authentication + a valid Nextcloud CSRF requesttoken.
+
+    PATCH application/x-www-form-urlencoded
+      SPREED_WEBRTC_ORIGIN: Domain of the Spreed WebRTC server (including protocol and optional port number) (string, optional)
+      SPREED_WEBRTC_BASEPATH: Spreed WebRTC basepath (string, optional)
+      OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED: Whether the 'Temporary Password' feature should be enabled (string, optional)
+      SPREED_WEBRTC_IS_SHARED_INSTANCE: Whether the Spreed WebRTC server is used by multiple Nextcloud instances (string, optional)
+      Response 200:
+        {
+          "success": true
+        }
+
+
+  /api/v1/admin/config/regenerate/sharedsecret
+
+    The admin/config/regenerate/sharedsecret endpoint generates, stores, and returns a new SPREED_WEBRTC_SHAREDSECRET.
+    This shared secret has to be used in the Spreed WebRTC config (sharedsecret_secret).
+    This endpoint requires admin authentication + a valid Nextcloud CSRF requesttoken.
+
+    POST application/x-www-form-urlencoded
+      Response 200:
+        {
+          "success": true,
+          "sharedsecret": "8485adfe6d78521fc4710f14172e4566328b558bda9f3bd3d017a45135e37cfc"
+        }
+
+
+  /api/v1/admin/config/regenerate/tp-key
+
+    The admin/config/regenerate/tp-key endpoint generates and stores a new OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY.
+    This endpoint requires admin authentication + a valid Nextcloud CSRF requesttoken.
+
+    POST application/x-www-form-urlencoded
+      Response 200:
+        {
+          "success": true
+        }
 
 
 End of API.
