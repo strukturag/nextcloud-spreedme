@@ -179,6 +179,21 @@ class Security {
 		Helper::setDatabaseConfigValueIfEnabled('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY', $key);
 	}
 
+	public static function generateSpreedWebRTCConfig() {
+		$config = file_get_contents(Helper::getOwnAppPath() . 'doc/spreed-webrtc-minimal-config.txt');
+		if (Helper::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_SHAREDSECRET') === '') {
+			self::regenerateSharedSecret();
+		}
+		$replace = array(
+			'the-default-secret-do-not-keep-me' => self::getRandomHexString(256 / 4), // 256 bit
+			'the-default-encryption-block-key' => self::getRandomHexString(256 / 4), // 256 bit
+			'i-did-not-change-the-public-token-boo' => self::getRandomHexString(256 / 4), // 256 bit
+			'/absolute/path/to/nextcloud/apps/spreedme/extra' => Helper::getOwnAppPath() . 'extra',
+			'some-secret-do-not-keep' => Helper::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_SHAREDSECRET'),
+		);
+		return strtr($config, $replace);
+	}
+
 	public static function constantTimeEquals($a, $b) {
 		$alen = strlen($a);
 		$blen = strlen($b);

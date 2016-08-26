@@ -1,0 +1,19 @@
+; Minimal Spreed WebRTC for Nextcloud server configuration
+
+[app]
+sessionSecret = the-default-secret-do-not-keep-me
+encryptionSecret = the-default-encryption-block-key
+serverToken = i-did-not-change-the-public-token-boo
+extra = /absolute/path/to/nextcloud/apps/spreedme/extra
+plugin = extra/static/owncloud.js
+authorizeRoomJoin = true
+serverRealm = local
+
+[users]
+sharedsecret_secret = some-secret-do-not-keep
+enabled = true
+mode = sharedsecret
+
+[http]
+listen = 127.0.0.1:8080
+basePath = /webrtc/
