@@ -16,6 +16,13 @@ use OCA\SpreedME\Settings\Settings;
 
 class Helper {
 
+	private static $defaultConfig = array(
+		'SPREED_WEBRTC_ORIGIN' => '',
+		'SPREED_WEBRTC_BASEPATH' => '/webrtc/',
+		'SPREED_WEBRTC_IS_SHARED_INSTANCE' => false,
+		'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED' => false,
+	);
+
 	private function __construct() {
 
 	}
@@ -49,8 +56,19 @@ class Helper {
 		return $protocol . '://' . $hostname;
 	}
 
+	private static function getDefaultValue($key) {
+		if (isset(self::$defaultConfig[$key])) {
+			return self::$defaultConfig[$key];
+		}
+		return null;
+	}
+
 	private static function getFileConfigValue($key) {
-		return constant('\OCA\SpreedME\Config\Config::' . $key);
+		$constantName = '\OCA\SpreedME\Config\Config::' . $key;
+		if (defined($constantName)) {
+			return constant($constantName);
+		}
+		return null;
 	}
 
 	public static function getDatabaseConfigValue($key) {
@@ -63,17 +81,12 @@ class Helper {
 	}
 
 	public static function getDatabaseConfigValueOrDefault($key) {
-		$defaultConfig = array(
-			'SPREED_WEBRTC_ORIGIN' => '',
-			'SPREED_WEBRTC_BASEPATH' => '/webrtc/',
-			'SPREED_WEBRTC_IS_SHARED_INSTANCE' => false,
-			'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED' => false,
-		);
 		if (self::getDatabaseConfigValue('is_set_up') === true) {
 			return self::getDatabaseConfigValue($key);
 		}
-		if (isset($defaultConfig[$key])) {
-			return $defaultConfig[$key];
+		$default = $this->getDefaultValue($key);
+		if ($default !== null) {
+			return $default;
 		}
 		return '';
 	}
