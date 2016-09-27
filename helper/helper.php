@@ -84,7 +84,7 @@ class Helper {
 		if (self::getDatabaseConfigValue('is_set_up') === true) {
 			return self::getDatabaseConfigValue($key);
 		}
-		$default = $this->getDefaultValue($key);
+		$default = self::getDefaultValue($key);
 		if ($default !== null) {
 			return $default;
 		}
