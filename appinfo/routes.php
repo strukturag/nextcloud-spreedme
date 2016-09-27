@@ -28,6 +28,7 @@ return [
 		['name' => 'api#save_config', 'url' => '/api/v1/admin/config', 'verb' => 'PATCH'],
 		['name' => 'api#regenerate_shared_secret', 'url' => '/api/v1/admin/config/regenerate/sharedsecret', 'verb' => 'POST'],
 		['name' => 'api#regenerate_temporary_password_signing_key', 'url' => '/api/v1/admin/config/regenerate/tp-key', 'verb' => 'POST'],
+		['name' => 'api#generate_spreed_webrtc_config', 'url' => '/api/v1/admin/config/generate/spreed-webrtc-config', 'verb' => 'POST'],
 		['name' => 'api#download_file', 'url' => '/api/v1/file/download', 'verb' => 'GET'],
 	],
 ];

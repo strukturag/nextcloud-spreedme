@@ -28,13 +28,22 @@ $classes[] = (Helper::doesJsConfigExist() ? 'js-config-found' : 'js-config-missi
 		<p><code>config/config.php</code> was not found. We will use the Nextcloud database to read/write config values.</p>
 		<p>You can change them here:</p>
 		<form action="#" method="POST">
+			<p class="hidden SPREED_WEBRTC_CONFIG warning">
+				<label for="SPREED_WEBRTC_CONFIG">A new SPREED_WEBRTC_CONFIG was generated.<br />Simply remove everything from your current <code>server.conf</code> and paste the new config in instead.<br />Restart Spreed WebRTC afterwards.</label>
+				<textarea id="SPREED_WEBRTC_CONFIG" name="SPREED_WEBRTC_CONFIG" readonly="readonly" class="select-on-click"></textarea>
+			</p>
+			<p>
+				<label for="GENERATE_SPREED_WEBRTC_CONFIG">SPREED_WEBRTC_CONFIG:</label>
+				<input type="button" id="GENERATE_SPREED_WEBRTC_CONFIG" name="GENERATE_SPREED_WEBRTC_CONFIG"
+					value="Generate Spreed WebRTC config" />
+			</p>
 			<p class="hidden SPREED_WEBRTC_SHAREDSECRET warning">
 				<!-- label for and input id removed intentionally. This makes it possible to copy&paste 'sharedsecret_secret' -->
 				<label>A new SPREED_WEBRTC_SHAREDSECRET was generated.<br />Use it for <code>sharedsecret_secret</code> in Spreed WebRTC's configuration.<br />Restart Spreed WebRTC afterwards.</label>
 				<input type="text" name="SPREED_WEBRTC_SHAREDSECRET" placeholder="" readonly="readonly"
 					class="select-on-click" value="" />
 			</p>
-			<p>
+			<p class="show-if-advanced-settings">
 				<label for="REGENERATE_SPREED_WEBRTC_SHAREDSECRET">SPREED_WEBRTC_SHAREDSECRET:</label>
 				<input type="button" id="REGENERATE_SPREED_WEBRTC_SHAREDSECRET" name="REGENERATE_SPREED_WEBRTC_SHAREDSECRET"
 					class="needs-confirmation" data-confirmation-message="Do you really want to generate a new shared secret?\nYou will need to change it in Spreed WebRTC's configuration, too." value="Generate new shared secret" />

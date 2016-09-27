@@ -192,6 +192,18 @@ class ApiController extends Controller {
 		return new DataResponse($_response);
 	}
 
+	public function generateSpreedWebRTCConfig() {
+		$_response = array('success' => false);
+		try {
+			$_response['config'] = Security::generateSpreedWebRTCConfig();
+			$_response['success'] = true;
+		} catch (\Exception $e) {
+			$_response['error'] = $e->getCode();
+		}
+
+		return new DataResponse($_response);
+	}
+
 	/**
 	 * @NoAdminRequired
 	 */
