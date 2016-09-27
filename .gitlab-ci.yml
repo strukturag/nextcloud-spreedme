@@ -1,6 +1,6 @@
 variables:
-  OWNCLOUD_BRANCH: master
-  OWNCLOUD_DATABASE: mysql
+  NC_BRANCH: master
+  NC_DATABASE: mysql
 
 runtests:
   script:
@@ -8,6 +8,6 @@ runtests:
     - ci-apt-get-update
     - ci-apt-get-install mysql-client mysql-server phpunit php5-curl php5-gd php5-intl php5-mysql
     - ./tests/prepare-ci-tests.sh
-    - cd ${CI_PROJECT_DIR}/../owncloud/apps/spreedme
+    - cd ${CI_PROJECT_DIR}/../nextcloud/apps/spreedme
     - phpunit -c phpunit.xml
     - phpunit -c phpunit.integration.xml

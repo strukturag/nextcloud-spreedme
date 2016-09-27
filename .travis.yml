@@ -8,32 +8,32 @@ php:
 
 env:
   global:
-    - OWNCLOUD_BRANCH=master
+    - NC_BRANCH=master
   matrix:
-    - OWNCLOUD_DATABASE=mysql
+    - NC_DATABASE=mysql
 
 matrix:
   allow_failures:
     - php: hhvm
   include:
     - php: 5.5
-      env: OWNCLOUD_DATABASE=sqlite
+      env: NC_DATABASE=sqlite
     - php: 5.5
-      env: OWNCLOUD_DATABASE=pgsql
+      env: NC_DATABASE=pgsql
     - php: 5.6
-      env: OWNCLOUD_DATABASE=sqlite
+      env: NC_DATABASE=sqlite
     - php: 5.6
-      env: OWNCLOUD_DATABASE=pgsql
+      env: NC_DATABASE=pgsql
     - php: 7.0
-      env: OWNCLOUD_DATABASE=sqlite
+      env: NC_DATABASE=sqlite
     - php: 7.0
-      env: OWNCLOUD_DATABASE=pgsql
+      env: NC_DATABASE=pgsql
 
 install:
   - phpenv config-add tests/travis/php.ini
   - ./tests/prepare-ci-tests.sh
 
 script:
-  - cd ${TRAVIS_BUILD_DIR}/../owncloud/apps/spreedme
+  - cd ${TRAVIS_BUILD_DIR}/../nextcloud/apps/spreedme
   - phpunit -c phpunit.xml
   - phpunit -c phpunit.integration.xml

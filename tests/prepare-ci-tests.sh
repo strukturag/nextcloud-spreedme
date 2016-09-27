@@ -1,13 +1,13 @@
 #!/bin/bash
 set -eu
 
-if [ -z "${OWNCLOUD_BRANCH:-}" ]; then
-    echo "No ownclound branch specified."
+if [ -z "${NC_BRANCH:-}" ]; then
+    echo "No Nextcloud branch specified."
     exit 1
 fi
 
-if [ -z "${OWNCLOUD_DATABASE:-}" ]; then
-    echo "No ownclound database specified."
+if [ -z "${NC_DATABASE:-}" ]; then
+    echo "No Nextcloud database specified."
     exit 1
 fi
 
@@ -40,15 +40,7 @@ fi
 
 pushd "${PROJECT_ROOT}"
 
-echo "Installing ocdev ..."
-${SUDO} ${APT_GET_INSTALL} \
-    python3-jinja2 \
-    python3-setuptools
-
-${SUDO} easy_install3 requests==2.10.0
-${SUDO} easy_install3 ocdev
-
-case "${OWNCLOUD_DATABASE}" in
+case "${NC_DATABASE}" in
     pgsql)
         echo "Setting up postgresql ..."
         createuser -s oc_autotest
@@ -66,27 +58,27 @@ case "${OWNCLOUD_DATABASE}" in
         ;;
 
     *)
-        echo "No additional setup required for ${OWNCLOUD_DATABASE}"
+        echo "No additional setup required for ${NC_DATABASE}"
         ;;
 esac
 
-echo "Installing owncloud ..."
+echo "Installing Nextcloud ..."
 cd ..
-rm -rf owncloud
-ocdev setup core --dir owncloud --branch "${OWNCLOUD_BRANCH}" --no-history
-cp -r "${PROJECT_ROOT}" owncloud/apps/spreedme
-cd owncloud/apps/spreedme
+rm -rf nextcloud
+git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b $NC_BRANCH nextcloud
+cp -r "${PROJECT_ROOT}" nextcloud/apps/spreedme
+cd nextcloud/apps/spreedme
 cp config/config.php.in config/config.php
 cp extra/static/config/OwnCloudConfig.js.in extra/static/config/OwnCloudConfig.js
 cd ../../..
-cd owncloud
+cd nextcloud
 ./occ -vvv maintenance:install \
     --database-name oc_autotest \
     --database-user oc_autotest \
     --database-pass \
     --admin-user admin \
     --admin-pass admin \
-    --database "${OWNCLOUD_DATABASE}"
+    --database "${NC_DATABASE}"
 
 echo "Enabling spreedme app ..."
 ./occ app:enable spreedme
