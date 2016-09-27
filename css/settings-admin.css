@@ -51,6 +51,10 @@
 #spreedme form button[type="submit"] {
 	margin-top: 15px;
 }
+#spreedme form textarea[name="SPREED_WEBRTC_CONFIG"] {
+	width: 660px;
+	height: 360px;
+}
 
 /* TODO(leon): You know.. */
 #spreedme > div:not(.show-if-php-config-file):not(.show-if-php-config-database):not(:first-of-type) {

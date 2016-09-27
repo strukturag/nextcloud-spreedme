@@ -28,7 +28,7 @@ Put the following part into the `server` context of your Nginx configuration.
 
 ```nginx
 	# Spreed WebRTC
-	location /webrtc {
+	location ^~ /webrtc {
 		proxy_pass http://127.0.0.1:8080;
 		proxy_http_version 1.1;
 		proxy_set_header Upgrade $http_upgrade;
