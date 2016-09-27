@@ -1,3 +1,7 @@
+nextcloud-spreedme (0.3.2)
+* Further simplify setup
+* Bug fixes
+
 nextcloud-spreedme (0.3.1)
 * Prepare app for the Nextcloud app store
 
