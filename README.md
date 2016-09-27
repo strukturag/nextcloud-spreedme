@@ -21,30 +21,16 @@ Your server has to be available via HTTPS. If your Nextcloud server is not using
 1. Place this app in the **apps/** folder of your Nextcloud installation. Make sure the directory of this app is named `spreedme`.
 2. Enable this Nextcloud app by browsing to **/index.php/settings/apps**
 3. Open the Nextcloud admin settings page (**/index.php/settings/admin#goto-spreed.me**) in your browser and configure this app:
-   1. Click on **Generate new shared secret**. It will output a random string which you will need in one of the next steps. Copy it to your clipboard.
+   1. Click on **Generate Spreed WebRTC config**. It will output the Spreed WebRTC configuration you will need in one of the next steps. Copy it to your clipboard.
    2. Click on **Save settings**.
 4. Set up a Spreed WebRTC server and continue with the next step.
    An easy-to-follow installation guideline can be found further below, see [Installation / Setup of a Spreed WebRTC server](#installation--setup-of-a-spreed-webrtc-server).
 5. You now should have a running Spreed WebRTC server.
-6. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server (`webrtc.conf` if you use the packaged version), namely:
-   1. In the **[http]** section:
-      - Enable (= uncomment) **basePath** and set it to **/webrtc/**  
-        (`basePath = /webrtc/`)
-   2. In the **[app]** section:
-      - Enable **authorizeRoomJoin** and set it to **true**  
-        (`authorizeRoomJoin = true`)
-      - Enable **extra** and set it to the full absolute path of the **spreedme/extra** directory in your **apps** folder of your Nextcloud installation  
-        (e.g. `extra = /absolute/path/to/nextcloud/apps/spreedme/extra`)
-      - Enable **plugin** and set it to **extra/static/owncloud.js**  
-        (`plugin = extra/static/owncloud.js`)
-   3. In the **[users]** section:
-      - Enable **enabled** and set it to **true**  
-        (`enabled = true`)
-      - Enable **mode** and set it to **sharedsecret**  
-        (`mode = sharedsecret`)
-      - Enable **sharedsecret_secret** and set it to the random string from step 1.  
-        (e.g. `sharedsecret_secret = bb04fb058e2d7fd19c5bdaa129e7883195f73a9c49414a7eXXXXXXXXXXXXXXXX`)
-   4. Restart the Spreed WebRTC server to reload its configuration
+6. This app requires you to change some settings in the `server.conf` of the Spreed WebRTC server (`webrtc.conf` if you use the packaged version):
+   1. Empty the contents of the file.
+   2. Paste in the Spreed WebRTC config from step 1 (you should have it in your clipboard).
+   3. Save the file.
+   4. Restart the Spreed WebRTC server to reload its configuration.
 7. **That's it.** You can now start communicating securely with your friends and family by opening the **Spreed.ME app** of your Nextcloud host in your browser.
 
 ## Limiting access to this app
