@@ -80,6 +80,22 @@ $(document).ready(function() {
 			console.log(response, code);
 		});
 	};
+	var generateSpreedWebRTCConfig = function(cb_success, cb_error) {
+		$.ajax({
+			url: baseUrl + '/api/v1/admin/config/generate/spreed-webrtc-config',
+			type: 'POST',
+			data: {},
+		}).done(function (response) {
+			if (response.success === true) {
+				removeMessage();
+				cb_success(response.config);
+			} else {
+				cb_error(response.error);
+			}
+		}).fail(function (response, code) {
+			console.log(response, code);
+		});
+	};
 
 	$c.find('[name="OWNCLOUD_ORIGIN"]').val(OwnCloudConfig.OWNCLOUD_ORIGIN);
 	$c.find('.needs-confirmation').click(function(e) {
@@ -111,6 +127,16 @@ $(document).ready(function() {
 		regenerateTemporaryPasswordSigningKey(function() {
 			$c.find('.OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY')
 				.removeClass('hidden');
+		}, function(error) {
+
+		});
+	});
+	$c.find('[name="GENERATE_SPREED_WEBRTC_CONFIG"]').click(function(e) {
+		generateSpreedWebRTCConfig(function(config) {
+			$c.find('.SPREED_WEBRTC_CONFIG')
+				.removeClass('hidden')
+				.find('textarea')
+				.val(config);
 		}, function(error) {
 
 		});
