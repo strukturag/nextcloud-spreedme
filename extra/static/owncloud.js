@@ -124,23 +124,16 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 				(function() {
 					// TODO(leon): Rely on something else than __proto__
 					//var orig = _.bind(restURL.__proto__.room, restURL);
-					var parentUrl = document.referrer; // This is the URL of the site which loads this script in an Iframe
-					//var ownCloudAppPath = "/index.php/apps/spreedme/";
 					var that = restURL.__proto__;
 					that.room = function(room) {
 						var makeRoomUrl = function(url, room) {
-							var parser = document.createElement("a");
-							parser.href = url;
 							var roomName = "";
 							if (room) {
 								roomName = "#" + room;
 							}
-							//return parser.protocol + "//" + parser.host + ownCloudAppPath + roomName;
-							return ownCloud.getConfig().baseURL + that.encodeRoomURL(roomName).replace("%23", "#"); // Allow first hash to be unencoded
+							return url + that.encodeRoomURL(roomName).replace("%23", "#"); // Allow first hash to be unencoded
 						};
-
-						//return orig(name).replace($window.location.protocol + '//' + $window.location.host, makeRoomUrl(parentUrl, room));
-						return makeRoomUrl(parentUrl, room);
+						return makeRoomUrl(ownCloud.getConfig().baseURL, room);
 					};
 				})();
 
