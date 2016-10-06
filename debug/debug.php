@@ -70,7 +70,7 @@ class Debug {
 	}
 
 	private static function testOwncloudJavascriptConfigFile() {
-		$url = 'apps/' . Settings::APP_ID . '/extra/static/config/OwnCloudConfig.js';
+		$url = Helper::getOwnAppPath() . '/extra/static/config/OwnCloudConfig.js';
 		$response = file_get_contents($url);
 
 		if (!Helper::doesJsConfigExist()) {
