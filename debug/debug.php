@@ -70,12 +70,12 @@ class Debug {
 	}
 
 	private static function testOwncloudJavascriptConfigFile() {
-		$url = Helper::getOwnAppPath() . '/extra/static/config/OwnCloudConfig.js';
-		$response = file_get_contents($url);
-
 		if (!Helper::doesJsConfigExist()) {
 			return;
 		}
+
+		$url = Helper::getOwnAppPath() . '/extra/static/config/OwnCloudConfig.js';
+		$response = file_get_contents($url);
 
 		if (strpos($response, 'OWNCLOUD_ORIGIN') === false) {
 			return 'Did not find OwnCloudConfig.js at ' . $url;
