@@ -1,3 +1,8 @@
+nextcloud-spreedme (0.3.3)
+* Fix 'Share room link' URL
+* Fix redirect to Nextcloud login page
+* Other bug fixes
+
 nextcloud-spreedme (0.3.2)
 * Further simplify setup
 * Bug fixes
