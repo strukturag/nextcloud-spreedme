@@ -103,9 +103,18 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 			app.run(["$rootScope", "$window", "$q", "$timeout", "ownCloud", "mediaStream", "appData", "userSettingsData", "rooms", "restURL", "alertify", "chromeExtension", function($rootScope, $window, $q, $timeout, ownCloud, mediaStream, appData, userSettingsData, rooms, restURL, alertify, chromeExtension) {
 
 				var redirectToOwncloud = function() {
-					// This only redirects to the Nextcloud host. No base path included!
+					// This redirects to the Nextcloud host. No base path is included if this page is not loaded via Iframe.
 					// TODO(leon): Fix this somehow.
-					$window.parent.location.replace(ALLOWED_PARTNERS[0]);
+					var url = ALLOWED_PARTNERS[0];
+					var baseURL = ownCloud.getConfig().baseURL;
+					var fullURL = ownCloud.getConfig().fullURL;
+					if (baseURL && fullURL) {
+						var a = $window.document.createElement("a");
+						a.href = fullURL;
+						var redirectURL = a.pathname + a.search + a.hash;
+						url = baseURL + "/../../login?redirect_url=" + $window.encodeURIComponent(redirectURL);
+					}
+					$window.parent.location.replace(url);
 				};
 
 				if (!HAS_PARENT) {
@@ -526,6 +535,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 
 				var setConfig = function(newConfig) {
 					config.baseURL = newConfig.baseURL;
+					config.fullURL = newConfig.fullURL;
 				};
 
 				var downloadFile = function(file) {
