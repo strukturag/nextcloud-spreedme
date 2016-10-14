@@ -49,7 +49,8 @@ $(document).ready(function() {
 	var getConfig = function() {
 		postMessageAPI.post({
 			config: {
-				baseURL: OC.generateUrl("/apps/spreedme"),
+				baseURL: document.location.origin + OC.generateUrl("/apps/spreedme"),
+				fullURL: document.location.href,
 				isGuest: IS_GUEST,
 				temporaryPassword: getQueryParam("tp"),
 				features: {
