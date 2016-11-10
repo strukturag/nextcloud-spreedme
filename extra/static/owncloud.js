@@ -209,7 +209,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						} else {
 							alertify.dialog.error(
 								"Nextcloud account required",
-								"Please log in into your Nextcloud account to use use this service.",
+								"Please log in into your Nextcloud account to use this service.",
 								redirectToOwncloud,
 								redirectToOwncloud
 							);
