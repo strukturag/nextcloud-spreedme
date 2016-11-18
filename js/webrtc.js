@@ -197,21 +197,6 @@ $(document).ready(function() {
 		xhr.send();
 	};
 
-	var createFolder = function(path, name) {
-		// TODO(leon): Deprecated in latest master..
-		var fd = new FormData();
-		fd.append('dir', path);
-		fd.append('foldername', name);
-		//fd.append('requesttoken', oc_requesttoken);
-		return $.ajax({
-			type: 'POST',
-			url: OC.generateUrl('/apps/files/ajax/newfolder.php'),
-			data: fd,
-			processData: false,
-			contentType: false
-		});
-	};
-
 	var uploadBlob = function(obj, event) {
 		var doUpload = function(blob, filename) {
 			var uploadFolderPath = (function() {
