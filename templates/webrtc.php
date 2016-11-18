@@ -8,6 +8,11 @@ script('spreedme', '../extra/static/PostMessageAPI');
 script('spreedme', 'webrtc');
 style('spreedme', 'webrtc');
 
+// Nextcloud 11 file upload
+if (is_file(Helper::getAppPath('files') . 'js/file-upload.js')) {
+	script('files', 'file-upload');
+}
+
 $sharedConfig = array(
 	'is_guest' => $_['is_guest'] === true,
 	'features' => array(

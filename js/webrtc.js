@@ -198,18 +198,70 @@ $(document).ready(function() {
 	};
 
 	var uploadBlob = function(obj, event) {
-		var doUpload = function(blob, filename) {
-			var uploadFolderPath = (function() {
-				var padNum = function(num, count) {
-					var str = '' + num;
-					while (str.length < count) {
-						str = '0' + str;
+		var uploadFolderPath = (function() {
+			var padNum = function(num, count) {
+				var str = '' + num;
+				while (str.length < count) {
+					str = '0' + str;
+				}
+				return str;
+			};
+			var date = new Date();
+			return '/Spreed.ME Downloads/' + date.getFullYear() + '/' + padNum(date.getMonth() + 1, 2);
+		})();
+		// TODO(leon): Let backend do this job, as it might cause a lot of traffic for the client..
+		var FileCounter = function(filename) {
+			var counter = 1;
+			return {
+				next: function() {
+					if (counter === 1) {
+						counter++;
+						return filename;
 					}
-					return str;
-				};
-				var date = new Date();
-				return 'Spreed.ME Downloads/' + date.getFullYear() + '/' + padNum(date.getMonth() + 1, 2);
-			})();
+					var parts = filename.split('.');
+					var extension = parts.pop();
+					var name = parts.pop();
+					parts.push(name + ' ' + counter);
+					parts.push(extension);
+					counter++;
+					return parts.join('.');
+				},
+			};
+		};
+		// NC 11 file uploader
+		var doUploadNC11 = function(blob, filename) {
+			var deferred = $.Deferred();
+			var fileCounter = new FileCounter(filename);
+			var uploader = new OC.Uploader();
+			var upload = function(blob, filename) {
+				return uploader.filesClient.putFileContents(uploadFolderPath + "/" + filename, blob, {
+					contentType: "text/plain;charset=utf-8",
+				});
+			};
+			var tryUpload = function() {
+				var filename = fileCounter.next();
+				upload(blob, filename).then(function() {
+					deferred.resolve({
+						response: null,
+						savedFilename: filename,
+						path: uploadFolderPath
+					});
+				}, function(status) {
+					if (status === 412) {
+						// File already exists, try to upload using a different filename
+						tryUpload();
+					}
+				});
+			};
+			uploader.ensureFolderExists(uploadFolderPath).then(function() {
+				tryUpload();
+			});
+			return deferred;
+		};
+		// NC-pre-11 file uploader
+		var doUploadPreNC11 = function(blob, filename) {
+			var deferred = $.Deferred();
+			var fileCounter = new FileCounter(filename);
 			var upload = function(blob, filename) {
 				var fd = new FormData();
 				fd.append('dir', '/');
@@ -224,46 +276,30 @@ $(document).ready(function() {
 					contentType: false
 				});
 			};
-			// This function tries to upload the file until response status != 'existserror'
-			// TODO(leon): Let backend do this job, as it might cause a lot of traffic for the client..
-			var uploadNonOverwrite = (function() {
-				var origFilename = '';
-				var counter = 2;
-				var deferred = $.Deferred();
-				var getFilenameWithCounter = function(filename) {
-					var parts = filename.split('.');
-					var extension = parts.pop();
-					var name = parts.pop();
-					parts.push(name + ' ' + counter);
-					parts.push(extension);
-					counter++;
-					return parts.join('.');
-				};
-				return function(blob, filename) {
-					if (!origFilename) {
-						origFilename = filename;
+			var tryUpload = function() {
+				var filename = fileCounter.next();
+				upload(blob, filename).done(function(response) {
+					var json = $.parseJSON(response)[0];
+					if (json.status === 'existserror') {
+						tryUpload();
+					} else {
+						// No error
+						deferred.resolve({
+							response: response,
+							savedFilename: filename,
+							path: uploadFolderPath
+						});
 					}
-					upload(blob, filename)
-					.done(function(response) {
-						var json = $.parseJSON(response)[0];
-						if (json.status === 'existserror') {
-							return uploadNonOverwrite(blob, getFilenameWithCounter(origFilename));
-						} else {
-							// No error
-							deferred.resolve({
-								response: response,
-								savedFilename: filename,
-								path: uploadFolderPath
-							});
-						}
-					});
-					return deferred;
-				};
-			})();
-
-			return uploadNonOverwrite(blob, filename);
+				});
+			};
+			tryUpload();
+			return deferred;
 		};
 
+		var doUpload = doUploadPreNC11;
+		if (OC.Uploader) {
+			doUpload = doUploadNC11;
+		}
 		doUpload(obj.blob, obj.name)
 		.then(function(data) {
 			postMessageAPI.answerRequest(event, {
