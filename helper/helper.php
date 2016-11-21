@@ -117,6 +117,10 @@ class Helper {
 		return realpath(__DIR__ . '/..') . '/';
 	}
 
+	public static function getAppPath($app) {
+		return sprintf('%s/../%s/', realpath(__DIR__ . '/..'), $app);
+	}
+
 	public static function notifyIfAppNotSetUp() {
 		if (!self::doesPhpConfigExist() && self::getDatabaseConfigValue('is_set_up') !== true) {
 			die('You didn\'t set up this Nextcloud app. Please open the Nextcloud admin settings page and configure this app.');

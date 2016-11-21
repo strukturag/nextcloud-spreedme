@@ -29,6 +29,28 @@
 	width: inherit !important;
 }
 
-.oc-dialog.in-iframe .filelist {
-	height: 198px !important;
+.oc-dialog.in-iframe ul.filelist {
+	height: 218px !important;
+}
+
+.oc-dialog.in-iframe ul.filelist .filename {
+	max-width: 72% !important;
+}
+
+.oc-dialog.in-iframe ul.filelist .date {
+	display: block !important;
+}
+
+.oc-dialog.in-iframe .filelist-container {
+	height: 185px !important;
+	padding-bottom: 0px !important;
+}
+
+.oc-dialog.in-iframe table.filelist .filename {
+	max-width: 330px !important;
+}
+
+.oc-dialog.in-iframe table.filelist .filesize,
+.oc-dialog.in-iframe table.filelist .date {
+	display: table-cell !important;
 }
