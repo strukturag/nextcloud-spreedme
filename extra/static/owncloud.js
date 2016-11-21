@@ -209,7 +209,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						} else {
 							alertify.dialog.error(
 								"Nextcloud account required",
-								"Please log in into your Nextcloud account to use use this service.",
+								"Please log in into your Nextcloud account to use this service.",
 								redirectToOwncloud,
 								redirectToOwncloud
 							);
@@ -252,7 +252,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 							// Try to get tp from query params. Only done once, then prompt appears again
 							tokenReceived(ownCloud.dataStore.temporaryPassword);
 						} else {
-							alertify.dialog.prompt("Please enter a password to log in", function(token) {
+							alertify.dialog.prompt("Please enter a Temporary Password to log in", function(token) {
 								tokenReceived(token);
 							}, function() {
 								askForTemporaryPassword();

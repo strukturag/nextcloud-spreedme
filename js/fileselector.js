@@ -76,17 +76,35 @@ $(document).ready(function() {
 
 		if (!config.withDetails) {
 			// Add our own logic to file retrival function to save details about selected files.
-			var origFunction = window.OCdialogs._getFileList;
-			window.OCdialogs._getFileList = function(dir, mimeType) {
-				var defer = origFunction(dir, mimeType);
-				$.when(defer)
-				.then(function(response) {
-					var data = response.data;
-					// Save them to our list
-					fileDetails[data.directory] = data.files;
-				});
-				return defer;
-			};
+			var fileClient = window.OC.Files && window.OC.Files.getClient();
+			if (fileClient && fileClient.getFolderContents) {
+				// Nextcloud 11
+				var origFunction = _.bind(fileClient.getFolderContents, fileClient);
+				fileClient.getFolderContents = function(dir) {
+					var defer = origFunction(dir);
+					$.when(defer)
+					.then(function(status, files) {
+						files.forEach(function(file) {
+							fileDetails[file.path] = fileDetails[file.path] || [];
+							fileDetails[file.path].push(file);
+						});
+					});
+					return defer;
+				};
+			} else {
+				// Everything else
+				var origFunction = window.OCdialogs._getFileList;
+				window.OCdialogs._getFileList = function(dir, mimeType) {
+					var defer = origFunction(dir, mimeType);
+					$.when(defer)
+					.then(function(response) {
+						var data = response.data;
+						// Save them to our list
+						fileDetails[data.directory] = data.files;
+					});
+					return defer;
+				};
+			}
 		}
 
 		OC.dialogs.filepicker((config.inIframe ? "" : config.title), function(selectedFiles) {
