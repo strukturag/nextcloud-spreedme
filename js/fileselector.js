@@ -77,7 +77,7 @@ $(document).ready(function() {
 		if (!config.withDetails) {
 			// Add our own logic to file retrival function to save details about selected files.
 			var fileClient = window.OC.Files && window.OC.Files.getClient();
-			if (fileClient && fileClient.getFolderContents) {
+			if (fileClient && fileClient.getClient && fileClient.getFolderContents) {
 				// Nextcloud 11
 				var origFunction = _.bind(fileClient.getFolderContents, fileClient);
 				fileClient.getFolderContents = function(dir) {

@@ -1,3 +1,6 @@
+nextcloud-spreedme (0.3.5)
+* Fix file picker for Nextcloud 10. Issue was introduced in the previous release.
+
 nextcloud-spreedme (0.3.4)
 * Nextcloud 11 support
 * Other bug fixes
