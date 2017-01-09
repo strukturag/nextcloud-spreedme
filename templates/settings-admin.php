@@ -28,7 +28,7 @@ $classes[] = (Helper::doesJsConfigExist() ? 'js-config-found' : 'js-config-missi
 		<p><code>config/config.php</code> was not found. We will use the Nextcloud database to read/write config values.</p>
 		<p>You can change them here:</p>
 		<form action="#" method="POST">
-			<p class="hidden SPREED_WEBRTC_CONFIG warning">
+			<p class="hidden SPREED_WEBRTC_CONFIG success">
 				<label for="SPREED_WEBRTC_CONFIG">A new SPREED_WEBRTC_CONFIG was generated.<br />Simply remove everything from your current <code>server.conf</code> and paste the new config in instead.<br />Restart Spreed WebRTC afterwards.</label>
 				<textarea id="SPREED_WEBRTC_CONFIG" name="SPREED_WEBRTC_CONFIG" readonly="readonly" class="select-on-click"></textarea>
 			</p>
@@ -37,7 +37,7 @@ $classes[] = (Helper::doesJsConfigExist() ? 'js-config-found' : 'js-config-missi
 				<input type="button" id="GENERATE_SPREED_WEBRTC_CONFIG" name="GENERATE_SPREED_WEBRTC_CONFIG"
 					value="Generate Spreed WebRTC config" />
 			</p>
-			<p class="hidden SPREED_WEBRTC_SHAREDSECRET warning">
+			<p class="hidden SPREED_WEBRTC_SHAREDSECRET success">
 				<!-- label for and input id removed intentionally. This makes it possible to copy&paste 'sharedsecret_secret' -->
 				<label>A new SPREED_WEBRTC_SHAREDSECRET was generated.<br />Use it for <code>sharedsecret_secret</code> in Spreed WebRTC's configuration.<br />Restart Spreed WebRTC afterwards.</label>
 				<input type="text" name="SPREED_WEBRTC_SHAREDSECRET" placeholder="" readonly="readonly"
@@ -68,7 +68,7 @@ $classes[] = (Helper::doesJsConfigExist() ? 'js-config-found' : 'js-config-missi
 				<input type="checkbox" id="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED" name="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED"
 					<?php echo (Helper::getDatabaseConfigValueOrDefault('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true ? 'checked="checked"' : ''); ?> />
 			</p>
-			<p class="hidden OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY warning">
+			<p class="hidden OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY success">
 				A new OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY was generated.<br />Previously generated 'Temporary Passwords' are no longer valid.
 			</p>
 			<p class="show-if-advanced-settings">
