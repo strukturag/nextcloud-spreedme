@@ -195,7 +195,7 @@ class ApiController extends Controller {
 	public function generateSpreedWebRTCConfig() {
 		$_response = array('success' => false);
 		try {
-			$_response['config'] = Security::generateSpreedWebRTCConfig();
+			$_response['config'] = Helper::generateSpreedWebRTCConfig();
 			$_response['success'] = true;
 		} catch (\Exception $e) {
 			$_response['error'] = $e->getCode();
