@@ -3,6 +3,7 @@
 [http]
 listen = 127.0.0.1:8080
 basePath = /webrtc/
+;root = /usr/share/spreed-webrtc-server/www
 
 [app]
 sessionSecret = the-default-secret-do-not-keep-me
