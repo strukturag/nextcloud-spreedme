@@ -83,34 +83,11 @@ class Debug {
 	}
 
 	private static function testSpreedWebRTCAPI() {
-		// Force ?debug & other query params removal
-		$url = Helper::getSpreedWebRtcUrl(false, false);
-		$config_url = $url . 'api/v1/config';
-
-		// TODO(leon): Switch to curl as this is shitty?
-		$response = file_get_contents($config_url, false, stream_context_create(
-			array(
-				'http' => array(
-					'timeout' => 5,
-				),
-				'ssl' => array(
-					'verify_peer' => false,
-					'verify_peer_name' => false,
-				),
-			)
-		));
-
-		if (empty($response)) {
-			return 'Unable to connect to WebRTC at ' . $url . '. Did you set a correct SPREED_WEBRTC_ORIGIN and SPREED_WEBRTC_BASEPATH in config/config.php?';
+		try {
+			$config = Helper::getRemoteSpreedWebRTCConfig();
+		} catch (Exception $e) {
+			return $e->getMessage();
 		}
-
-		$json = json_decode($response, true);
-		$error = json_last_error();
-
-		if ($error !== JSON_ERROR_NONE) {
-			return 'WebRTC API config endpoint returned incorrect json response: <pre>' . htmlspecialchars($response) . '</pre>';
-		}
-
 		if (!isset($json['Plugin']) || empty($json['Plugin'])) {
 			return 'WebRTC API config endpoint does not include a plugin';
 		}

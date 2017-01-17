@@ -12,6 +12,7 @@
 namespace OCA\SpreedME\Helper;
 
 use OCA\SpreedME\Errors\ErrorCodes;
+use OCA\SpreedME\Security\Security;
 use OCA\SpreedME\Settings\Settings;
 
 class Helper {
@@ -170,6 +171,69 @@ class Helper {
 		}
 
 		return $url;
+	}
+
+	public static function getRemoteSpreedWebRTCConfig() {
+		// Force ?debug & other query params removal
+		$url = self::getSpreedWebRtcUrl(false, false);
+		$config_url = $url . 'api/v1/config';
+
+		// TODO(leon): Switch to curl as this is shitty?
+		$response = file_get_contents($config_url, false, stream_context_create(
+			array(
+				'http' => array(
+					'timeout' => 5,
+				),
+				'ssl' => array(
+					'verify_peer' => false,
+					'verify_peer_name' => false,
+				),
+			)
+		));
+
+		if (empty($response)) {
+			throw new \Exception('Unable to connect to WebRTC at ' . $url . '. Did you set a correct SPREED_WEBRTC_ORIGIN and SPREED_WEBRTC_BASEPATH in config/config.php?', ErrorCodes::REMOTE_CONFIG_EMPTY);
+		}
+
+		$json = json_decode($response, true);
+		$error = json_last_error();
+
+		if ($error !== JSON_ERROR_NONE) {
+			throw new \Exception('WebRTC API config endpoint returned incorrect json response: <pre>' . htmlspecialchars($response) . '</pre>', ErrorCodes::REMOTE_CONFIG_INVALID_JSON);
+		}
+
+		return $json;
+	}
+
+	public static function generateSpreedWebRTCConfig() {
+		$configPath = self::getOwnAppPath() . 'doc/spreed-webrtc-minimal-config.txt';
+		// Race condition if file is removed after this check, but we don't care :)
+		if (!is_file($configPath)) {
+			return;
+		}
+		$config = file_get_contents($configPath);
+		if (self::getDatabaseConfigValue('SPREED_WEBRTC_SHAREDSECRET') === '') {
+			Security::regenerateSharedSecret();
+		}
+		$replace = array(
+			'/webrtc/' => self::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_BASEPATH'),
+			'the-default-secret-do-not-keep-me' => Security::getRandomHexString(256 / 4), // 256 bit
+			'the-default-encryption-block-key' => Security::getRandomHexString(256 / 4), // 256 bit
+			'i-did-not-change-the-public-token-boo' => Security::getRandomHexString(256 / 4), // 256 bit
+			'/absolute/path/to/nextcloud/apps/spreedme/extra' => self::getOwnAppPath() . 'extra',
+			'some-secret-do-not-keep' => self::getDatabaseConfigValue('SPREED_WEBRTC_SHAREDSECRET'),
+		);
+		try {
+			$remoteConfig = self::getRemoteSpreedWebRTCConfig();
+			if (strpos($remoteConfig['Version'], 'unreleased') !== false) {
+				// Uncomment www root directive
+				$replace[';root'] = 'root';
+			}
+		} catch (\Exception $e) {
+			// We don't handle errors, sorry
+
+		}
+		return strtr($config, $replace);
 	}
 
 }
