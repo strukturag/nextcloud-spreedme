@@ -9,6 +9,10 @@
 	margin-bottom: 8px;
 }
 
+#spreedme .success {
+	background-color: #dfd;
+}
+
 #spreedme .hidden,
 #spreedme .show-if-php-config-file,
 #spreedme .show-if-php-config-database,
