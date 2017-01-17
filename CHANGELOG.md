@@ -1,3 +1,7 @@
+nextcloud-spreedme (0.3.6)
+* Fix Spreed WebRTC config generation for Spreed WebRTC servers installed via the Ubuntu package
+* Use a green color for success-messages (instead of red)
+
 nextcloud-spreedme (0.3.5)
 * Fix file picker for Nextcloud 10. Issue was introduced in the previous release.
 
