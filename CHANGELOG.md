@@ -1,3 +1,7 @@
+nextcloud-spreedme (0.3.7)
+* Fix iOS app compatibility if Nextcloud and Spreed WebRTC are available at different origins
+* Fix admin/debug page
+
 nextcloud-spreedme (0.3.6)
 * Fix Spreed WebRTC config generation for Spreed WebRTC servers installed via the Ubuntu package
 * Use a green color for success-messages (instead of red)
