@@ -85,10 +85,10 @@ class Debug {
 	private static function testSpreedWebRTCAPI() {
 		try {
 			$config = Helper::getRemoteSpreedWebRTCConfig();
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			return $e->getMessage();
 		}
-		if (!isset($json['Plugin']) || empty($json['Plugin'])) {
+		if (!isset($config['Plugin']) || empty($config['Plugin'])) {
 			return 'WebRTC API config endpoint does not include a plugin';
 		}
 	}

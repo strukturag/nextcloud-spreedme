@@ -45,7 +45,7 @@ class ApiController extends Controller {
 		$_response = array('success' => false);
 		try {
 			$_response['spreed_webrtc'] = array(
-				'url' => Helper::getSpreedWebRtcUrl(),
+				'url' => Helper::getSpreedWebRtcUrl(false, false),
 			);
 			$_response['success'] = true;
 		} catch (\Exception $e) {
