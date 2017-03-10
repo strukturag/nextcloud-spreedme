@@ -1,3 +1,7 @@
+nextcloud-spreedme (0.3.8)
+* Allow to load app in 'standalone' mode for logged-in users, i.e. without the Nextcloud header bar
+* Other improvements
+
 nextcloud-spreedme (0.3.7)
 * Fix iOS app compatibility if Nextcloud and Spreed WebRTC are available at different origins
 * Fix admin/debug page
