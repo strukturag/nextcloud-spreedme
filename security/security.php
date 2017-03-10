@@ -180,8 +180,8 @@ class Security {
 	}
 
 	public static function constantTimeEquals($a, $b) {
-		$alen = strlen($a);
-		$blen = strlen($b);
+		$alen = mb_strlen($a, '8bit');
+		$blen = mb_strlen($b, '8bit');
 
 		if ($alen !== $blen) {
 			return false;
