@@ -50,7 +50,7 @@ class PageController extends Controller {
 			'is_guest' => ($this->userid === null),
 		];
 		$renderAs = ($this->userid === null ? 'empty' : 'user');
-		if ($this->request->getParam('standalone')) {
+		if ($this->request->getParam('standalone') !== null) {
 			$renderAs = 'empty';
 		}
 		$response = new TemplateResponse(Settings::APP_ID, 'webrtc', $params, $renderAs);
