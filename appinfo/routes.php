@@ -30,5 +30,7 @@ return [
 		['name' => 'api#regenerate_temporary_password_signing_key', 'url' => '/api/v1/admin/config/regenerate/tp-key', 'verb' => 'POST'],
 		['name' => 'api#generate_spreed_webrtc_config', 'url' => '/api/v1/admin/config/generate/spreed-webrtc-config', 'verb' => 'POST'],
 		['name' => 'api#download_file', 'url' => '/api/v1/file/download', 'verb' => 'GET'],
+		// File Transfer
+		['name' => 'filetransfer#uploadAndShare', 'url' => '/api/v1/filetransfer', 'verb' => 'POST'],
 	],
 ];

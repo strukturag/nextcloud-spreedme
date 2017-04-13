@@ -198,6 +198,42 @@ $(document).ready(function() {
 	};
 
 	var uploadBlob = function(obj, event) {
+		var uploader = makeBlobUploader('Spreed.ME Downloads');
+		return uploader(obj, event).then(function(data) {
+			postMessageAPI.answerRequest(event, {
+				data: data,
+				type: "uploadBlob"
+			});
+			return data; // So further thens get 'data' as well
+		});
+	};
+
+	var uploadAndShareBlob = function(obj, event) {
+		var cb = function(data) {
+			if (data.success) {
+				data.url = OC.generateUrl("/s/" + data.token);
+			}
+			postMessageAPI.answerRequest(event, {
+				data: data,
+				type: "uploadAndShareBlob"
+			});
+		};
+
+		var fd = new FormData();
+		fd.append('target', currentRoom);
+		fd.append('file', obj.blob, obj.name);
+		//fd.append('requesttoken', oc_requesttoken);
+		return $.ajax({
+			type: 'POST',
+			url: OC.generateUrl("/apps/spreedme/api/v1/filetransfer"),
+			data: fd,
+			processData: false,
+			contentType: false
+		}).then(cb, cb);
+	};
+
+	var makeBlobUploader = function(baseFolderName) {
+	return function(obj, event) {
 		var uploadFolderPath = (function() {
 			var padNum = function(num, count) {
 				var str = '' + num;
@@ -207,7 +243,7 @@ $(document).ready(function() {
 				return str;
 			};
 			var date = new Date();
-			return '/Spreed.ME Downloads/' + date.getFullYear() + '/' + padNum(date.getMonth() + 1, 2);
+			return '/' + baseFolderName + '/' + date.getFullYear() + '/' + padNum(date.getMonth() + 1, 2);
 		})();
 		// TODO(leon): Let backend do this job, as it might cause a lot of traffic for the client..
 		var FileCounter = function(filename) {
@@ -300,14 +336,9 @@ $(document).ready(function() {
 		if (OC.Uploader) {
 			doUpload = doUploadNC11;
 		}
-		doUpload(obj.blob, obj.name)
-		.then(function(data) {
-			postMessageAPI.answerRequest(event, {
-				data: data,
-				type: "uploadBlob"
-			});
-		});
+		return doUpload(obj.blob, obj.name);
 	};
+	}; // makeBlobUploader
 
 	postMessageAPI.bind(function(event) {
 		var message = event.data[event.data.type];
@@ -330,6 +361,9 @@ $(document).ready(function() {
 			break;
 		case "uploadBlob":
 			uploadBlob(message, event);
+			break;
+		case "uploadAndShareBlob":
+			uploadAndShareBlob(message, event);
 			break;
 		default:
 			console.log("Got unsupported message type", event.data.type);

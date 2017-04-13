@@ -122,6 +122,8 @@ Available endpoints with request methods and content-type:
       SPREED_WEBRTC_BASEPATH: Spreed WebRTC basepath (string, optional)
       OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED: Whether the 'Temporary Password' feature should be enabled (string, optional)
       SPREED_WEBRTC_IS_SHARED_INSTANCE: Whether the Spreed WebRTC server is used by multiple Nextcloud instances (string, optional)
+      SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS: Whether to upload file transfers or share them peer-to-peer (string, optional)
+      SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS: Whether anonymous users (i.e. users which are not logged in) should be able to upload/share files and presentations (string, optional). This value is only taken into account when 'SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS' is set to true
       Response 200:
         {
           "success": true

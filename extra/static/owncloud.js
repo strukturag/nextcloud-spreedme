@@ -568,6 +568,23 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					return defer.promise;
 				};
 
+				var uploadAndShareFile = function(file, filename) {
+					var defer = $q.defer();
+					postMessageAPI.requestResponse(filename /* id */, {
+						type: "uploadAndShareBlob",
+						// :( blob attributes are lost when sent via postMessage
+						uploadAndShareBlob: {
+							blob: file,
+							name: filename
+						}
+					}, function(event) {
+						var data = event.data.data;
+						defer.resolve(data);
+					});
+
+					return defer.promise;
+				};
+
 				var openModalWithIframe = function(name, url, title, message, success_cb, error_cb) {
 					// TODO(leon): This is extremely ugly.
 					alertify.dialog.notify(
@@ -705,6 +722,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					getConfig: getConfig,
 					setConfig: setConfig,
 					uploadFile: uploadFile,
+					uploadAndShareFile: uploadAndShareFile,
 					downloadFile: downloadFile,
 					FileSelector: FileSelector,
 					deferreds: deferreds,
@@ -714,7 +732,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 
 			}]);
 
-			app.directive('presentation', ['$compile', '$timeout', 'ownCloud', 'fileData', 'toastr', function($compile, $timeout, ownCloud, fileData, toastr) {
+			app.directive('presentation', ['$compile', '$timeout', 'ownCloud', 'fileData', 'toastr', 'alertify', function($compile, $timeout, ownCloud, fileData, toastr, alertify) {
 
 				var importFromOwnCloud = function() {
 					var $scope = this;
@@ -758,7 +776,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 											if (!f.info.hasOwnProperty("id")) {
 												f.info.id = f.id;
 											}
-											scope.advertiseFile(f);
+											scope.advertiseFile(f, true);
 										});
 									});
 								});
@@ -774,6 +792,61 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					var fs = new ownCloud.FileSelector(ownCloudShare, {
 						allowedFileTypes: allowedFileTypes
 					});
+				};
+
+				var advertiseFileWrapper = function(scope) {
+					// We have support for remote downloads — Yay! :)
+
+					var makeShareDownloadURL = function(url) {
+						return url + "/download";
+					};
+					var origAdvertiseFile = scope.advertiseFile;
+					return function(file, alreadyUploaded) {
+						var err = function(msg) {
+							log("Failed to upload / share file:", msg);
+							alertify.dialog.error(
+								"Failed to share the document(s)",
+								"Failed to share the document(s). Please try it again later.",
+								null,
+								null
+							);
+						};
+						if (!alreadyUploaded) {
+							// The file has not yet been uploaded
+							// -> Upload & share
+							return ownCloud.uploadAndShareFile(file.file, file.info.name)
+							.then(function(data) {
+								// TODO(leon): Add support for multiple callbacks in then
+								if (!data.success) {
+									// Error
+									err(arguments);
+									return;
+								}
+								file.info.url = makeShareDownloadURL(data.url);
+								origAdvertiseFile(file);
+							});
+						}
+
+						// File was already uploaded
+						// -> Directly share via link
+						// TODO(leon): Implement this
+
+						/*
+						return ownCloud.uploadFile(file.file, file.info.name)
+							.then(function(url) {
+								if (!url) {
+									err("url is empty");
+									return;
+								}
+								file.file.path = url;
+								scope.advertiseFile(file, false);
+							}, function() {
+								// Error
+								// TODO(leon): Pass in correct arguments
+								err(arguments);
+							});
+						*/
+					};
 				};
 
 				var downloadPresentation = function(presentationToDownload) {
@@ -836,6 +909,13 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					compile: function(element) {
 						// Compile
 						return function(scope, element) {
+							if (typeof scope.allowRemoteDownloads !== "undefined") {
+								// Allow remote downloads
+								scope.allowRemoteDownloads = true;
+								// Overwrite advertiseFile function to provide support for remote downloads
+								scope.advertiseFile = advertiseFileWrapper(scope);
+							}
+
 							// Link
 							var $button = $('<button>');
 							$button

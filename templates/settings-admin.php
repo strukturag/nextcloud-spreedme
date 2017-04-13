@@ -64,6 +64,16 @@ $classes[] = (Helper::doesJsConfigExist() ? 'js-config-found' : 'js-config-missi
 					<?php echo (Helper::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_IS_SHARED_INSTANCE') === true ? 'checked="checked"' : ''); ?> />
 			</p>
 			<p class="show-if-advanced-settings">
+				<label for="SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS">SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS:</label>
+				<input type="checkbox" id="SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS" name="SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS"
+					<?php echo (Helper::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS') === true ? 'checked="checked"' : ''); ?> />
+			</p>
+			<p class="show-if-advanced-settings">
+				<label for="SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS">SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS:</label>
+				<input type="checkbox" id="SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS" name="SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS"
+					<?php echo (Helper::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS') === true ? 'checked="checked"' : ''); ?> />
+			</p>
+			<p class="show-if-advanced-settings">
 				<label for="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED">OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED:</label>
 				<input type="checkbox" id="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED" name="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED"
 					<?php echo (Helper::getDatabaseConfigValueOrDefault('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true ? 'checked="checked"' : ''); ?> />
