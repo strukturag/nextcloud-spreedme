@@ -211,7 +211,7 @@ $(document).ready(function() {
 	var uploadAndShareBlob = function(obj, event) {
 		var cb = function(data) {
 			if (data.success) {
-				data.url = OC.generateUrl("/s/" + data.token);
+				data.url = document.location.origin + OC.generateUrl("/s/" + data.token);
 			}
 			postMessageAPI.answerRequest(event, {
 				data: data,
@@ -340,6 +340,44 @@ $(document).ready(function() {
 	};
 	}; // makeBlobUploader
 
+	var shareFile = function(obj, event) {
+		// TODO(leon): Check if this is still in NC11
+		// Thanks for providing a JavaScript API! :(
+		var url = OC.linkToOCS('apps/files_sharing/api/v1', 2);
+		url += "shares?format=json"; // Why does one explicitly need to specify the format? :(
+		var path = obj;
+		// var date = new Date();
+		// TODO(leon): Set this to 5 minutes or so?
+		var expireDate;
+		// var expireDate = date.getFullYear() + "-" + padNum(date.getMonth() + 1, 2) + "-" + padNum(date.getDate(), 2);
+		// TODO(leon): Do we want to protect the share with a shared secret just to be on the safe side or does the random URL provide enough entropy to be "unguessable"?
+		var password;
+		return $.ajax({
+			type: 'POST',
+			url: url,
+			data: {
+				path: path,
+				shareType: OC.Share.SHARE_TYPE_LINK,
+				permissions: OC.PERMISSION_READ,
+				expireDate: expireDate,
+				password: password,
+				passwordChanged: false,
+			},
+			dataType: 'json'
+		}).then(function(data) {
+			var url;
+			// Thanks for creating such a good API :)
+			if (typeof data.ocs.data !== "undefined" && data.ocs.data.url !== "") {
+				url = data.ocs.data.url;
+			}
+			postMessageAPI.answerRequest(event, {
+				data: url,
+				type: "shareFile"
+			});
+			return data;
+		});
+	};
+
 	postMessageAPI.bind(function(event) {
 		var message = event.data[event.data.type];
 		switch (event.data.type) {
@@ -364,6 +402,9 @@ $(document).ready(function() {
 			break;
 		case "uploadAndShareBlob":
 			uploadAndShareBlob(message, event);
+			break;
+		case "shareFile":
+			shareFile(message, event);
 			break;
 		default:
 			console.log("Got unsupported message type", event.data.type);

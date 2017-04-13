@@ -579,10 +579,28 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 							name: filename
 						}
 					}, function(event) {
-						var data = event.data.data;
-						defer.resolve(data);
+						if (event.data.data.success) {
+							defer.resolve(event.data.data);
+						} else {
+							defer.reject();
+						}
 					});
 
+					return defer.promise;
+				};
+
+				var shareFile = function(path) {
+					var defer = $q.defer();
+					postMessageAPI.requestResponse(path /* id */, {
+						type: "shareFile",
+						shareFile: path
+					}, function(event) {
+						if (event.data.data) {
+							defer.resolve(event.data.data);
+						} else {
+							defer.reject();
+						}
+					});
 					return defer.promise;
 				};
 
@@ -724,6 +742,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					setConfig: setConfig,
 					uploadFile: uploadFile,
 					uploadAndShareFile: uploadAndShareFile,
+					shareFile: shareFile,
 					downloadFile: downloadFile,
 					FileSelector: FileSelector,
 					deferreds: deferreds,
@@ -769,6 +788,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						ownCloud.downloadFile(file)
 						.then(function(blob) {
 							blob.name = file.name;
+							blob.path = file.path;
 							var namespace = "file_" + $scope.id;
 							var fromBlobBinder = fromBlob(namespace, [blob], function(files) {
 								$timeout(function() {
@@ -817,36 +837,24 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 							// -> Upload & share
 							return ownCloud.uploadAndShareFile(file.file, file.info.name)
 							.then(function(data) {
-								// TODO(leon): Add support for multiple callbacks in then
-								if (!data.success) {
-									// Error
-									err(arguments);
-									return;
-								}
 								file.info.url = makeShareDownloadURL(data.url);
 								origAdvertiseFile(file);
+							}, function() {
+								// Error
+								err(arguments);
 							});
 						}
 
 						// File was already uploaded
 						// -> Directly share via link
-						// TODO(leon): Implement this
-
-						/*
-						return ownCloud.uploadFile(file.file, file.info.name)
-							.then(function(url) {
-								if (!url) {
-									err("url is empty");
-									return;
-								}
-								file.file.path = url;
-								scope.advertiseFile(file, false);
-							}, function() {
-								// Error
-								// TODO(leon): Pass in correct arguments
-								err(arguments);
-							});
-						*/
+						return ownCloud.shareFile(file.file.path)
+						.then(function(data) {
+							file.info.url = makeShareDownloadURL(data);
+							origAdvertiseFile(file);
+						}, function() {
+							// Error
+							err(arguments);
+						});
 					};
 				};
 
