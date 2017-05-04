@@ -229,16 +229,17 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					settingsScope.saveSettings();
 				};
 
-				var tokenReceived = function(token) {
+				var tokenReceived = function(tp) {
 					postMessageAPI.requestResponse((new Date().getTime()) /* id */, {
 						type: "guestLogin",
-						guestLogin: token
+						guestLogin: tp
 					}, function(event) {
 						var token = event.data;
 						if (!token.success) {
 							askForTemporaryPassword();
 							return;
 						}
+						ownCloud.dataStore.temporaryPassword = tp;
 						doLogin({
 							useridcombo: token.useridcombo,
 							secret: token.secret
@@ -576,7 +577,8 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						// :( blob attributes are lost when sent via postMessage
 						uploadAndShareBlob: {
 							blob: file,
-							name: filename
+							name: filename,
+							tp: dataStore.temporaryPassword
 						}
 					}, function(event) {
 						if (event.data.data.success) {

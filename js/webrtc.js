@@ -222,6 +222,10 @@ $(document).ready(function() {
 		var fd = new FormData();
 		fd.append('target', currentRoom);
 		fd.append('file', obj.blob, obj.name);
+		// TP (temporary password) is only passed when available (i.e. for invited users)
+		if (obj.tp) {
+			fd.append('tp', obj.tp);
+		}
 		//fd.append('requesttoken', oc_requesttoken);
 		return $.ajax({
 			type: 'POST',
