@@ -79,7 +79,9 @@ class Security {
 
 	// TODO(leon): Refactor, this is shitty
 	public static function generateTemporaryPassword($userid, $expiration = 0, $version = self::TP_VERSION, $forValidation = false) {
-		self::requireEnabledTemporaryPassword();
+		if (!$forValidation) {
+			self::requireEnabledTemporaryPassword();
+		}
 
 		// Only prevent certain characters and decorate userid if we don't want to validate a given TP
 		if (!$forValidation) {
@@ -118,9 +120,7 @@ class Security {
 		return $signed_combo_array['useridcombo'] . ':' . $signed_combo_array['secret'];
 	}
 
-	private static function validateTemporaryPassword($tp) {
-		self::requireEnabledTemporaryPassword();
-
+	public static function validateTemporaryPassword($tp) {
 		$split = explode(':', $tp);
 
 		// The 4 parts: expiraton, userid, version, hmac (signature of previous 3 parts)

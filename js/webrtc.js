@@ -225,7 +225,7 @@ $(document).ready(function() {
 		//fd.append('requesttoken', oc_requesttoken);
 		return $.ajax({
 			type: 'POST',
-			url: OC.generateUrl("/apps/spreedme/api/v1/filetransfer"),
+			url: OC.generateUrl("/apps/spreedme/api/v1/filetransfers"),
 			data: fd,
 			processData: false,
 			contentType: false

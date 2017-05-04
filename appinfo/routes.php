@@ -31,6 +31,7 @@ return [
 		['name' => 'api#generate_spreed_webrtc_config', 'url' => '/api/v1/admin/config/generate/spreed-webrtc-config', 'verb' => 'POST'],
 		['name' => 'api#download_file', 'url' => '/api/v1/file/download', 'verb' => 'GET'],
 		// File Transfer
-		['name' => 'filetransfer#uploadAndShare', 'url' => '/api/v1/filetransfer', 'verb' => 'POST'],
+		['name' => 'filesharing#uploadAndShare', 'url' => '/api/v1/filetransfers', 'verb' => 'POST'],
+		['name' => 'filesharing#listShares', 'url' => '/api/v1/filetransfers', 'verb' => 'GET'],
 	],
 ];

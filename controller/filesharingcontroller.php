@@ -13,6 +13,7 @@ namespace OCA\SpreedME\Controller;
 
 use OCA\SpreedME\Errors\ErrorCodes;
 use OCA\SpreedME\Helper\Helper;
+use OCA\SpreedME\Security\Security;
 use OCA\SpreedME\Settings\Settings;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -20,7 +21,7 @@ use OCP\Files\IRootFolder;
 use OCP\ILogger;
 use OCP\IRequest;
 
-class FileTransferController extends Controller {
+class FileSharingController extends Controller {
 
 	private $logger;
 	private $rootFolder;
@@ -34,13 +35,17 @@ class FileTransferController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @PublicPage
 	 */
-	public function uploadAndShare($target) {
+	public function uploadAndShare($target, $tp) {
 		$_response = array('success' => false);
 		$target = stripslashes($target); // TODO(leon): Is this really required? Found it somewhere
 
-		// TODO(leon): Validate token!
+		if (!Helper::isUserLoggedIn() && !Security::validateTemporaryPassword(base64_decode($tp, true))) {
+			$_response['error'] = ErrorCodes::TEMPORARY_PASSWORD_INVALID;
+			return new DataResponse($_response);
+		}
 
 		if (!Helper::areFileTransferUploadsAllowed() || !Helper::doesServiceUserExist()) {
 			$_response['error'] = ErrorCodes::FILETRANSFER_DISABLED;
@@ -65,21 +70,7 @@ class FileTransferController extends Controller {
 				if ($file['size'] > Helper::getServiceUserMaxUploadSize()) {
 					throw new \Exception('Uploaded file is too big');
 				}
-				// Validate file extension
-				// Keep in sync with SUPPORTED_DOCUMENT_TYPES
-				$allowedFileExtensions = array(
-					'.pdf',
-					'.odf',
-				);
-				$isAllowedFileExtension = false;
-				foreach ($allowedFileExtensions as $extension) {
-					if (stripos(strrev($fileName), strrev($extension)) === 0) {
-						// Found allowed extension
-						$isAllowedFileExtension = true;
-						break;
-					}
-				}
-				if (!$isAllowedFileExtension) {
+				if (!Helper::hasAllowedFileExtension($fileName)) {
 					throw new \Exception('Unsupported file extension');
 				}
 
@@ -98,7 +89,7 @@ class FileTransferController extends Controller {
 						null, /* shareWith */
 						\OCP\Constants::PERMISSION_READ,
 						null, /* itemSourceName */
-						null/* expirationDate, TODO(leon): Add support for this */
+						null/* expirationDate */
 					);
 				});
 
@@ -107,6 +98,67 @@ class FileTransferController extends Controller {
 				}
 
 				$_response['token'] = $shareToken;
+				$_response['success'] = true;
+			} catch (\Exception $e) {
+				$this->logger->logException($e, ['app' => Settings::APP_ID]);
+				$_response['error'] = ErrorCodes::FILETRANSFER_FAILED;
+			}
+		}
+
+		return new DataResponse($_response);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @PublicPage
+	 */
+	public function listShares($target, $tp) {
+		$_response = array('success' => false);
+		$target = stripslashes($target); // TODO(leon): Is this really required? Found it somewhere
+
+		if (!Helper::isUserLoggedIn() && !Security::validateTemporaryPassword(base64_decode($tp, true))) {
+			$_response['error'] = ErrorCodes::TEMPORARY_PASSWORD_INVALID;
+			return new DataResponse($_response);
+		}
+
+		if (!Helper::areFileTransferUploadsAllowed() || !Helper::doesServiceUserExist()) {
+			$_response['error'] = ErrorCodes::FILETRANSFER_DISABLED;
+		} else {
+			try {
+				$serviceUserFolder = $this->rootFolder->getUserFolder(Settings::SPREEDME_SERVICEUSER_USERNAME);
+				$uploadFolder = $serviceUserFolder
+					->newFolder(Settings::SPREEDME_SERVICEUSER_UPLOADFOLDER)
+					->newFolder($target);
+
+				$shares = array();
+				foreach ($uploadFolder->getDirectoryListing() as $node) {
+					if ($node->getType() !== 'file' || !Helper::hasAllowedFileExtension($node->getName())) {
+						continue;
+					}
+					$shareToken = Helper::runAsServiceUser(function () use ($node) {
+						return \OCP\Share::shareItem(
+							'file',
+							$node->getId(),
+							\OCP\Share::SHARE_TYPE_LINK,
+							null, /* shareWith */
+							\OCP\Constants::PERMISSION_READ,
+							null, /* itemSourceName */
+							null/* expirationDate */
+						);
+					});
+					$newShare = array(
+						'name' => $node->getName(),
+						'size' => $node->getSize(),
+					);
+					// Only expose token to logged-in users
+					if (Helper::isUserLoggedIn()) {
+						$newShare['token'] = $shareToken;
+					}
+					$shares[] = $newShare;
+				}
+
+				$_response['shares'] = $shares;
 				$_response['success'] = true;
 			} catch (\Exception $e) {
 				$this->logger->logException($e, ['app' => Settings::APP_ID]);

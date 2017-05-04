@@ -25,6 +25,11 @@ class Helper {
 		'SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS' => false,
 		'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED' => false,
 	);
+	// Keep in sync with SUPPORTED_DOCUMENT_TYPES
+	private static $allowedFileExtensions = array(
+		'.pdf',
+		'.odf',
+	);
 
 	private function __construct() {
 
@@ -237,6 +242,19 @@ class Helper {
 		return strtr($config, $replace);
 	}
 
+	public static function hasAllowedFileExtension($name) {
+		// Validate file extension
+		$valid = false;
+		foreach (self::$allowedFileExtensions as $extension) {
+			if (stripos(strrev($name), strrev($extension)) === 0) {
+				// Found allowed extension
+				$valid = true;
+				break;
+			}
+		}
+		return $valid;
+	}
+
 	public static function doesServiceUserExist() {
 		$users = \OC::$server->getUserManager();
 		return $users->userExists(Settings::SPREEDME_SERVICEUSER_USERNAME);
@@ -268,8 +286,12 @@ class Helper {
 		return true;
 	}
 
+	public static function isUserLoggedIn() {
+		return \OC_User::getUser() !== false;
+	}
+
 	public static function getServiceUserMaxUploadSize() {
-		if (\OC_User::getUser() === false) {
+		if (!self::isUserLoggedIn()) {
 			// Anonymous user
 			return Settings::SPREEDME_SERVICEUSER_MAX_UPLOAD_SIZE_ANONYMOUS;
 		}
@@ -281,7 +303,7 @@ class Helper {
 		if (!self::areFileTransferUploadsAllowed() || !self::doesServiceUserExist()) {
 			throw new \Exception('Service user not usable');
 		}
-		if (\OC_User::getUser() === false && !self::areAnonymousFileTransfersAllowed()) {
+		if (!self::isUserLoggedIn() && !self::areAnonymousFileTransfersAllowed()) {
 			throw new \Exception('Anonymous uploads are not allowed');
 		}
 
