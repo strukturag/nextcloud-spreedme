@@ -35,7 +35,6 @@ class FileSharingController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @PublicPage
 	 */
 	public function uploadAndShare($target, $tp) {
@@ -110,7 +109,6 @@ class FileSharingController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @PublicPage
 	 */
 	public function listShares($target, $tp) {
