@@ -75,8 +75,15 @@ class User {
 	private function getGroups() {
 		$this->requireLogin();
 
-		// TODO(leon): This looks like a private API.
-		return \OC_Group::getUserGroups($this->getUserId());
+		if (class_exists('\OC_Group', true)) {
+			// Nextcloud <= 11, ownCloud
+			return \OC_Group::getUserGroups($this->getUserId());
+		}
+		// Nextcloud >= 12
+		$groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
+		return array_map(function ($group) {
+			return $group->getGID();
+		}, $groups);
 	}
 
 	private function getAdministeredGroups() {
