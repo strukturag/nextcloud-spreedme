@@ -89,7 +89,12 @@ class FileSharingController extends Controller {
 			$_response['success'] = true;
 		} catch (\Exception $e) {
 			$this->logger->logException($e, ['app' => Settings::APP_ID]);
-			$_response['error'] = ErrorCodes::FILETRANSFER_FAILED;
+			$code = $e->getCode();
+			if ($code > 0) {
+				$_response['error'] = $code;
+			} else {
+				$_response['error'] = ErrorCodes::FILETRANSFER_FAILED;
+			}
 		}
 
 		return new DataResponse($_response);

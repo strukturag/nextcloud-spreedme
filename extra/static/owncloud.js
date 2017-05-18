@@ -584,7 +584,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						if (event.data.data.success) {
 							defer.resolve(event.data.data);
 						} else {
-							defer.reject();
+							defer.reject(event.data.data.error);
 						}
 					});
 
@@ -825,11 +825,17 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					};
 					var origAdvertiseFile = scope.advertiseFile;
 					return function(file, alreadyUploaded) {
-						var err = function(msg) {
+						var err = function(code) {
+							var msg = "Please try it again later.";
+							switch (code) {
+							case 50403:
+								msg = "A file with this name was already shared. Please use a different name."
+								break;
+							}
 							log("Failed to upload / share file:", msg);
 							alertify.dialog.error(
 								"Failed to share the document(s)",
-								"Failed to share the document(s). Please try it again later.",
+								"Failed to share the document(s). " + msg,
 								null,
 								null
 							);
@@ -841,9 +847,9 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 							.then(function(data) {
 								file.info.url = makeShareDownloadURL(data.url);
 								origAdvertiseFile(file);
-							}, function() {
+							}, function(code) {
 								// Error
-								err(arguments);
+								err(code);
 							});
 						}
 
