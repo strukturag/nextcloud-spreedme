@@ -128,6 +128,18 @@ class FileSharingController extends Controller {
 		$newFile->putContent(file_get_contents($filePath));
 
 		return Helper::runAsServiceUser(function () use ($newFile) {
+			if (!method_exists(\OC::$server, 'getShareManager')) {
+				return \OCP\Share::shareItem(
+					'file',
+					$newFile->getId(),
+					\OCP\Share::SHARE_TYPE_LINK,
+					null, /* shareWith */
+					\OCP\Constants::PERMISSION_READ,
+					null, /* itemSourceName */
+					null/* expirationDate */
+				);
+			}
+			// Nextcloud 9
 			$manager = \OC::$server->getShareManager();
 			$username = Settings::SPREEDME_SERVICEUSER_USERNAME;
 			$shareType = \OCP\Share::SHARE_TYPE_LINK;
