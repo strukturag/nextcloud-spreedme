@@ -83,28 +83,7 @@ class FileSharingController extends Controller {
 				throw new \Exception('Unsupported file extension');
 			}
 
-			$serviceUserFolder = $this->rootFolder->getUserFolder(Settings::SPREEDME_SERVICEUSER_USERNAME);
-			$uploadFolder = $serviceUserFolder
-				->newFolder(Settings::SPREEDME_SERVICEUSER_UPLOADFOLDER)
-				->newFolder($target);
-			$newFile = $uploadFolder->newFile($fileName);
-			$newFile->putContent(file_get_contents($file['tmp_name']));
-
-			$shareToken = Helper::runAsServiceUser(function () use ($newFile) {
-				return \OCP\Share::shareItem(
-					'file',
-					$newFile->getId(),
-					\OCP\Share::SHARE_TYPE_LINK,
-					null, /* shareWith */
-					\OCP\Constants::PERMISSION_READ,
-					null, /* itemSourceName */
-					null/* expirationDate */
-				);
-			});
-
-			if (!is_string($shareToken)) {
-				throw new \Exception('Failed to share uploaded file');
-			}
+			$shareToken = $this->shareAndGetToken($file['name'], $file['tmp_name'], $target);
 
 			$_response['token'] = $shareToken;
 			$_response['success'] = true;
@@ -114,6 +93,58 @@ class FileSharingController extends Controller {
 		}
 
 		return new DataResponse($_response);
+	}
+
+	private function doesFileExist($file, $cwd, $fsView) {
+		$fsView->lockFile($file, \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
+		$exists = true;
+		try {
+			$cwd->get($file);
+		} catch (\OCP\Files\NotFoundException $e) {
+			$exists = false;
+		} finally {
+			$fsView->unlockFile($file, \OCP\Lock\ILockingProvider::LOCK_EXCLUSIVE);
+		}
+		return $exists;
+	}
+
+	private function shareAndGetToken($fileName, $filePath, $target) {
+		$serviceUserFolder = $this->rootFolder->getUserFolder(Settings::SPREEDME_SERVICEUSER_USERNAME);
+		$uploadFolder = $serviceUserFolder
+			->newFolder(Settings::SPREEDME_SERVICEUSER_UPLOADFOLDER)
+			->newFolder($target);
+
+		if ($this->doesFileExist($fileName, $uploadFolder, \OC\Files\Filesystem::getView())) {
+			// TODO(leon): Try to share file under a different name using a counter, e.g. 'x 2.x'
+			throw new \Exception('File already exists', ErrorCodes::FILETRANSFER_ALREADY_EXISTS);
+		}
+
+		$newFile = $uploadFolder->newFile($fileName);
+		$newFile->putContent(file_get_contents($filePath));
+
+		return Helper::runAsServiceUser(function () use ($newFile) {
+			$manager = \OC::$server->getShareManager();
+			$username = Settings::SPREEDME_SERVICEUSER_USERNAME;
+			$shareType = \OCP\Share::SHARE_TYPE_LINK;
+			$permissions = \OCP\Constants::PERMISSION_READ;
+			$existingShares = $manager->getSharesBy($username, $shareType, $newFile, false, 1);
+			// TODO(leon): Race condition here
+			if (count($existingShares) > 0) {
+				// TODO(leon): We will never land here as we already check if the file exists above and abort instantly
+				// We already have our share
+				$share = $existingShares[0];
+			} else {
+				// Not shared yet, share it now
+				$share = $manager->newShare();
+				$share
+					->setNode($newFile)
+					->setShareType($shareType)
+					->setPermissions($permissions)
+					->setSharedBy($username);
+				$manager->createShare($share);
+			}
+			return $share->getToken();
+		});
 	}
 
 	/**
