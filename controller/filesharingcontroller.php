@@ -119,6 +119,8 @@ class FileSharingController extends Controller {
 			->newFolder(Settings::SPREEDME_SERVICEUSER_UPLOADFOLDER)
 			->newFolder($target);
 
+		// Make sure the file system is initialized even for unauthenticated users
+		\OC\Files\Filesystem::init(Settings::SPREEDME_SERVICEUSER_USERNAME, $serviceUserFolder->getPath());
 		if ($this->doesFileExist($fileName, $uploadFolder, \OC\Files\Filesystem::getView())) {
 			// TODO(leon): Try to share file under a different name using a counter, e.g. 'x 2.x'
 			throw new \Exception('File already exists', ErrorCodes::FILETRANSFER_ALREADY_EXISTS);
