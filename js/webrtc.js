@@ -47,8 +47,11 @@ $(document).ready(function() {
 	var currentRoom = decodeURIComponent(window.location.hash.replace("#", "")) || "";
 
 	var getConfig = function() {
+		var rootURLIndex = document.location.origin + OC.generateUrl("/");
 		postMessageAPI.post({
 			config: {
+				rootURL: rootURLIndex.replace("/index.php", ""),
+				rootURLIndex: rootURLIndex,
 				baseURL: document.location.origin + OC.generateUrl("/apps/spreedme"),
 				fullURL: document.location.href,
 				isGuest: IS_GUEST,
@@ -210,9 +213,6 @@ $(document).ready(function() {
 
 	var uploadAndShareBlob = function(obj, event) {
 		var cb = function(data) {
-			if (data.success) {
-				data.url = document.location.origin + OC.generateUrl("/s/" + data.token);
-			}
 			postMessageAPI.answerRequest(event, {
 				data: data,
 				type: "uploadAndShareBlob"
@@ -369,13 +369,13 @@ $(document).ready(function() {
 			},
 			dataType: 'json'
 		}).then(function(data) {
-			var url;
+			var res = {};
 			// Thanks for creating such a good API :)
-			if (typeof data.ocs.data !== "undefined" && data.ocs.data.url !== "") {
-				url = data.ocs.data.url;
+			if (typeof data.ocs.data !== "undefined" && data.ocs.data.token !== "") {
+				res.token = data.ocs.data.token;
 			}
 			postMessageAPI.answerRequest(event, {
-				data: url,
+				data: res,
 				type: "shareFile"
 			});
 			return data;

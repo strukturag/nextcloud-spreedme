@@ -536,8 +536,19 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 				};
 
 				var setConfig = function(newConfig) {
+					config.rootURL = newConfig.rootURL;
+					config.rootURLIndex = newConfig.rootURLIndex;
 					config.baseURL = newConfig.baseURL;
 					config.fullURL = newConfig.fullURL;
+				};
+
+				var generateUrl = function(path) {
+					if (path[0] === "/") {
+						// Absolute
+						return config.rootURL + path;
+					}
+					// Relative
+					return config.rootURLIndex + path;
 				};
 
 				var downloadFile = function(file) {
@@ -628,7 +639,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						var loader = angular.element("<div>")
 							.addClass("loader")
 							.css({
-								"background-image": "url('" + config.baseURL.replace("/index.php/apps/spreedme", "/core/img/loading.gif") + "')"
+								"background-image": "url('" + generateUrl("/core/img/loading.gif") + "')"
 							});
 						iframe.get(0).onload = function() {
 							loader.remove();
@@ -742,6 +753,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 				return {
 					getConfig: getConfig,
 					setConfig: setConfig,
+					generateUrl: generateUrl,
 					uploadFile: uploadFile,
 					uploadAndShareFile: uploadAndShareFile,
 					shareFile: shareFile,
@@ -820,8 +832,8 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 				var advertiseFileWrapper = function(scope) {
 					// We have support for remote downloads — Yay! :)
 
-					var makeShareDownloadURL = function(url) {
-						return url + "/download";
+					var makeShareDownloadURL = function(token) {
+						return ownCloud.generateUrl("s/" + token + "/download");
 					};
 					var origAdvertiseFile = scope.advertiseFile;
 					return function(file, alreadyUploaded) {
@@ -845,7 +857,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 							// -> Upload & share
 							return ownCloud.uploadAndShareFile(file.file, file.info.name)
 							.then(function(data) {
-								file.info.url = makeShareDownloadURL(data.url);
+								file.info.url = makeShareDownloadURL(data.token);
 								origAdvertiseFile(file);
 							}, function(code) {
 								// Error
@@ -857,7 +869,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						// -> Directly share via link
 						return ownCloud.shareFile(file.file.path)
 						.then(function(data) {
-							file.info.url = makeShareDownloadURL(data);
+							file.info.url = makeShareDownloadURL(data.token);
 							origAdvertiseFile(file);
 						}, function() {
 							// Error
