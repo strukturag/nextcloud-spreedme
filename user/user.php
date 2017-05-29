@@ -75,8 +75,15 @@ class User {
 	private function getGroups() {
 		$this->requireLogin();
 
-		// TODO(leon): This looks like a private API.
-		return \OC_Group::getUserGroups($this->getUserId());
+		if (class_exists('\OC_Group', true)) {
+			// Nextcloud <= 11, ownCloud
+			return \OC_Group::getUserGroups($this->getUserId());
+		}
+		// Nextcloud >= 12
+		$groups = \OC::$server->getGroupManager()->getUserGroups(\OC::$server->getUserSession()->getUser());
+		return array_map(function ($group) {
+			return $group->getGID();
+		}, $groups);
 	}
 
 	private function getAdministeredGroups() {
@@ -86,17 +93,14 @@ class User {
 			return \OC_SubAdmin::getSubAdminsGroups($this->getUserId());
 		}
 		// Nextcloud 9
-		$subadmin = new \OC\SubAdmin(
+		$groups = (new \OC\SubAdmin(
 			\OC::$server->getUserManager(),
 			\OC::$server->getGroupManager(),
 			\OC::$server->getDatabaseConnection()
-		);
-		$ocgroups = $subadmin->getSubAdminsGroups($this->user);
-		$groups = array();
-		foreach ($ocgroups as $ocgroup) {
-			$groups[] = $ocgroup->getGID();
-		}
-		return $groups;
+		))->getSubAdminsGroups($this->user);
+		return array_map(function ($group) {
+			return $group->getGID();
+		}, $groups);
 	}
 
 	private function isAdmin() {

@@ -1,3 +1,6 @@
+nextcloud-spreedme (0.3.9)
+* Add support for Nextcloud 12
+
 nextcloud-spreedme (0.3.8)
 * Allow to load app in 'standalone' mode for logged-in users, i.e. without the Nextcloud header bar
 * Other improvements
