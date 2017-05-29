@@ -241,6 +241,7 @@ $(document).ready(function() {
 			var tryUpload = function() {
 				var filename = fileCounter.next();
 				upload(blob, filename).then(function() {
+					// TODO(leon): Why is the response 'null' here?
 					deferred.resolve({
 						response: null,
 						savedFilename: filename,

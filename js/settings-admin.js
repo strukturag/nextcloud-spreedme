@@ -154,6 +154,7 @@ $(document).ready(function() {
 		};
 
 		saveConfig(config, function() {
+			// TODO(leon): Make the box green
 			showMessage('The settings were saved');
 		}, function(error) {
 
