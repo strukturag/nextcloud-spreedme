@@ -835,6 +835,10 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					var makeShareDownloadURL = function(token) {
 						return ownCloud.generateUrl("s/" + token + "/download");
 					};
+					var isSanitizedToken = function(token) {
+						return /^[a-z0-9]+$/i.test(token);
+					};
+					var errUnsanitizedToken = 1;
 					var origAdvertiseFile = scope.advertiseFile;
 					return function(file, alreadyUploaded) {
 						var err = function(code) {
@@ -857,7 +861,12 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 							// -> Upload & share
 							return ownCloud.uploadAndShareFile(file.file, file.info.name)
 							.then(function(data) {
-								file.info.url = makeShareDownloadURL(data.token);
+								var token = data.token;
+								if (!isSanitizedToken(token)) {
+									err(errUnsanitizedToken);
+									return;
+								}
+								file.info.url = makeShareDownloadURL(token);
 								origAdvertiseFile(file);
 							}, function(code) {
 								// Error
@@ -869,7 +878,12 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						// -> Directly share via link
 						return ownCloud.shareFile(file.file.path)
 						.then(function(data) {
-							file.info.url = makeShareDownloadURL(data.token);
+							var token = data.token;
+							if (!isSanitizedToken(token)) {
+								err(errUnsanitizedToken);
+								return;
+							}
+							file.info.url = makeShareDownloadURL(token);
 							origAdvertiseFile(file);
 						}, function() {
 							// Error
