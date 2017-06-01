@@ -617,6 +617,24 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					return defer.promise;
 				};
 
+				var listFileShares = function() {
+					var defer = $q.defer();
+					postMessageAPI.requestResponse((new Date().getTime()) /* id */, {
+						type: "listFileShares",
+						listFileShares: {
+							tp: dataStore.temporaryPassword
+						}
+					}, function(event) {
+						if (event.data.data.success) {
+							defer.resolve(event.data.data);
+						} else {
+							defer.reject();
+						}
+					});
+
+					return defer.promise;
+				};
+
 				var openModalWithIframe = function(name, url, title, message, success_cb, error_cb) {
 					// TODO(leon): This is extremely ugly.
 					alertify.dialog.notify(
@@ -757,6 +775,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					uploadFile: uploadFile,
 					uploadAndShareFile: uploadAndShareFile,
 					shareFile: shareFile,
+					listFileShares: listFileShares,
 					downloadFile: downloadFile,
 					FileSelector: FileSelector,
 					deferreds: deferreds,
@@ -829,12 +848,12 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					});
 				};
 
+				var makeShareDownloadURL = function(token) {
+					return ownCloud.generateUrl("s/" + token + "/download");
+				};
 				var advertiseFileWrapper = function(scope) {
 					// We have support for remote downloads — Yay! :)
 
-					var makeShareDownloadURL = function(token) {
-						return ownCloud.generateUrl("s/" + token + "/download");
-					};
 					var isSanitizedToken = function(token) {
 						return /^[a-z0-9]+$/i.test(token);
 					};
@@ -945,6 +964,38 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					};
 				};
 
+				var loadAvailablePresentations = function() {
+					var $scope = this;
+					if (typeof $scope.allowRemoteDownloads === "undefined") {
+						// Make sure we have support for remote downloads
+						return;
+					}
+
+					ownCloud.listFileShares().then(function(data) {
+						if (!data.success) {
+							// TODO(leon): Handle error
+							return;
+						}
+						var files = data.shares;
+						files.forEach(_.bind(function(file) {
+							// TODO(leon): Make this unforgeable, i.e. only logged-in users should be able to
+							// select such a presentation.
+							var presentation = {
+								info: {
+									id: "nextcloud-share-" + file.token,
+									type: "application/pdf",
+									name: file.name,
+									size: file.size,
+									url: makeShareDownloadURL(file.token),
+									token: file.token,
+								},
+							};
+							var dwn = $scope.loadPresentation(presentation.info, null);
+							dwn.presentable = true;
+						}, this));
+					});
+				};
+
 				return {
 					restrict: 'C',
 					scope: false,
@@ -957,6 +1008,19 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 								scope.allowRemoteDownloads = true;
 								// Overwrite advertiseFile function to provide support for remote downloads
 								scope.advertiseFile = advertiseFileWrapper(scope);
+								// Load available presentations on load
+								ownCloud.deferreds.guest.promise.then(function(guest) {
+									if (guest) {
+										// Do not load available presentations for guests
+										//return; // TODO(leon): Enable this once we support lazy loading
+									}
+									scope.$on("mainview", function(event, mainview, state) {
+										if (mainview === "presentation" && state) {
+											console.log("presentation pane became active, loading available presentations..");
+											_.bind(loadAvailablePresentations, scope)();
+										}
+									});
+								});
 							}
 
 							// Link

@@ -382,8 +382,34 @@ $(document).ready(function() {
 		});
 	};
 
+	var listFileShares = function(obj, event) {
+		var cb = function(data) {
+			postMessageAPI.answerRequest(event, {
+				data: data,
+				type: "listFileShares"
+			});
+		};
+
+		var data = {
+			target: currentRoom
+		};
+		// TP (temporary password) is only passed when available (i.e. for invited users)
+		if (obj.tp) {
+			data.tp = obj.tp;
+		}
+		return $.ajax({
+			type: 'GET',
+			url: OC.generateUrl("/apps/spreedme/api/v1/filetransfers"),
+			data: data
+		}).then(cb, cb);
+	};
+
 	postMessageAPI.bind(function(event) {
 		var message = event.data[event.data.type];
+		// So we still support sending empty strings and 'null'
+		if (message === undefined) {
+			message = {};
+		}
 		switch (event.data.type) {
 		case "init":
 			onInit();
@@ -409,6 +435,9 @@ $(document).ready(function() {
 			break;
 		case "shareFile":
 			shareFile(message, event);
+			break;
+		case "listFileShares":
+			listFileShares(message, event);
 			break;
 		default:
 			console.log("Got unsupported message type", event.data.type);

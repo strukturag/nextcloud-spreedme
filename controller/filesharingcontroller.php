@@ -207,9 +207,9 @@ class FileSharingController extends Controller {
 					'size' => $node->getSize(),
 				);
 				// Only expose token to logged-in users
-				if (Helper::isUserLoggedIn()) {
-					$newShare['token'] = $shareToken;
-				}
+				//if (Helper::isUserLoggedIn()) { // TODO(leon): Enable once we support lazy loading
+				$newShare['token'] = $shareToken;
+				//}
 				$shares[] = $newShare;
 			}
 
