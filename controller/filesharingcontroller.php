@@ -113,6 +113,42 @@ class FileSharingController extends Controller {
 		return $exists;
 	}
 
+	private function shareFile($file) {
+		if (!method_exists(\OC::$server, 'getShareManager')) {
+			return \OCP\Share::shareItem(
+				'file',
+				$file->getId(),
+				\OCP\Share::SHARE_TYPE_LINK,
+				null, /* shareWith */
+				\OCP\Constants::PERMISSION_READ,
+				null, /* itemSourceName */
+				null/* expirationDate */
+			);
+		}
+		// Nextcloud 9
+		$manager = \OC::$server->getShareManager();
+		$username = Settings::SPREEDME_SERVICEUSER_USERNAME;
+		$shareType = \OCP\Share::SHARE_TYPE_LINK;
+		$permissions = \OCP\Constants::PERMISSION_READ;
+		$existingShares = $manager->getSharesBy($username, $shareType, $file, false, 1);
+		// TODO(leon): Race condition here
+		if (count($existingShares) > 0) {
+			// TODO(leon): We will never land here as we already check if the file exists above and abort instantly
+			// We already have our share
+			$share = $existingShares[0];
+		} else {
+			// Not shared yet, share it now
+			$share = $manager->newShare();
+			$share
+				->setNode($file)
+				->setShareType($shareType)
+				->setPermissions($permissions)
+				->setSharedBy($username);
+			$manager->createShare($share);
+		}
+		return $share->getToken();
+	}
+
 	private function shareAndGetToken($fileName, $filePath, $target) {
 		$serviceUserFolder = $this->rootFolder->getUserFolder(Settings::SPREEDME_SERVICEUSER_USERNAME);
 		$uploadFolder = $serviceUserFolder
@@ -130,39 +166,7 @@ class FileSharingController extends Controller {
 		$newFile->putContent(file_get_contents($filePath));
 
 		return Helper::runAsServiceUser(function () use ($newFile) {
-			if (!method_exists(\OC::$server, 'getShareManager')) {
-				return \OCP\Share::shareItem(
-					'file',
-					$newFile->getId(),
-					\OCP\Share::SHARE_TYPE_LINK,
-					null, /* shareWith */
-					\OCP\Constants::PERMISSION_READ,
-					null, /* itemSourceName */
-					null/* expirationDate */
-				);
-			}
-			// Nextcloud 9
-			$manager = \OC::$server->getShareManager();
-			$username = Settings::SPREEDME_SERVICEUSER_USERNAME;
-			$shareType = \OCP\Share::SHARE_TYPE_LINK;
-			$permissions = \OCP\Constants::PERMISSION_READ;
-			$existingShares = $manager->getSharesBy($username, $shareType, $newFile, false, 1);
-			// TODO(leon): Race condition here
-			if (count($existingShares) > 0) {
-				// TODO(leon): We will never land here as we already check if the file exists above and abort instantly
-				// We already have our share
-				$share = $existingShares[0];
-			} else {
-				// Not shared yet, share it now
-				$share = $manager->newShare();
-				$share
-					->setNode($newFile)
-					->setShareType($shareType)
-					->setPermissions($permissions)
-					->setSharedBy($username);
-				$manager->createShare($share);
-			}
-			return $share->getToken();
+			return $this->shareFile($newFile);
 		});
 	}
 
@@ -192,15 +196,7 @@ class FileSharingController extends Controller {
 					continue;
 				}
 				$shareToken = Helper::runAsServiceUser(function () use ($node) {
-					return \OCP\Share::shareItem(
-						'file',
-						$node->getId(),
-						\OCP\Share::SHARE_TYPE_LINK,
-						null, /* shareWith */
-						\OCP\Constants::PERMISSION_READ,
-						null, /* itemSourceName */
-						null/* expirationDate */
-					);
+					return $this->shareFile($node);
 				});
 				$newShare = array(
 					'name' => $node->getName(),
