@@ -133,7 +133,6 @@ class FileSharingController extends Controller {
 		$existingShares = $manager->getSharesBy($username, $shareType, $file, false, 1);
 		// TODO(leon): Race condition here
 		if (count($existingShares) > 0) {
-			// TODO(leon): We will never land here as we already check if the file exists above and abort instantly
 			// We already have our share
 			$share = $existingShares[0];
 		} else {
