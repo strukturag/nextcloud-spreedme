@@ -862,11 +862,6 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					return function(file, alreadyUploaded) {
 						var err = function(code) {
 							var msg = "Please try it again later.";
-							switch (code) {
-							case 50403:
-								msg = "A file with this name was already shared. Please use a different name."
-								break;
-							}
 							log("Failed to upload / share file:", msg);
 							alertify.dialog.error(
 								"Failed to share the document(s)",

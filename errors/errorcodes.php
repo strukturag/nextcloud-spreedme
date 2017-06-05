@@ -22,7 +22,6 @@ class ErrorCodes {
 	const REMOTE_CONFIG_INVALID_JSON = 50302;
 	const FILETRANSFER_DISABLED = 50401;
 	const FILETRANSFER_FAILED = 50402;
-	const FILETRANSFER_ALREADY_EXISTS = 50403;
 
 	private function __construct() {
 
