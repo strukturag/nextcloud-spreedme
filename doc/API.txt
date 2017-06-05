@@ -156,6 +156,36 @@ Available endpoints with request methods and content-type:
         }
 
 
+  /api/v1/filetransfers
+
+    The filetransfers endpoint allows admins list existing and create new shares.
+    This endpoint requires a valid Nextcloud session or TP + a valid Nextcloud CSRF requesttoken.
+
+    POST application/x-www-form-urlencoded
+      target: The room to upload the file into
+      file: The file to share form-data
+      Response 200:
+        {
+          "success": true,
+          "token": "dLDaFKSy2L6Nigv"
+        }
+    GET
+      Response 200:
+        {
+          "success": true,
+          "shares": [{
+            "name": "MyPresentation.pdf",
+            "size": 12345,
+            "token": "dLDaFKSy2L6Nigv"
+          }, {
+            "name": "Another Presentation.pdf",
+            "size": 56789,
+            "token": "DldAfksY2l6nIGV"
+          }]
+        }
+
+
+
 End of API.
 
 For questions, contact mailto:info@struktur.de.
