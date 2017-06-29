@@ -138,6 +138,8 @@ class ApiController extends Controller {
 			'SPREED_WEBRTC_BASEPATH',
 			'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED',
 			'SPREED_WEBRTC_IS_SHARED_INSTANCE',
+			'SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS',
+			'SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS',
 		);
 
 		$_response = array('success' => false);
@@ -148,6 +150,11 @@ class ApiController extends Controller {
 					Helper::setDatabaseConfigValueIfEnabled($key, $value);
 					// Extra configuration for some of the keys
 					switch ($key) {
+						case 'SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS':
+							if ($value === 'true') {
+								Helper::createServiceUserUnlessExists();
+							}
+							break;
 						case 'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED':
 							if ($value === 'true' && Helper::getDatabaseConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY') === '') {
 								// Also generate a 'Temporary Password signing key'
