@@ -1004,7 +1004,8 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 								// Overwrite advertiseFile function to provide support for remote downloads
 								scope.advertiseFile = advertiseFileWrapper(scope);
 								// Load available presentations on load
-								ownCloud.deferreds.guest.promise.then(function(guest) {
+								// TODO(leon): Enable this feature
+								/*ownCloud.deferreds.guest.promise.then(function(guest) {
 									if (guest) {
 										// Do not load available presentations for guests
 										//return; // TODO(leon): Enable this once we support lazy loading
@@ -1015,7 +1016,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 											_.bind(loadAvailablePresentations, scope)();
 										}
 									});
-								});
+								});*/
 							}
 
 							// Link
