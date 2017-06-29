@@ -981,7 +981,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 							var presentation = {
 								info: {
 									id: "nextcloud-share-" + file.token,
-									type: "application/pdf",
+									type: "application/pdf", // TODO(leon): Automatically determine type
 									name: file.name,
 									size: file.size,
 									url: makeShareDownloadURL(file.token),
