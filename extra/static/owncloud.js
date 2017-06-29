@@ -171,6 +171,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 				var authorize = ownCloud.deferreds.authorize;
 				var temporaryPassword = ownCloud.deferreds.features.temporaryPassword;
 				var isTemporaryPasswordFeatureEnabled = false;
+				var anonymousFileTransfer = ownCloud.deferreds.features.anonymousFileTransfer;
 
 				appData.e.on("selfReceived", function(event, data) {
 					log("selfReceived", data);
@@ -286,6 +287,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					if (typeof config.features.temporaryPassword !== "undefined") {
 						temporaryPassword.resolve(!!config.features.temporaryPassword);
 					}
+					anonymousFileTransfer.resolve(config.features.anonymousFileTransfer);
 				};
 
 				var setGuestConfig = function(config) {
@@ -519,7 +521,8 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					admin: $q.defer(),
 					guest: $q.defer(),
 					features: {
-						temporaryPassword: $q.defer()
+						temporaryPassword: $q.defer(),
+						anonymousFileTransfer: $q.defer()
 					}
 				};
 
@@ -1054,6 +1057,14 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 									element.find('.owncloud-start-import').remove();
 									$thumb.remove();
 									$(element).off('mouseenter', '.presentations .thumbnail.ng-scope', onmouseenter);
+								}
+							});
+							ownCloud.deferreds.features.anonymousFileTransfer.promise.then(function(enable) {
+								console.log("Anonymous file Transfer enabled: ", enable);
+								if (!enable) {
+									// Disable presentation upload support
+									scope.advertiseFile = function() {};
+									element.find('.welcome').remove();
 								}
 							});
 						};

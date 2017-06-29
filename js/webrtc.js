@@ -18,6 +18,7 @@ $(document).ready(function() {
 	var sharedConfig = $.parseJSON($("#sharedconfig").html());
 	var IS_GUEST = sharedConfig.is_guest;
 	var IS_TEMPORARY_PASSWORD_FEATURE_ENABLED = sharedConfig.features.temporary_password;
+	var ARE_ANONYMOUS_FILE_TRANSFERS_ENABLED = !sharedConfig.features.disable_anonymous_file_transfer;
 	var ALLOWED_PARTNERS = (function() {
 		var parser = document.createElement("a");
 		parser.href = iframe.src;
@@ -57,7 +58,8 @@ $(document).ready(function() {
 				isGuest: IS_GUEST,
 				temporaryPassword: getQueryParam("tp"),
 				features: {
-					temporaryPassword: IS_TEMPORARY_PASSWORD_FEATURE_ENABLED
+					temporaryPassword: IS_TEMPORARY_PASSWORD_FEATURE_ENABLED,
+					anonymousFileTransfer: ARE_ANONYMOUS_FILE_TRANSFERS_ENABLED
 				}
 			},
 			type: "config"
