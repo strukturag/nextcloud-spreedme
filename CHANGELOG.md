@@ -1,3 +1,6 @@
+nextcloud-spreedme (0.3.10)
+* Support file sharing through Nextcloud. This is not of any interest for you unless you are using an WebRTC MCU / SFU.
+
 nextcloud-spreedme (0.3.9)
 * Add support for Nextcloud 12
 

@@ -20,6 +20,8 @@ class ErrorCodes {
 	const DB_CONFIG_ERROR_CONFIG_PHP_EXISTS = 50201;
 	const REMOTE_CONFIG_EMPTY = 50301;
 	const REMOTE_CONFIG_INVALID_JSON = 50302;
+	const FILETRANSFER_DISABLED = 50401;
+	const FILETRANSFER_FAILED = 50402;
 
 	private function __construct() {
 

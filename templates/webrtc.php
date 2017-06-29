@@ -17,6 +17,7 @@ $sharedConfig = array(
 	'is_guest' => $_['is_guest'] === true,
 	'features' => array(
 		'temporary_password' => Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true,
+		'disable_anonymous_file_transfer' => Helper::areFileTransferUploadsAllowed() && !Helper::areAnonymousFileTransfersAllowed(),
 	),
 );
 

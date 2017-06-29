@@ -21,7 +21,14 @@ class Helper {
 		'SPREED_WEBRTC_ORIGIN' => '',
 		'SPREED_WEBRTC_BASEPATH' => '/webrtc/',
 		'SPREED_WEBRTC_IS_SHARED_INSTANCE' => false,
+		'SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS' => false,
+		'SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS' => false,
 		'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED' => false,
+	);
+	// Keep in sync with SUPPORTED_DOCUMENT_TYPES
+	private static $allowedFileExtensions = array(
+		'.pdf',
+		'.odf',
 	);
 
 	private function __construct() {
@@ -230,10 +237,108 @@ class Helper {
 				$replace[';root'] = 'root';
 			}
 		} catch (\Exception $e) {
-			// We don't handle errors, sorry
-
+			// TODO(leon): Handle error
 		}
 		return strtr($config, $replace);
+	}
+
+	public static function hasAllowedFileExtension($name) {
+		// Validate file extension
+		$valid = false;
+		foreach (self::$allowedFileExtensions as $extension) {
+			if (stripos(strrev($name), strrev($extension)) === 0) {
+				// Found allowed extension
+				$valid = true;
+				break;
+			}
+		}
+		return $valid;
+	}
+
+	public static function doesServiceUserExist() {
+		$users = \OC::$server->getUserManager();
+		return $users->userExists(Settings::SPREEDME_SERVICEUSER_USERNAME);
+	}
+
+	public static function areFileTransferUploadsAllowed() {
+		return self::getConfigValue('SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS') === true;
+	}
+
+	public static function areAnonymousFileTransfersAllowed() {
+		return self::getConfigValue('SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS') === true;
+	}
+
+	public static function createServiceUserUnlessExists() {
+		$users = \OC::$server->getUserManager();
+		if (!self::doesServiceUserExist()) {
+			$pass = \OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate(50);
+			try {
+				if ($users->createUser(Settings::SPREEDME_SERVICEUSER_USERNAME, $pass) === false) {
+					throw new \Exception('Backend does not implement CREATE_USER action');
+				}
+			} catch (\Exception $e) {
+				// User already exists or couldn't be created. Thanks for being so specific.
+				// Pass error along
+				throw $e;
+			}
+		}
+		// User already exists
+		return true;
+	}
+
+	public static function isUserLoggedIn() {
+		return \OC_User::getUser() !== false;
+	}
+
+	public static function getServiceUserMaxUploadSize() {
+		if (!self::isUserLoggedIn()) {
+			// Anonymous user
+			return Settings::SPREEDME_SERVICEUSER_MAX_UPLOAD_SIZE_ANONYMOUS;
+		}
+		// Logged in user
+		return Settings::SPREEDME_SERVICEUSER_MAX_UPLOAD_SIZE_LOGGEDIN;
+	}
+
+	public static function runAsServiceUser($func) {
+		if (!self::areFileTransferUploadsAllowed() || !self::doesServiceUserExist()) {
+			throw new \Exception('Service user not usable');
+		}
+		if (!self::isUserLoggedIn() && !self::areAnonymousFileTransfersAllowed()) {
+			throw new \Exception('Anonymous uploads are not allowed');
+		}
+
+		$serviceUserRootPath = sprintf('/%s/files', Settings::SPREEDME_SERVICEUSER_USERNAME);
+
+		// TODO(leon): Maybe replace order: First set user id, then chroot
+		$oldUser = \OC_User::getUser();
+		if ($oldUser === false) {
+			// We're an anonymous user, init filesystem for service user
+			\OC\Files\Filesystem::init(Settings::SPREEDME_SERVICEUSER_USERNAME, $serviceUserRootPath);
+		} else {
+			// User is logged in, chroot into service user's files folder
+			$fsView = \OC\Files\Filesystem::getView();
+			$oldRoot = $fsView->getRoot();
+			$fsView->chroot($serviceUserRootPath);
+		}
+
+		// Switch user ID
+		\OC_User::setUserId(Settings::SPREEDME_SERVICEUSER_USERNAME);
+
+		$ret = $func();
+
+		// Switch user ID back again
+		\OC_User::setUserId($oldUser);
+
+		if ($oldUser === false) {
+			// Tear down if we're an anonymous user
+			\OC\Files\Filesystem::tearDown();
+		} else {
+			// Switch back to old user
+			// chroot back to previous root folder
+			$fsView->chroot($oldRoot);
+		}
+
+		return $ret;
 	}
 
 }

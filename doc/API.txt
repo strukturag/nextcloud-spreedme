@@ -122,6 +122,8 @@ Available endpoints with request methods and content-type:
       SPREED_WEBRTC_BASEPATH: Spreed WebRTC basepath (string, optional)
       OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED: Whether the 'Temporary Password' feature should be enabled (string, optional)
       SPREED_WEBRTC_IS_SHARED_INSTANCE: Whether the Spreed WebRTC server is used by multiple Nextcloud instances (string, optional)
+      SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS: Whether to upload file transfers or share them peer-to-peer (string, optional)
+      SPREED_WEBRTC_ALLOW_ANONYMOUS_FILE_TRANSFERS: Whether anonymous users (i.e. users which are not logged in) should be able to upload/share files and presentations (string, optional). This value is only taken into account when 'SPREED_WEBRTC_UPLOAD_FILE_TRANSFERS' is set to true
       Response 200:
         {
           "success": true
@@ -152,6 +154,36 @@ Available endpoints with request methods and content-type:
         {
           "success": true
         }
+
+
+  /api/v1/filetransfers
+
+    The filetransfers endpoint allows admins list existing and create new shares.
+    This endpoint requires a valid Nextcloud session or TP + a valid Nextcloud CSRF requesttoken.
+
+    POST application/x-www-form-urlencoded
+      target: The room to upload the file into
+      file: The file to share form-data
+      Response 200:
+        {
+          "success": true,
+          "token": "dLDaFKSy2L6Nigv"
+        }
+    GET
+      Response 200:
+        {
+          "success": true,
+          "shares": [{
+            "name": "MyPresentation.pdf",
+            "size": 12345,
+            "token": "dLDaFKSy2L6Nigv"
+          }, {
+            "name": "Another Presentation.pdf",
+            "size": 56789,
+            "token": "DldAfksY2l6nIGV"
+          }]
+        }
+
 
 
 End of API.

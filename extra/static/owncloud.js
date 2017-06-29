@@ -65,6 +65,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 		return allowed;
 	})();
 	// Copied from directives/presentation.js
+	// Keep in sync with $allowed_file_extensions
 	var SUPPORTED_DOCUMENT_TYPES = {
 		// rendered by pdfcanvas directive
 		"application/pdf": "pdf",
@@ -170,6 +171,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 				var authorize = ownCloud.deferreds.authorize;
 				var temporaryPassword = ownCloud.deferreds.features.temporaryPassword;
 				var isTemporaryPasswordFeatureEnabled = false;
+				var anonymousFileTransfer = ownCloud.deferreds.features.anonymousFileTransfer;
 
 				appData.e.on("selfReceived", function(event, data) {
 					log("selfReceived", data);
@@ -228,16 +230,17 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					settingsScope.saveSettings();
 				};
 
-				var tokenReceived = function(token) {
+				var tokenReceived = function(tp) {
 					postMessageAPI.requestResponse((new Date().getTime()) /* id */, {
 						type: "guestLogin",
-						guestLogin: token
+						guestLogin: tp
 					}, function(event) {
 						var token = event.data;
 						if (!token.success) {
 							askForTemporaryPassword();
 							return;
 						}
+						ownCloud.dataStore.temporaryPassword = tp;
 						doLogin({
 							useridcombo: token.useridcombo,
 							secret: token.secret
@@ -284,6 +287,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					if (typeof config.features.temporaryPassword !== "undefined") {
 						temporaryPassword.resolve(!!config.features.temporaryPassword);
 					}
+					anonymousFileTransfer.resolve(config.features.anonymousFileTransfer);
 				};
 
 				var setGuestConfig = function(config) {
@@ -517,7 +521,8 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					admin: $q.defer(),
 					guest: $q.defer(),
 					features: {
-						temporaryPassword: $q.defer()
+						temporaryPassword: $q.defer(),
+						anonymousFileTransfer: $q.defer()
 					}
 				};
 
@@ -534,8 +539,19 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 				};
 
 				var setConfig = function(newConfig) {
+					config.rootURL = newConfig.rootURL;
+					config.rootURLIndex = newConfig.rootURLIndex;
 					config.baseURL = newConfig.baseURL;
 					config.fullURL = newConfig.fullURL;
+				};
+
+				var generateUrl = function(path) {
+					if (path[0] === "/") {
+						// Absolute
+						return config.rootURL + path;
+					}
+					// Relative
+					return config.rootURLIndex + path;
 				};
 
 				var downloadFile = function(file) {
@@ -568,6 +584,60 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					return defer.promise;
 				};
 
+				var uploadAndShareFile = function(file, filename) {
+					var defer = $q.defer();
+					postMessageAPI.requestResponse(filename /* id */, {
+						type: "uploadAndShareBlob",
+						// :( blob attributes are lost when sent via postMessage
+						uploadAndShareBlob: {
+							blob: file,
+							name: filename,
+							tp: dataStore.temporaryPassword
+						}
+					}, function(event) {
+						if (event.data.data.success) {
+							defer.resolve(event.data.data);
+						} else {
+							defer.reject(event.data.data.error);
+						}
+					});
+
+					return defer.promise;
+				};
+
+				var shareFile = function(path) {
+					var defer = $q.defer();
+					postMessageAPI.requestResponse(path /* id */, {
+						type: "shareFile",
+						shareFile: path
+					}, function(event) {
+						if (event.data.data) {
+							defer.resolve(event.data.data);
+						} else {
+							defer.reject();
+						}
+					});
+					return defer.promise;
+				};
+
+				var listFileShares = function() {
+					var defer = $q.defer();
+					postMessageAPI.requestResponse((new Date().getTime()) /* id */, {
+						type: "listFileShares",
+						listFileShares: {
+							tp: dataStore.temporaryPassword
+						}
+					}, function(event) {
+						if (event.data.data.success) {
+							defer.resolve(event.data.data);
+						} else {
+							defer.reject();
+						}
+					});
+
+					return defer.promise;
+				};
+
 				var openModalWithIframe = function(name, url, title, message, success_cb, error_cb) {
 					// TODO(leon): This is extremely ugly.
 					alertify.dialog.notify(
@@ -590,7 +660,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						var loader = angular.element("<div>")
 							.addClass("loader")
 							.css({
-								"background-image": "url('" + config.baseURL.replace("/index.php/apps/spreedme", "/core/img/loading.gif") + "')"
+								"background-image": "url('" + generateUrl("/core/img/loading.gif") + "')"
 							});
 						iframe.get(0).onload = function() {
 							loader.remove();
@@ -704,7 +774,11 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 				return {
 					getConfig: getConfig,
 					setConfig: setConfig,
+					generateUrl: generateUrl,
 					uploadFile: uploadFile,
+					uploadAndShareFile: uploadAndShareFile,
+					shareFile: shareFile,
+					listFileShares: listFileShares,
 					downloadFile: downloadFile,
 					FileSelector: FileSelector,
 					deferreds: deferreds,
@@ -714,7 +788,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 
 			}]);
 
-			app.directive('presentation', ['$compile', '$timeout', 'ownCloud', 'fileData', 'toastr', function($compile, $timeout, ownCloud, fileData, toastr) {
+			app.directive('presentation', ['$compile', '$timeout', 'ownCloud', 'fileData', 'toastr', 'alertify', function($compile, $timeout, ownCloud, fileData, toastr, alertify) {
 
 				var importFromOwnCloud = function() {
 					var $scope = this;
@@ -750,6 +824,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 						ownCloud.downloadFile(file)
 						.then(function(blob) {
 							blob.name = file.name;
+							blob.path = file.path;
 							var namespace = "file_" + $scope.id;
 							var fromBlobBinder = fromBlob(namespace, [blob], function(files) {
 								$timeout(function() {
@@ -758,7 +833,7 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 											if (!f.info.hasOwnProperty("id")) {
 												f.info.id = f.id;
 											}
-											scope.advertiseFile(f);
+											scope.advertiseFile(f, true);
 										});
 									});
 								});
@@ -774,6 +849,64 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					var fs = new ownCloud.FileSelector(ownCloudShare, {
 						allowedFileTypes: allowedFileTypes
 					});
+				};
+
+				var makeShareDownloadURL = function(token) {
+					return ownCloud.generateUrl("s/" + token + "/download");
+				};
+				var advertiseFileWrapper = function(scope) {
+					// We have support for remote downloads — Yay! :)
+
+					var isSanitizedToken = function(token) {
+						return /^[a-z0-9]+$/i.test(token);
+					};
+					var errUnsanitizedToken = 1;
+					var origAdvertiseFile = scope.advertiseFile;
+					return function(file, alreadyUploaded) {
+						var err = function(code) {
+							var msg = "Please try it again later.";
+							log("Failed to upload / share file:", msg);
+							alertify.dialog.error(
+								"Failed to share the document(s)",
+								"Failed to share the document(s). " + msg,
+								null,
+								null
+							);
+						};
+						if (!alreadyUploaded) {
+							// The file has not yet been uploaded
+							// -> Upload & share
+							return ownCloud.uploadAndShareFile(file.file, file.info.name)
+							.then(function(data) {
+								var token = data.token;
+								if (!isSanitizedToken(token)) {
+									err(errUnsanitizedToken);
+									return;
+								}
+								file.info.url = makeShareDownloadURL(token);
+								origAdvertiseFile(file);
+							}, function(code) {
+								// Error
+								err(code);
+							});
+						}
+
+						// File was already uploaded
+						// -> Directly share via link
+						return ownCloud.shareFile(file.file.path)
+						.then(function(data) {
+							var token = data.token;
+							if (!isSanitizedToken(token)) {
+								err(errUnsanitizedToken);
+								return;
+							}
+							file.info.url = makeShareDownloadURL(token);
+							origAdvertiseFile(file);
+						}, function() {
+							// Error
+							err(arguments);
+						});
+					};
 				};
 
 				var downloadPresentation = function(presentationToDownload) {
@@ -829,6 +962,38 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					};
 				};
 
+				var loadAvailablePresentations = function() {
+					var $scope = this;
+					if (typeof $scope.allowRemoteDownloads === "undefined") {
+						// Make sure we have support for remote downloads
+						return;
+					}
+
+					ownCloud.listFileShares().then(function(data) {
+						if (!data.success) {
+							// TODO(leon): Handle error
+							return;
+						}
+						var files = data.shares;
+						files.forEach(_.bind(function(file) {
+							// TODO(leon): Make this unforgeable, i.e. only logged-in users should be able to
+							// select such a presentation.
+							var presentation = {
+								info: {
+									id: "nextcloud-share-" + file.token,
+									type: "application/pdf", // TODO(leon): Automatically determine type
+									name: file.name,
+									size: file.size,
+									url: makeShareDownloadURL(file.token),
+									token: file.token,
+								},
+							};
+							var dwn = $scope.loadPresentation(presentation.info, null);
+							dwn.presentable = true;
+						}, this));
+					});
+				};
+
 				return {
 					restrict: 'C',
 					scope: false,
@@ -836,6 +1001,27 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 					compile: function(element) {
 						// Compile
 						return function(scope, element) {
+							if (typeof scope.allowRemoteDownloads !== "undefined") {
+								// Allow remote downloads
+								scope.allowRemoteDownloads = true;
+								// Overwrite advertiseFile function to provide support for remote downloads
+								scope.advertiseFile = advertiseFileWrapper(scope);
+								// Load available presentations on load
+								// TODO(leon): Enable this feature
+								/*ownCloud.deferreds.guest.promise.then(function(guest) {
+									if (guest) {
+										// Do not load available presentations for guests
+										//return; // TODO(leon): Enable this once we support lazy loading
+									}
+									scope.$on("mainview", function(event, mainview, state) {
+										if (mainview === "presentation" && state) {
+											console.log("presentation pane became active, loading available presentations..");
+											_.bind(loadAvailablePresentations, scope)();
+										}
+									});
+								});*/
+							}
+
 							// Link
 							var $button = $('<button>');
 							$button
@@ -871,6 +1057,14 @@ define(modules, function(angular, moment, PostMessageAPI, OwnCloudConfig) {
 									element.find('.owncloud-start-import').remove();
 									$thumb.remove();
 									$(element).off('mouseenter', '.presentations .thumbnail.ng-scope', onmouseenter);
+								}
+							});
+							ownCloud.deferreds.features.anonymousFileTransfer.promise.then(function(enable) {
+								console.log("Anonymous file Transfer enabled: ", enable);
+								if (!enable) {
+									// Disable presentation upload support
+									scope.advertiseFile = function() {};
+									element.find('.welcome').remove();
 								}
 							});
 						};

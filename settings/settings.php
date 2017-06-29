@@ -19,6 +19,11 @@ class Settings {
 
 	const SPREED_WEBRTC_USERCOMBO_MAX_AGE = 20;
 
+	const SPREEDME_SERVICEUSER_USERNAME = 'spreedme_service';
+	const SPREEDME_SERVICEUSER_UPLOADFOLDER = 'spreed-webrtc-uploads';
+	const SPREEDME_SERVICEUSER_MAX_UPLOAD_SIZE_ANONYMOUS = 1024 * 1024 * 10; // 10 MB
+	const SPREEDME_SERVICEUSER_MAX_UPLOAD_SIZE_LOGGEDIN = 1024 * 1024 * 20; // 20 MB
+
 	private function __construct() {
 
 	}

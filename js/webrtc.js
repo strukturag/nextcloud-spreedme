@@ -18,6 +18,7 @@ $(document).ready(function() {
 	var sharedConfig = $.parseJSON($("#sharedconfig").html());
 	var IS_GUEST = sharedConfig.is_guest;
 	var IS_TEMPORARY_PASSWORD_FEATURE_ENABLED = sharedConfig.features.temporary_password;
+	var ARE_ANONYMOUS_FILE_TRANSFERS_ENABLED = !sharedConfig.features.disable_anonymous_file_transfer;
 	var ALLOWED_PARTNERS = (function() {
 		var parser = document.createElement("a");
 		parser.href = iframe.src;
@@ -47,14 +48,18 @@ $(document).ready(function() {
 	var currentRoom = decodeURIComponent(window.location.hash.replace("#", "")) || "";
 
 	var getConfig = function() {
+		var rootURLIndex = document.location.origin + OC.generateUrl("/");
 		postMessageAPI.post({
 			config: {
+				rootURL: rootURLIndex.replace("/index.php", ""),
+				rootURLIndex: rootURLIndex,
 				baseURL: document.location.origin + OC.generateUrl("/apps/spreedme"),
 				fullURL: document.location.href,
 				isGuest: IS_GUEST,
 				temporaryPassword: getQueryParam("tp"),
 				features: {
-					temporaryPassword: IS_TEMPORARY_PASSWORD_FEATURE_ENABLED
+					temporaryPassword: IS_TEMPORARY_PASSWORD_FEATURE_ENABLED,
+					anonymousFileTransfer: ARE_ANONYMOUS_FILE_TRANSFERS_ENABLED
 				}
 			},
 			type: "config"
@@ -198,6 +203,43 @@ $(document).ready(function() {
 	};
 
 	var uploadBlob = function(obj, event) {
+		var uploader = makeBlobUploader('Spreed.ME Downloads');
+		return uploader(obj, event).then(function(data) {
+			postMessageAPI.answerRequest(event, {
+				data: data,
+				type: "uploadBlob"
+			});
+			return data; // So further thens get 'data' as well
+		});
+	};
+
+	var uploadAndShareBlob = function(obj, event) {
+		var cb = function(data) {
+			postMessageAPI.answerRequest(event, {
+				data: data,
+				type: "uploadAndShareBlob"
+			});
+		};
+
+		var fd = new FormData();
+		fd.append('target', currentRoom);
+		fd.append('file', obj.blob, obj.name);
+		// TP (temporary password) is only passed when available (i.e. for invited users)
+		if (obj.tp) {
+			fd.append('tp', obj.tp);
+		}
+		//fd.append('requesttoken', oc_requesttoken);
+		return $.ajax({
+			type: 'POST',
+			url: OC.generateUrl("/apps/spreedme/api/v1/filetransfers"),
+			data: fd,
+			processData: false,
+			contentType: false
+		}).then(cb, cb);
+	};
+
+	var makeBlobUploader = function(baseFolderName) {
+	return function(obj, event) {
 		var uploadFolderPath = (function() {
 			var padNum = function(num, count) {
 				var str = '' + num;
@@ -207,7 +249,7 @@ $(document).ready(function() {
 				return str;
 			};
 			var date = new Date();
-			return '/Spreed.ME Downloads/' + date.getFullYear() + '/' + padNum(date.getMonth() + 1, 2);
+			return '/' + baseFolderName + '/' + date.getFullYear() + '/' + padNum(date.getMonth() + 1, 2);
 		})();
 		// TODO(leon): Let backend do this job, as it might cause a lot of traffic for the client..
 		var FileCounter = function(filename) {
@@ -301,17 +343,76 @@ $(document).ready(function() {
 		if (OC.Uploader) {
 			doUpload = doUploadNC11;
 		}
-		doUpload(obj.blob, obj.name)
-		.then(function(data) {
+		return doUpload(obj.blob, obj.name);
+	};
+	}; // makeBlobUploader
+
+	var shareFile = function(obj, event) {
+		// TODO(leon): Check if this is still in NC11
+		// Thanks for providing a JavaScript API! :(
+		var url = OC.linkToOCS('apps/files_sharing/api/v1', 2);
+		url += "shares?format=json"; // Why does one explicitly need to specify the format? :(
+		var path = obj;
+		// var date = new Date();
+		// TODO(leon): Set this to 5 minutes or so?
+		var expireDate;
+		// var expireDate = date.getFullYear() + "-" + padNum(date.getMonth() + 1, 2) + "-" + padNum(date.getDate(), 2);
+		// TODO(leon): Do we want to protect the share with a shared secret just to be on the safe side or does the random URL provide enough entropy to be "unguessable"?
+		var password;
+		return $.ajax({
+			type: 'POST',
+			url: url,
+			data: {
+				path: path,
+				shareType: OC.Share.SHARE_TYPE_LINK,
+				permissions: OC.PERMISSION_READ,
+				expireDate: expireDate,
+				password: password,
+				passwordChanged: false,
+			},
+			dataType: 'json'
+		}).then(function(data) {
+			var res = {};
+			// Thanks for creating such a good API :)
+			if (typeof data.ocs.data !== "undefined" && data.ocs.data.token !== "") {
+				res.token = data.ocs.data.token;
+			}
+			postMessageAPI.answerRequest(event, {
+				data: res,
+				type: "shareFile"
+			});
+			return data;
+		});
+	};
+
+	var listFileShares = function(obj, event) {
+		var cb = function(data) {
 			postMessageAPI.answerRequest(event, {
 				data: data,
-				type: "uploadBlob"
+				type: "listFileShares"
 			});
-		});
+		};
+
+		var data = {
+			target: currentRoom
+		};
+		// TP (temporary password) is only passed when available (i.e. for invited users)
+		if (obj.tp) {
+			data.tp = obj.tp;
+		}
+		return $.ajax({
+			type: 'GET',
+			url: OC.generateUrl("/apps/spreedme/api/v1/filetransfers"),
+			data: data
+		}).then(cb, cb);
 	};
 
 	postMessageAPI.bind(function(event) {
 		var message = event.data[event.data.type];
+		// So we still support sending empty strings and 'null'
+		if (message === undefined) {
+			message = {};
+		}
 		switch (event.data.type) {
 		case "init":
 			onInit();
@@ -331,6 +432,15 @@ $(document).ready(function() {
 			break;
 		case "uploadBlob":
 			uploadBlob(message, event);
+			break;
+		case "uploadAndShareBlob":
+			uploadAndShareBlob(message, event);
+			break;
+		case "shareFile":
+			shareFile(message, event);
+			break;
+		case "listFileShares":
+			listFileShares(message, event);
 			break;
 		default:
 			console.log("Got unsupported message type", event.data.type);
