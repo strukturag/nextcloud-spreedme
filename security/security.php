@@ -11,7 +11,6 @@
 
 namespace OCA\SpreedME\Security;
 
-use OCA\SpreedME\Errors\ErrorCodes;
 use OCA\SpreedME\Helper\Helper;
 use OCA\SpreedME\Settings\Settings;
 
@@ -22,7 +21,6 @@ class Security {
 
 	// Increase this with every major update of the signing process to invalidate old signatures
 	const COMBO_VERSION = 2;
-	const TP_VERSION = 2;
 
 	private function __construct() {
 
@@ -65,134 +63,14 @@ class Security {
 		}
 	}
 
-	private static function requireEnabledTemporaryPassword() {
-		if (Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') !== true) {
-			throw new \Exception('Temporary Passwords not enabled in config/config.php', ErrorCodes::TEMPORARY_PASSWORD_NOT_ENABLED);
-		}
-	}
-
-	private static function decorateUserId($userid, $prefix) {
-		// Prefix userid with ext/ or int/ and append /uniqueid
-		$uniqueid = uniqid('', true);
-		return sprintf('%s/%s/%s', $prefix, $userid, $uniqueid);
-	}
-
-	// TODO(leon): Refactor, this is shitty
-	public static function generateTemporaryPassword($userid, $expiration = 0, $version = self::TP_VERSION, $forValidation = false) {
-		if (!$forValidation) {
-			self::requireEnabledTemporaryPassword();
-		}
-
-		// Only prevent certain characters and decorate userid if we don't want to validate a given TP
-		if (!$forValidation) {
-			$disallowed = array(':', '/');
-			foreach ($disallowed as $char) {
-				if (strpos($userid, $char) !== false) {
-					throw new \Exception('userid may not contain one of these symbols: ' . join(' or ', $disallowed), ErrorCodes::TEMPORARY_PASSWORD_INVALID_USERID);
-				}
-			}
-
-			$userid = self::decorateUserId($userid, 'ext');
-		}
-
-		$key = Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY');
-		$max_age = 60 * 60 * 2;
-
-		if ($expiration > 0) {
-			// Use a fixed expiration date
-			$signed_combo_array = self::getSignedUsercomboArray(
-				$version,
-				$userid,
-				$key,
-				false,
-				$expiration
-			);
-		} else {
-			// Dynamically expire after x seconds
-			$signed_combo_array = self::getSignedUsercomboArray(
-				$version,
-				$userid,
-				$key,
-				$max_age
-			);
-		}
-
-		return $signed_combo_array['useridcombo'] . ':' . $signed_combo_array['secret'];
-	}
-
-	public static function validateTemporaryPassword($tp) {
-		$split = explode(':', $tp);
-
-		// The 4 parts: expiraton, userid, version, hmac (signature of previous 3 parts)
-		if (count($split) !== 4) {
-			// Invalid tp part length
-			return false;
-		}
-
-		list($expiration, $userid, $version, $hmac) = $split;
-
-		if (time() > $expiration) {
-			// Expired
-			return false;
-		}
-
-		if (intval($version) !== self::TP_VERSION) {
-			// Unsupported / outdated version
-			return false;
-		}
-
-		$calctp = self::generateTemporaryPassword($userid, $expiration, $version, true); // Set forValidation flag
-		if (self::constantTimeEquals($tp, $calctp) !== true) {
-			// Incorrect hmac
-			return false;
-		}
-
-		return true;
-	}
-
-	public static function getSignedComboFromTemporaryPassword($tp) {
-		self::requireEnabledTemporaryPassword();
-
-		if (self::validateTemporaryPassword($tp) !== true) {
-			throw new \Exception('Invalid Temporary Password', ErrorCodes::TEMPORARY_PASSWORD_INVALID);
-		}
-
-		// TODO(leon): Do we need to split again?
-		$split = explode(':', $tp);
-		list($expiration, $userid, $version, $hmac) = $split;
-
-		return self::getSignedCombo($userid);
-	}
-
-	public static function getRandomHexString($length) {
-		return \OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate($length, '0123456789abcdef');
+	public static function getRandomString($length, $charset = '0123456789abcdef') {
+		return \OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate($length, $charset);
 	}
 
 	public static function regenerateSharedSecret() {
-		$key = Security::getRandomHexString(256 / 4); // 256 bit
+		$key = Security::getRandomString(256 / 4); // 256 bit
 		Helper::setDatabaseConfigValueIfEnabled('SPREED_WEBRTC_SHAREDSECRET', $key);
 		return $key;
-	}
-
-	public static function regenerateTemporaryPasswordSigningKey() {
-		$key = Security::getRandomHexString(256 / 4); // 256 bit
-		Helper::setDatabaseConfigValueIfEnabled('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY', $key);
-	}
-
-	public static function constantTimeEquals($a, $b) {
-		$alen = mb_strlen($a, '8bit');
-		$blen = mb_strlen($b, '8bit');
-
-		if ($alen !== $blen) {
-			return false;
-		}
-
-		$result = 0;
-		for ($i = 0; $i < $alen; $i++) {
-			$result |= (ord($a[$i]) ^ ord($b[$i]));
-		}
-
-		return $result === 0;
 	}
 
 	public static function getAllowedIframeDomains() {

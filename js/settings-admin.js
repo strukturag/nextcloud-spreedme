@@ -123,14 +123,6 @@ $(document).ready(function() {
 
 		});
 	});
-	$c.find('[name="REGENERATE_OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY"]').click(function(e) {
-		regenerateTemporaryPasswordSigningKey(function() {
-			$c.find('.OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY')
-				.removeClass('hidden');
-		}, function(error) {
-
-		});
-	});
 	$c.find('[name="GENERATE_SPREED_WEBRTC_CONFIG"]').click(function(e) {
 		generateSpreedWebRTCConfig(function(config) {
 			$c.find('.SPREED_WEBRTC_CONFIG')

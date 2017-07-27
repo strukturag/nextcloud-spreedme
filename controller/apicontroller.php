@@ -87,51 +87,6 @@ class ApiController extends Controller {
 		return new DataResponse($_response);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function generateTemporaryPassword($userid, $expiration) {
-		$_response = array('success' => false);
-		// TODO(leon): Move this to user.php
-		if ($this->user->isSpreedMeAdmin() && $userid !== null && $expiration !== null) {
-			try {
-				$_response['tp'] = base64_encode(Security::generateTemporaryPassword($userid, $expiration));
-				$_response['success'] = true;
-			} catch (\Exception $e) {
-				$_response['error'] = $e->getCode();
-			}
-		}
-
-		return new DataResponse($_response);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 */
-	public function getTokenWithTemporaryPassword($tp) {
-		$tmp = base64_decode($tp, true);
-		// We support both base64 encoded and unencoded TPs
-		if ($tmp !== false) {
-			$tp = $tmp;
-		}
-
-		$_response = array('success' => false);
-		if ($tp) {
-			try {
-				$token = Security::getSignedComboFromTemporaryPassword($tp);
-				$_response = array_merge($_response, $token);
-				$_response['success'] = true;
-			} catch (\Exception $e) {
-				$_response['error'] = $e->getCode();
-			}
-		}
-
-		return new DataResponse($_response);
-	}
-
 	public function saveConfig($config) {
 		$allowedKeys = array(
 			'SPREED_WEBRTC_ORIGIN',
@@ -155,12 +110,6 @@ class ApiController extends Controller {
 								Helper::createServiceUserUnlessExists();
 							}
 							break;
-						case 'OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED':
-							if ($value === 'true' && Helper::getDatabaseConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY') === '') {
-								// Also generate a 'Temporary Password signing key'
-								Security::regenerateTemporaryPasswordSigningKey();
-							}
-							break;
 					}
 				}
 			}
@@ -178,19 +127,6 @@ class ApiController extends Controller {
 		try {
 			$key = Security::regenerateSharedSecret();
 			$_response['sharedsecret'] = $key;
-			$_response['success'] = true;
-		} catch (\Exception $e) {
-			$_response['error'] = $e->getCode();
-		}
-
-		return new DataResponse($_response);
-	}
-
-	public function regenerateTemporaryPasswordSigningKey() {
-		// TODO(leon): Should we also allow Spreed.ME group admins to regenerate the signing key?
-		$_response = array('success' => false);
-		try {
-			Security::regenerateTemporaryPasswordSigningKey();
 			$_response['success'] = true;
 		} catch (\Exception $e) {
 			$_response['error'] = $e->getCode();

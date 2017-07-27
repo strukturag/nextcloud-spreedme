@@ -19,18 +19,18 @@ return [
 		['name' => 'page#debug', 'url' => '/admin/debug', 'verb' => 'GET'],
 		['name' => 'page#generate_temporary_password', 'url' => '/admin/tp', 'verb' => 'GET'],
 
-		// API
+		// General API
 		['name' => 'api#get_config', 'url' => '/api/v1/config', 'verb' => 'GET'],
 		['name' => 'api#get_user_config', 'url' => '/api/v1/user/config', 'verb' => 'GET'],
 		['name' => 'api#get_token', 'url' => '/api/v1/user/token', 'verb' => 'GET'],
-		['name' => 'api#get_token_with_temporary_password', 'url' => '/api/v1/token/withtp', 'verb' => 'POST'],
-		['name' => 'api#generate_temporary_password', 'url' => '/api/v1/admin/tp', 'verb' => 'POST'],
 		['name' => 'api#save_config', 'url' => '/api/v1/admin/config', 'verb' => 'PATCH'],
 		['name' => 'api#regenerate_shared_secret', 'url' => '/api/v1/admin/config/regenerate/sharedsecret', 'verb' => 'POST'],
-		['name' => 'api#regenerate_temporary_password_signing_key', 'url' => '/api/v1/admin/config/regenerate/tp-key', 'verb' => 'POST'],
 		['name' => 'api#generate_spreed_webrtc_config', 'url' => '/api/v1/admin/config/generate/spreed-webrtc-config', 'verb' => 'POST'],
 		['name' => 'api#download_file', 'url' => '/api/v1/file/download', 'verb' => 'GET'],
-		// File Transfer
+		// Temporary password API
+		['name' => 'temporarypassword#generate_temporary_password', 'url' => '/api/v1/admin/tp', 'verb' => 'POST'],
+		['name' => 'temporarypassword#get_token_with_temporary_password', 'url' => '/api/v1/token/withtp', 'verb' => 'POST'],
+		// File transfer API
 		['name' => 'filesharing#uploadAndShare', 'url' => '/api/v1/filetransfers', 'verb' => 'POST'],
 		['name' => 'filesharing#listShares', 'url' => '/api/v1/filetransfers', 'verb' => 'GET'],
 	],

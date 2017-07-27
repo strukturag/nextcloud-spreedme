@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<database>
+	<name>*dbname*</name>
+	<create>true</create>
+	<overwrite>false</overwrite>
+	<charset>utf8</charset>
+	<table>
+		<name>*dbprefix*spreedme_tps</name>
+		<declaration>
+			<field>
+				<name>id</name>
+				<type>integer</type>
+				<autoincrement>1</autoincrement>
+			</field>
+			<field>
+				<name>tp</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+			<field>
+				<name>userid</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+			<field>
+				<name>expiration</name>
+				<type>timestamp</type>
+				<notnull>true</notnull>
+			</field>
+			<index>
+				<name>spreedme_tps_tp</name>
+				<unique>true</unique>
+				<field>
+					<name>tp</name>
+				</field>
+			</index>
+		</declaration>
+	</table>
+</database>
