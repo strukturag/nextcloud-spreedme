@@ -56,6 +56,9 @@ class TemporaryPasswordManager {
 	}
 
 	public function generateTemporaryPassword($userid, $expirationUnix) {
+		// TODO(leon): Let this get called by cron
+		$this->cleanup();
+
 		// Validate userid length
 		if (strlen($userid) > $this->maxUserLength) {
 			throw new \Exception('userid too long', ErrorCodes::TEMPORARY_PASSWORD_USERID_TOO_LONG);
@@ -122,6 +125,16 @@ class TemporaryPasswordManager {
 		}
 
 		return Security::getSignedCombo($userid);
+	}
+
+	public function cleanup() {
+		// Cleanup expired TPs
+		$now = new \DateTime();
+		$query = $this->db->getQueryBuilder();
+		$query
+			->delete($this->tableName)
+			->where($query->expr()->lt('expiration', $query->createNamedParameter($this->getFormattedDate($now))))
+			->execute();
 	}
 
 }
