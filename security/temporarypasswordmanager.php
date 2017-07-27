@@ -86,7 +86,7 @@ class TemporaryPasswordManager {
 					'expiration' => $query->createNamedParameter($this->getFormattedDate($expiration)),
 				))->execute();
 				return $tp;
-			} catch (UniqueConstraintViolationException $e) {
+			} catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
 				// Whoops, hash collision
 				// You are likely one of the first people to find a $this->hashFuncName collision
 				// Unfortunately I don't tell you about it ;) Fame = vanished
