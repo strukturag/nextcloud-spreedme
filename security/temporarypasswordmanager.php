@@ -23,8 +23,8 @@ class TemporaryPasswordManager {
 	private $hashFuncName = 'sha256';
 	private $maxUserLength = 64; // Keep in sync with database.xml
 	private $disallowedUserChars = array(':', '/');
-	private $temporaryPasswordLength = 10; // ld(55^10) ≈ 58 bit of entropy
-	private $temporaryPasswordAllowedChars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ123456789';
+	private $temporaryPasswordLength = 12;
+	private $temporaryPasswordAllowedChars = '0123456789';
 
 	public function __construct(IDBConnection $db) {
 		$this->db = $db;
@@ -36,7 +36,10 @@ class TemporaryPasswordManager {
 	}
 
 	private function getNewTemporaryPassword() {
-		return Security::getRandomString($this->temporaryPasswordLength, $this->temporaryPasswordAllowedChars);
+		do {
+			$pass = Security::getRandomString($this->temporaryPasswordLength, $this->temporaryPasswordAllowedChars);
+		} while ($pass[0] === '0'); // Make sure we don't have a leading 0
+		return $pass;
 	}
 
 	private function requireEnabledTemporaryPassword() {
