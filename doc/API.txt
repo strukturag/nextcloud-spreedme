@@ -96,7 +96,7 @@ Available endpoints with request methods and content-type:
       Response 200:
         {
           "success": true,
-          "tp": "Sp4hgnQRXm"
+          "tp": "658395259239"
         }
 
 
