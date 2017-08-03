@@ -88,7 +88,7 @@ Available endpoints with request methods and content-type:
   /api/v1/admin/tp
 
     The admin/tp endpoint returns a temporary password.
-    This endpoint requires admin authentication.
+    This endpoint requires admin authentication + a valid Nextcloud CSRF requesttoken.
 
     POST application/x-www-form-urlencoded
       userid: The user id to invite
