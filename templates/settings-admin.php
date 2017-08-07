@@ -78,14 +78,6 @@ $classes[] = (Helper::doesJsConfigExist() ? 'js-config-found' : 'js-config-missi
 				<input type="checkbox" id="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED" name="OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED"
 					<?php echo (Helper::getDatabaseConfigValueOrDefault('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true ? 'checked="checked"' : ''); ?> />
 			</p>
-			<p class="hidden OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY success">
-				A new OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY was generated.<br />Previously generated 'Temporary Passwords' are no longer valid.
-			</p>
-			<p class="show-if-advanced-settings">
-				<label for="REGENERATE_OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY">OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY:</label>
-				<input type="button" id="REGENERATE_OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY" name="REGENERATE_OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY"
-					class="needs-confirmation" data-confirmation-message="Do you really want to generate a new signing key?\nAll previously generated 'Temporary Passwords' will be invalidated." value="Generate new signing key" />
-			</p>
 			<button type="submit" class="primary">Save settings</button> <button type="button" class="do-show-advanced-settings">Show advanced settings</button>
 		</form>
 	</div>
