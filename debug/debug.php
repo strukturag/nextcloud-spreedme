@@ -57,16 +57,6 @@ class Debug {
 		if (!ctype_xdigit(Helper::getConfigValue('SPREED_WEBRTC_SHAREDSECRET'))) {
 			return 'Invalid SPREED_WEBRTC_SHAREDSECRET in config/config.php. Secret may only contain hexadecimal characters.';
 		}
-
-		if (Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_LOGIN_ENABLED') === true) {
-			if (strlen(Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY')) !== 64) {
-				return 'OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY in config/config.php must be a 64 character hexadecimal string.';
-			}
-
-			if (!ctype_xdigit(Helper::getConfigValue('OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY'))) {
-				return 'Invalid OWNCLOUD_TEMPORARY_PASSWORD_SIGNING_KEY in config/config.php. Key may only contain hexadecimal characters.';
-			}
-		}
 	}
 
 	private static function testOwncloudJavascriptConfigFile() {

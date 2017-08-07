@@ -224,9 +224,9 @@ class Helper {
 		}
 		$replace = array(
 			'/webrtc/' => self::getDatabaseConfigValueOrDefault('SPREED_WEBRTC_BASEPATH'),
-			'the-default-secret-do-not-keep-me' => Security::getRandomHexString(256 / 4), // 256 bit
-			'the-default-encryption-block-key' => Security::getRandomHexString(256 / 4), // 256 bit
-			'i-did-not-change-the-public-token-boo' => Security::getRandomHexString(256 / 4), // 256 bit
+			'the-default-secret-do-not-keep-me' => Security::getRandomString(256 / 4), // 256 bit
+			'the-default-encryption-block-key' => Security::getRandomString(256 / 4), // 256 bit
+			'i-did-not-change-the-public-token-boo' => Security::getRandomString(256 / 4), // 256 bit
 			'/absolute/path/to/nextcloud/apps/spreedme/extra' => self::getOwnAppPath() . 'extra',
 			'some-secret-do-not-keep' => self::getDatabaseConfigValue('SPREED_WEBRTC_SHAREDSECRET'),
 		);
