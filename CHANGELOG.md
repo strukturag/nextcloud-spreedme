@@ -1,3 +1,6 @@
+nextcloud-spreedme (0.3.11)
+* Temporary Passwords now are a lot shorter and easier to communicate
+
 nextcloud-spreedme (0.3.10)
 * Support file sharing through Nextcloud. This is not of any interest for you unless you are using an WebRTC MCU / SFU.
 
