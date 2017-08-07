@@ -44,6 +44,24 @@ form button[type="submit"] {
 #ui-datepicker-div .ui-datepicker-header > a:nth-child(2) {
 	right: 2px;
 }
+#ui-datepicker-div .ui-datepicker-buttonpane {
+	margin: 0;
+}
+#ui-datepicker-div::after {
+	display: none;
+}
+#ui-datepicker-div button {
+	border: 1px solid black;
+}
+#ui-datepicker-div table {
+	margin: 0;
+}
+#ui-datepicker-div dl, #ui-datepicker-div dd {
+	padding: 0;
+}
+#ui-datepicker-div dl>dt {
+	text-align: left;
+}
 
 #generated {
 	margin-left: 3%;
