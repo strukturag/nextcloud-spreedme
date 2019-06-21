@@ -3,6 +3,7 @@ TODO:
 For TODOs not listed in here, search for them via:
   $ grep -r --exclude-dir=".git" --exclude="TODO.txt" "TODO" .
 
+- Audio recording functionality
 - Return API error message along with error code
 - Fix scope.msg = "Could not authenticate. Please try again.";
 - Move config stuff from helper.php to own class
